@@ -75,6 +75,7 @@ See [CONTRIBUTING.md](docs/contributing.md) for details.
 ## 📚 Documentation
 
 - [Project Overview](docs/panini-neuro-symbolic-ai.md) - Detailed project description
+- [Approach to Solution](docs/Approach-to-solution.md) - Neuro-symbolic architecture and methodology
 - [Solution Architecture](docs/SOLUTION_ARCHITECTURE.md) - Complete system architecture
 - [Contributing Guide](docs/contributing.md) - How to contribute to the project
 
