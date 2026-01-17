@@ -101,6 +101,7 @@ We update only specific modules to keep the model "smart" while teaching it Sans
 - **LoRA Paper:** [LoRA: Low-Rank Adaptation of Large Language Models](https://arxiv.org/abs/2106.09685)
 - **Unsloth Blog:** [How to make LLM fine-tuning 2x faster](https://github.com/unslothai/unsloth)
 - **Panini's Grammar:** [Ashtadhyayi Structure & Algorithms](https://en.wikipedia.org/wiki/A%E1%B9%A3%E1%B9%AD%C4%81dhy%C4%81y%C4%AB)
+- **Panini's Grammar:** [Ashtadhyayi website data](https://github.com/ashtadhyayi-com/data)
 
 ### 📺 Video Tutorials (For Students)
 
