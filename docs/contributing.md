@@ -141,6 +141,14 @@ Users can then load `panini-v1.gguf` into LM Studio or Ollama to chat with the m
 
 ### Areas Where We Need Help
 
+We are seeking contributors for the following initial phases:
+
+- **Phase 1 (Data Engineering):** Building the Python wrappers for Paninian rule engines to generate the "Golden Dataset."
+- **Phase 2 (Scraping & Cleaning):** Processing raw text files of Meghaduta and Raghuvamsha, cleaning XML tags, and formatting for tokenization.
+- **Phase 3 (Model Training):** Running initial LoRA experiments on Google Colab (Free Tier) or local GPUs.
+
+### Detailed Contribution Areas
+
 1. **Data Engineering**
    - Write Python wrappers for Paninian rule engines
    - Generate synthetic grammar datasets
