@@ -75,7 +75,7 @@ ISSUES = [
     },
     {
         "title": "Integrate Vidyut for Accurate Form Generation",
-        "body": """Replace simplified form generation with Vidyut Rust library for accurate Paninian form generation.
+        "body": """Replace simplified form generation with Vidyut Rust library for accurate Paninian form generation during dataset creation. (For inference-time rule engine, see Issue #27 and #28.)
 
 **Tasks:**
 - [ ] Research Vidyut Python bindings (pyo3)
@@ -91,7 +91,8 @@ ISSUES = [
 - Performance acceptable for large-scale generation
 
 **References:**
-- [Vidyut Project](https://github.com/ambuda-org/vidyut)""",
+- [Vidyut Project](https://github.com/ambuda-org/vidyut)
+- Inference: Issues #27, #28""",
         "labels": ["stage-1", "enhancement", "vidyut", "integration"]
     },
     {
@@ -386,16 +387,29 @@ ISSUES = [
         "body": """Implement complete Path A pipeline: English/Transliterated → Sanskrit.
 
 **Tasks:**
-- [ ] Integrate semantic parser (Karaka extractor)
-- [ ] Integrate root mapper
-- [ ] Integrate Paninian assembler
-- [ ] Add script conversion
-- [ ] Test end-to-end
+- [ ] Integrate semantic parser (Karaka extractor from Issue #7)
+- [ ] Implement Root Mapper:
+  - [ ] Create English → Sanskrit root mapping (verbs → dhatu, nouns → pratipadika)
+  - [ ] Integrate bilingual dictionary
+  - [ ] Implement context-aware mapping
+  - [ ] Handle transliterated Sanskrit input (direct root extraction)
+- [ ] Implement Paninian Assembly Engine:
+  - [ ] Apply Vibhakti rules (case endings based on Karaka)
+  - [ ] Apply Tinganta rules (verb conjugation)
+  - [ ] Apply Sandhi rules (word combination)
+  - [ ] Apply Samasa rules (compound formation)
+  - [ ] Integrate with Paninian rule engine (Issue #27) or Vidyut bindings (Issue #28)
+- [ ] Add script conversion (integrate Issue #23)
+- [ ] Test end-to-end with English input
+- [ ] Test end-to-end with transliterated Sanskrit input
 
 **Acceptance Criteria:**
 - Path A pipeline complete
 - Handles English and transliterated input
-- Produces grammatically correct Sanskrit""",
+- Root Mapper working for both input types
+- Paninian Assembly Engine applies all rule types correctly
+- Produces grammatically correct Sanskrit
+- Output available in both transliteration and Devanagari""",
         "labels": ["feature", "path-a", "constructor", "translation"]
     },
     {
@@ -403,16 +417,36 @@ ISSUES = [
         "body": """Implement complete Path B pipeline: Sanskrit → Validation & Correction.
 
 **Tasks:**
-- [ ] Integrate Sanskrit parser
-- [ ] Integrate rule validator
-- [ ] Integrate correction engine
-- [ ] Add explanation generation
-- [ ] Test with various inputs
+- [ ] Implement Sanskrit Parser:
+  - [ ] Tokenize Sanskrit text (both transliterated and Devanagari)
+  - [ ] Identify case endings (Vibhakti)
+  - [ ] Extract verb forms (Tinganta)
+  - [ ] Parse compound words (Samasa)
+  - [ ] Extract Karaka relationships from Sanskrit sentences
+- [ ] Implement Rule Validator:
+  - [ ] Check Karaka-Vibhakti mapping (correct case for semantic role)
+  - [ ] Check verb agreement (person, number, gender)
+  - [ ] Validate Sandhi rules (proper word combination)
+  - [ ] Validate Samasa rules (valid compound formation)
+  - [ ] Integrate with Paninian rule engine (Issue #27) or Vidyut bindings (Issue #28)
+- [ ] Implement Correction Engine:
+  - [ ] Identify rule violations
+  - [ ] Propose correct forms
+  - [ ] Generate error explanations
+  - [ ] Provide alternative constructions
+- [ ] Add explanation generation (detailed grammar feedback)
+- [ ] Integrate script conversion (for Devanagari input/output)
+- [ ] Test with transliterated Sanskrit input
+- [ ] Test with Devanagari Sanskrit input
+- [ ] Test with various error types
 
 **Acceptance Criteria:**
 - Path B pipeline complete
-- Validates Sanskrit grammar
-- Suggests corrections with explanations""",
+- Sanskrit Parser handles both transliterated and Devanagari input
+- Rule Validator checks all Paninian rules correctly
+- Correction Engine suggests accurate corrections
+- Explanation generation provides clear grammar feedback
+- Works end-to-end for both script types""",
         "labels": ["feature", "path-b", "auditor", "validation"]
     },
     {
@@ -483,56 +517,228 @@ ISSUES = [
 - Quality checks in place""",
         "labels": ["devops", "ci-cd", "automation"]
     },
+    {
+        "title": "Implement Paninian Rule Engine for Inference",
+        "body": """Implement the core Paninian rule engine for inference (distinct from Issue #4 which is for dataset generation). This engine applies Ashtadhyayi rules during inference to ensure grammatically correct output.
+
+**Background:**
+- Issue #4 covers Vidyut integration for dataset generation
+- This issue covers the rule engine used during inference in Path A and Path B
+- May use Vidyut bindings or implement a Python-native rule engine
+
+**Tasks:**
+- [ ] Design rule engine architecture (Vidyut bindings vs Python-native)
+- [ ] Implement Ashtadhyayi rule evaluation engine
+- [ ] Implement Vibhakti (case) rule application
+- [ ] Implement Tinganta (verb conjugation) rule application
+- [ ] Implement Sandhi (word combination) rule application
+- [ ] Implement Samasa (compound) rule application
+- [ ] Handle rule conflict resolution
+- [ ] Integrate with Path A (Paninian Assembly Engine)
+- [ ] Integrate with Path B (Rule Validator)
+- [ ] Create unit tests for rule application
+- [ ] Document rule application logic
+
+**Acceptance Criteria:**
+- Rule engine applies Ashtadhyayi rules correctly
+- All rule types (Vibhakti, Tinganta, Sandhi, Samasa) supported
+- Integrates with both Path A and Path B
+- Performance acceptable for real-time inference
+- Comprehensive test coverage
+
+**References:**
+- Architecture: `docs/PANINIAN_ENGINE_ARCHITECTURE.md` (Section 3.5, 4.3)
+- Dataset Generation: Issue #4 (Vidyut for dataset generation)
+- Path A Integration: Issue #21
+- Path B Integration: Issue #22""",
+        "labels": ["feature", "core", "paninian-rules", "inference"]
+    },
+    {
+        "title": "Implement Vidyut Python Bindings for Inference",
+        "body": """Create Python bindings for Vidyut Rust library to be used during inference (complementary to Issue #4 which uses Vidyut for dataset generation). This enables accurate Paninian form generation during real-time inference.
+
+**Background:**
+- Issue #4 covers Vidyut integration for batch dataset generation
+- This issue focuses on Vidyut bindings optimized for inference performance
+- May share code with Issue #4, but inference requires different optimization
+
+**Tasks:**
+- [ ] Research Vidyut Python bindings (pyo3) for inference use case
+- [ ] Create Python wrapper for Vidyut (or reuse from Issue #4)
+- [ ] Optimize bindings for inference performance (caching, batching)
+- [ ] Integrate with Paninian Rule Engine (Issue #27)
+- [ ] Add to Path A (Paninian Assembly Engine in Issue #21)
+- [ ] Add to Path B (Rule Validator in Issue #22)
+- [ ] Benchmark performance vs Python-native implementation
+- [ ] Document API and usage patterns
+
+**Acceptance Criteria:**
+- Vidyut bindings working for inference
+- Performance optimized for real-time use
+- Integrated with rule engine and pipelines
+- API documented with examples
+
+**References:**
+- [Vidyut Project](https://github.com/ambuda-org/vidyut)
+- Dataset Generation: Issue #4 (Vidyut for dataset generation)
+- Rule Engine: Issue #27""",
+        "labels": ["enhancement", "vidyut", "integration", "inference"]
+    },
 ]
 
 
-def create_issue(issue_data: dict, dry_run: bool = False):
-    """Create a GitHub issue using GitHub CLI."""
+def find_existing_issue(title: str):
+    """Find an existing issue by title. Returns issue number if found, None otherwise."""
+    try:
+        # Search for issues by title (using --search or list all and filter)
+        result = subprocess.run(
+            ["gh", "issue", "list", "--state", "all", "--json", "number,title,state"],
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        
+        issues = json.loads(result.stdout)
+        for issue in issues:
+            if issue["title"].strip() == title.strip():
+                return issue["number"], issue["state"], issue
+        return None, None, None
+    except (subprocess.CalledProcessError, json.JSONDecodeError, KeyError):
+        return None, None, None
+
+
+def create_or_update_issue(issue_data: dict, dry_run: bool = False, force_update: bool = False):
+    """Create or update a GitHub issue using GitHub CLI.
+    
+    Args:
+        issue_data: Dictionary with 'title', 'body', and 'labels'
+        dry_run: If True, don't actually create/update
+        force_update: If True, update existing issue even if body hasn't changed
+    
+    Returns:
+        Issue URL if successful, None otherwise
+    """
     title = issue_data["title"]
     body = issue_data["body"]
     labels = issue_data["labels"]
     
     if dry_run:
-        print(f"\n[DRY RUN] Would create issue:")
+        # Check if issue exists in dry-run mode
+        issue_num, issue_state, _ = find_existing_issue(title)
+        if issue_num:
+            print(f"\n[DRY RUN] Would update existing issue #{issue_num} ({issue_state}):")
+        else:
+            print(f"\n[DRY RUN] Would create new issue:")
         print(f"  Title: {title}")
         print(f"  Labels: {', '.join(labels)}")
         print(f"  Body length: {len(body)} chars")
         return
     
-    # Create issue first without labels
-    cmd = [
-        "gh", "issue", "create",
-        "--title", title,
-        "--body", body
-    ]
+    # Check if issue already exists
+    issue_num, issue_state, existing_issue = find_existing_issue(title)
     
-    try:
-        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
-        issue_url = result.stdout.strip()
-        issue_number = issue_url.split('/')[-1]
+    if issue_num:
+        # Update existing issue
+        print(f"  📝 Found existing issue #{issue_num} ({issue_state}), updating...")
         
-        # Add labels one by one (skip if label doesn't exist)
-        labels_added = []
-        for label in labels:
-            try:
-                subprocess.run(
-                    ["gh", "issue", "edit", issue_number, "--add-label", label],
-                    capture_output=True,
-                    text=True,
-                    check=True
-                )
-                labels_added.append(label)
-            except subprocess.CalledProcessError:
-                # Label doesn't exist, skip it
-                print(f"    ⚠ Label '{label}' not found, skipping")
+        try:
+            # Update title and body
+            subprocess.run(
+                ["gh", "issue", "edit", str(issue_num), "--title", title, "--body", body],
+                capture_output=True,
+                text=True,
+                check=True
+            )
+            
+            # Remove all existing labels first (if we want to replace them)
+            # Get current labels
+            current_labels_result = subprocess.run(
+                ["gh", "issue", "view", str(issue_num), "--json", "labels"],
+                capture_output=True,
+                text=True,
+                check=True
+            )
+            current_labels_data = json.loads(current_labels_result.stdout)
+            current_labels = [label["name"] for label in current_labels_data.get("labels", [])]
+            
+            # Remove old labels that aren't in new list
+            for old_label in current_labels:
+                if old_label not in labels:
+                    try:
+                        subprocess.run(
+                            ["gh", "issue", "edit", str(issue_num), "--remove-label", old_label],
+                            capture_output=True,
+                            text=True,
+                            check=True
+                        )
+                    except subprocess.CalledProcessError:
+                        pass  # Label might not exist, ignore
+            
+            # Add new labels
+            labels_added = []
+            for label in labels:
+                if label not in current_labels:  # Only add if not already present
+                    try:
+                        subprocess.run(
+                            ["gh", "issue", "edit", str(issue_num), "--add-label", label],
+                            capture_output=True,
+                            text=True,
+                            check=True
+                        )
+                        labels_added.append(label)
+                    except subprocess.CalledProcessError:
+                        print(f"    ⚠ Label '{label}' not found, skipping")
+                else:
+                    labels_added.append(label)  # Already present, count as added
+            
+            issue_url = f"https://github.com/raghav-vk/panini-neuro-symbolic-ai/issues/{issue_num}"
+            print(f"✓ Updated issue #{issue_num}: {issue_url}")
+            if labels_added:
+                print(f"  Labels: {', '.join(labels_added)}")
+            
+            # Reopen if it was closed and should be active
+            if issue_state == "CLOSED":
+                print(f"  ℹ️  Issue was closed. Use 'gh issue reopen {issue_num}' to reopen if needed.")
+            
+            return issue_url
+        except subprocess.CalledProcessError as e:
+            print(f"✗ Error updating issue #{issue_num} '{title}': {e.stderr}")
+            return None
+    else:
+        # Create new issue
+        cmd = [
+            "gh", "issue", "create",
+            "--title", title,
+            "--body", body
+        ]
         
-        print(f"✓ Created issue: {issue_url}")
-        if labels_added:
-            print(f"  Labels: {', '.join(labels_added)}")
-        return issue_url
-    except subprocess.CalledProcessError as e:
-        print(f"✗ Error creating issue '{title}': {e.stderr}")
-        return None
+        try:
+            result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+            issue_url = result.stdout.strip()
+            issue_number = issue_url.split('/')[-1]
+            
+            # Add labels one by one (skip if label doesn't exist)
+            labels_added = []
+            for label in labels:
+                try:
+                    subprocess.run(
+                        ["gh", "issue", "edit", issue_number, "--add-label", label],
+                        capture_output=True,
+                        text=True,
+                        check=True
+                    )
+                    labels_added.append(label)
+                except subprocess.CalledProcessError:
+                    # Label doesn't exist, skip it
+                    print(f"    ⚠ Label '{label}' not found, skipping")
+            
+            print(f"✓ Created issue: {issue_url}")
+            if labels_added:
+                print(f"  Labels: {', '.join(labels_added)}")
+            return issue_url
+        except subprocess.CalledProcessError as e:
+            print(f"✗ Error creating issue '{title}': {e.stderr}")
+            return None
 
 
 def main():
@@ -544,6 +750,7 @@ def main():
     parser.add_argument("--start", type=int, default=0, help="Start from issue index")
     parser.add_argument("--end", type=int, help="End at issue index")
     parser.add_argument("--single", type=int, help="Create only a single issue by index")
+    parser.add_argument("--force-update", action="store_true", help="Force update existing issues even if unchanged")
     
     args = parser.parse_args()
     
@@ -580,7 +787,7 @@ def main():
     
     for i, issue_data in enumerate(issues_to_create, start=args.start + 1):
         print(f"[{i}/{len(ISSUES)}] {issue_data['title']}")
-        result = create_issue(issue_data, dry_run=args.dry_run)
+        result = create_or_update_issue(issue_data, dry_run=args.dry_run, force_update=args.force_update)
         
         if result:
             created.append(result)
