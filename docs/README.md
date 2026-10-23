@@ -7,6 +7,8 @@ collaboration guides for the current neuro-symbolic sandhi experiment.
 
 | Document | Purpose |
 | --- | --- |
+| [Development results](../reports/development-v1/SUMMARY.md) | Measured CPU smoke experiment, conversion counts and limitations |
+| [First review packet](../data/reviews/REVIEW_PACKET.md) | Twelve cross-family draft encodings awaiting expert judgement |
 | [Working paper](panini-neuro-symbolic-ai.md) | Manuscript being developed for archival submission |
 | [Experiment protocol](EXPERIMENT_PROTOCOL.md) | Research questions, frozen-study design, metrics, and release gates |
 | [All-sandhi dataset](ALL_SANDHI_DATASET.md) | Reproducible 148-record source corpus and expert-screening workflow |
@@ -25,8 +27,9 @@ grammar-engine plans from early project drafts are retired. They are available
 from Git history if needed but are intentionally absent from the current
 documentation tree.
 
-The current source corpus spans sandhi families, while the first executable
-and measured benchmark remains external vowel-sandhi splitting until broader
-rules receive expert operational review. No document in this directory should
+The current source corpus spans sandhi families. The executable development
+experiment uses 12 draft encodings across five families; the independent
+scholarly benchmark still awaits reviewed rules and corpus examples.
+No document in this directory should
 describe source candidates as automatically executable rules or subset
 compliance as complete Sanskrit correctness.

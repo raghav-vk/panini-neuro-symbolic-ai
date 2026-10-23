@@ -1,8 +1,9 @@
 # Verification Guide
 
-The project has four current verification layers: code, rule records, corpus
-integrity, and dataset splitting. Model-training tests will be added after the
-candidate compiler is implemented.
+The project now tests rules, safe corpus conversion, candidate inversion,
+holdouts, metrics and CPU training/checkpoint reload. Use [QUICKSTART.md](QUICKSTART.md)
+for the complete six-step workflow. The full local suite passes 104 tests;
+the neural test is skipped when the optional PyTorch dependency is absent.
 
 ## 1. Fast Verification
 
@@ -176,10 +177,12 @@ Before reporting:
 - Report parameter count, time, RAM, VRAM, and latency.
 - Run paired bootstrap confidence intervals.
 
-## 8. Future Model Tests
+## 8. Model Verification
 
-The candidate compiler and ranker are not yet implemented. Add these tests
-before their first reported run:
+The candidate compiler and ranker are implemented. Regression coverage is in
+`tests/test_development_pipeline.py`. The following remain the broader
+research acceptance checklist, not a claim that every research comparison
+has been completed:
 
 - Gold analysis appears in generated candidates.
 - Every candidate reconstructs the surface.

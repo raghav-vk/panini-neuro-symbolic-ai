@@ -13,3 +13,4 @@ datasets/source_manifest.json
 data/processed/
 runs/
 checkpoints/
+.venv/

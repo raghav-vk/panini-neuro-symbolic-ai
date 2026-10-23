@@ -1,9 +1,26 @@
 # Experimental Protocol: Proof-Carrying External Vowel-Sandhi Splitting
 
 **Protocol version:** 0.1
-**Status:** Active design; freeze before training
+**Status:** Planned independent-corpus study; development smoke run separately frozen
 **Primary task:** Rank rule-licensed analyses of one external vowel-sandhi boundary
 **Compute target:** CPU or one modest consumer GPU
+
+### Development Implementation, September 2026
+
+The six-step engineering pipeline is runnable. It includes a 12-rule draft
+review packet, non-executing DCS conversion and 200 proposed boundaries,
+single-step inverse candidates, three grouped holdouts, CPU baselines and
+a 128,769-parameter development ranker (exact count is recorded in the run
+artifact; use that value if architecture settings change). The default smoke
+architecture is two layers of width 64, not the larger proposed research model.
+
+See [the measured report](../reports/development-v1/SUMMARY.md) and
+[Quick Start](../QUICKSTART.md). These runs use generated nonce strings and
+no informative context. They do not instantiate this document's planned
+independent-corpus study, prove linguistic coverage, or establish improvement
+over an unconstrained generator. Publication gates and the planned study
+minimums below remain in force. Freeze reviewed data and rule revisions
+separately before the actual study; do not reinterpret smoke results as gold data.
 **Submission status:** Not ready for archival submission until every release gate passes
 
 ## 1. Objective

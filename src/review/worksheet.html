@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'">
+<title>Project Panini | Boundary Review</title>
+<style>
+:root{--ink:#24362e;--paper:#fcf8ed;--accent:#b54c20;--line:#d8ddce}*{box-sizing:border-box}body{margin:0;color:var(--ink);background:radial-gradient(ellipse at top right,#e5e8cd,transparent 60%),var(--paper);font:17px/1.5 Georgia,serif}main{max-width:1050px;margin:auto;padding:40px 24px}h1{font-size:clamp(32px,6vw,58px);font-weight:normal;line-height:1.1;margin:12px 0}h2{font-size:23px;font-weight:normal}.eyebrow{font:12px monospace;letter-spacing:2px;text-transform:uppercase;color:var(--accent)}nav,.actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:24px 0}button{background:var(--ink);color:var(--paper);border:0;border-radius:3px;padding:11px 18px;font:14px Georgia,serif;cursor:pointer}button:focus,input:focus,textarea:focus,select:focus{outline:3px solid var(--accent);outline-offset:2px}button.secondary{background:transparent;color:var(--ink);border:1px solid var(--line)}.panel{border:1px solid var(--line);padding:22px;background:#fffdf7;margin:20px 0}.sentence{font-size:24px;overflow-wrap:anywhere;white-space:pre-wrap}.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}label{display:block;font-size:15px}input,textarea,select{display:block;width:100%;padding:10px;border:1px solid var(--line);background:white;font:17px Georgia,serif;margin-top:6px}input[type=checkbox]{display:inline;width:auto}.help{font-size:14px;color:#526555}#message{min-height:26px;color:var(--accent)}@media(max-width:650px){.grid{grid-template-columns:1fr}main{padding:24px 16px}.panel{padding:16px}}@media(prefers-reduced-motion:no-preference){main{animation:reveal .5s ease-out}@keyframes reveal{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}}
+</style>
+<main>
+<div class="eyebrow">Project Panini / Expert Review</div>
+<h1>From source to evidence.</h1>
+<p>These are proposed boundaries, not verified analyses. Supply the actual inflected forms and confirm that this is an external word boundary. Everything stays in this browser; export your work before closing.</p>
+<nav><button id="previous">Previous</button><strong id="progress"></strong><button id="next">Next</button><button class="secondary" id="export">Export all work</button><button class="secondary" id="approved">Export approved only</button></nav>
+<label class="help">Resume from a previously exported JSONL file<input type="file" id="import" accept=".jsonl,.json"></label>
+<section class="panel"><div id="identity" class="eyebrow"></div><h2>Source sentence, converted from SLP1 to IAST</h2><div class="sentence" id="sentence"></div><p id="lemmas"></p><p class="help" id="morphology"></p><p class="help">Lemma strings are not necessarily the words as inflected in this sentence. Within-chunk proposals can be compound-internal and must not be approved for this external-boundary task without checking.</p></section>
+<form id="form">
+<div class="grid">
+<label>Left inflected word<input id="left"></label><label>Right inflected word<input id="right"></label>
+<label>Observed surface (exact source substring)<input id="surface"></label><label>Operational rule ID, or “unsupported”<input id="rule_id" placeholder="SDH-001"></label>
+<label>Source start offset (IAST characters, zero-based)<input id="start" type="number" min="0"></label><label>Source end offset (exclusive)<input id="end" type="number" min="0"></label>
+<label>Tags, comma-separated<input id="tags" placeholder="pada_boundary"></label><label>Context lemmas, comma-separated<input id="context_lemmas"></label>
+</div>
+<label>Observed context, excluding the target boundary<textarea id="context" rows="2"></textarea></label>
+<label>Corrections, exceptions and reasoning<textarea id="notes" rows="3"></textarea></label>
+<p><label><input id="external_boundary_confirmed" type="checkbox"> I have confirmed this is an external word boundary.</label></p>
+<div class="grid"><label>Decision<select id="review_status"><option value="pending">Pending</option><option value="needs_correction">Needs correction</option><option value="expert_reviewed">Expert reviewed and approved</option></select></label><label>Reviewer name<input id="reviewer"></label><label>Review date<input id="reviewed_at" type="date"></label></div>
+<div class="actions"><button type="button" id="locate">Locate surface in source</button><button type="button" id="save">Keep changes to this item</button></div>
+</form><p role="status" id="message"></p><p class="help">Approval is a scholarly judgement, not a checkbox-based guarantee. The dataset preparation tool rechecks required metadata, source alignment and split leakage before admitting these records.</p>
+</main>
+<script>
+let rows=__REVIEW_DATA__, index=0;
+const $=id=>document.getElementById(id), fields=['left','right','surface','rule_id','context','notes','reviewer','reviewed_at'];
+function keep(){const r=rows[index];for(const k of fields)r[k]=$(k).value;r.source_surface=$('surface').value;r.surface=r.source_surface.replace(/\s/g,'');r.tags=$('tags').value.split(',').map(s=>s.trim()).filter(Boolean);r.context_lemmas=$('context_lemmas').value.split(',').map(s=>s.trim()).filter(Boolean);r.source_span=$('start').value!==''&&$('end').value!==''?[Number($('start').value),Number($('end').value)]:null;r.review_status=$('review_status').value;r.external_boundary_confirmed=$('external_boundary_confirmed').checked;}
+function show(){const r=rows[index];if(!r){$('message').textContent='No review items.';return;}$('progress').textContent=`${index+1} / ${rows.length}`;$('identity').textContent=r.example_id;$('sentence').textContent=r.source_sentence_iast;$('lemmas').textContent=`Lemma slots: ${r.left_lemma} + ${r.right_lemma}`;$('morphology').textContent=`Source morphology codes: ${r.left_morphology} / ${r.right_morphology}. Boundary proposal: ${r.boundary_kind}.`;for(const k of fields)$(k).value=r[k]??'';$('surface').value=r.source_surface??r.surface??'';$('tags').value=(r.tags||[]).join(', ');$('context_lemmas').value=(r.context_lemmas||[]).join(', ');$('start').value=r.source_span?.[0]??'';$('end').value=r.source_span?.[1]??'';$('external_boundary_confirmed').checked=!!r.external_boundary_confirmed;$('review_status').value=r.review_status;$('message').textContent='';}
+function exportRows(approved){keep();const selected=approved?rows.filter(r=>r.review_status==='expert_reviewed'):rows;if(!selected.length){$('message').textContent='No approved items to export.';return;}const url=URL.createObjectURL(new Blob([selected.map(r=>JSON.stringify(r)).join('\n')+'\n'],{type:'application/x-ndjson'}));const a=document.createElement('a');a.href=url;a.download=approved?'reviewed_boundaries.jsonl':'boundary_review_progress.jsonl';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+$('form').onsubmit=e=>e.preventDefault();$('previous').onclick=()=>{keep();index=Math.max(0,index-1);show();};$('next').onclick=()=>{keep();index=Math.min(rows.length-1,index+1);show();};$('save').onclick=()=>{keep();$('message').textContent='Kept in this browser tab. Export all work to preserve it before closing.';};$('export').onclick=()=>exportRows(false);$('approved').onclick=()=>exportRows(true);
+$('locate').onclick=()=>{const sentence=rows[index].source_sentence_iast,surface=$('surface').value,pos=sentence.indexOf(surface);if(!surface||pos<0||sentence.indexOf(surface,pos+1)>=0){$('message').textContent='Surface is absent or appears more than once. Set offsets manually after checking.';return;}$('start').value=Array.from(sentence.slice(0,pos)).length;$('end').value=Array.from(sentence.slice(0,pos+surface.length)).length;$('message').textContent='Source offsets located. Please verify the boundary.';};
+$('import').onchange=async e=>{try{const imported=(await e.target.files[0].text()).trim().split('\n').map(JSON.parse);if(!imported.length||imported.some(r=>typeof r.example_id!=='string'||typeof r.source_sentence_iast!=='string'))throw Error('Unexpected record format');rows=imported;index=0;show();}catch(error){$('message').textContent=error.message;}};
+window.addEventListener('beforeunload',e=>{e.preventDefault();e.returnValue='Export your review work before leaving.';});show();
+</script>
+</html>

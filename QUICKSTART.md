@@ -1,145 +1,124 @@
 # Quick Start
 
-This guide verifies the current research scaffolding. It does not train a
-model yet.
+The six-step **development pipeline runs on CPU**. Rules remain drafts and
+the synthetic experiment is not a scholarly validation of Sanskrit grammar.
+Measured artifacts are in [the development report](reports/development-v1/SUMMARY.md).
 
-## 1. Environment
+## 1. Install and Test
 
-Requirements:
+Use Python 3.12 for the tested training environment. Standard-library data
+tools also work on Python 3.10+. No GPU or pretrained model download is needed.
 
-- Python 3.10 or newer.
-- pytest for the test suite.
-- No GPU for the current rule, split, and archive utilities.
+```sh
+python3.12 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt -r requirements-train.txt
+.venv/bin/python -m pytest tests -q
+```
 
-Optional virtual environment:
+The full environment includes the CPU training/checkpoint round-trip test.
+Without PyTorch, that test is explicitly skipped; other tests still run.
 
-    python3 -m venv .venv
-    source .venv/bin/activate
-    python3 -m pip install -r requirements.txt
+## 2. Review the Draft Rules
 
-## 2. Run Everything Implemented
+```sh
+.venv/bin/python scripts/build_development_rules.py
+.venv/bin/python scripts/validate_rules.py data/rules/development_sandhi.jsonl
+```
 
-    ./test_quick.sh
+Start with [REVIEW_PACKET.md](data/reviews/REVIEW_PACKET.md). It covers six vowel,
+two consonant, two nasal, one visarga and one non-application encoding. These
+are 12 operational cases, not 12 complete sutras or coverage of all sandhi.
+Copy the JSONL review template to a separate working file before recording
+decisions; rebuilding replaces generated templates, never scholarly reviews.
 
-Or run the steps independently:
+## 3. Convert and Annotate DCS
 
-    python3 scripts/validate_rules.py
-    python3 -m pytest tests -q
+With the verified archive at `datasets/DCS_pick.zip`:
 
-The rule command should validate one draft rule. It does not certify the
-inventory for publication.
+```sh
+.venv/bin/python scripts/convert_dcs.py --output data/processed/my-dcs
+.venv/bin/python scripts/build_review_page.py data/processed/my-dcs/boundary_review.jsonl
+```
 
-## 3. Inspect a Proof Trace
+Open `data/processed/my-dcs/review.html` in a browser. The worksheet runs locally
+and offers export/resume without uploading data. Export your work before closing.
+The existing full conversion and worksheet are in `data/processed/dcs/` on
+the development machine. They are intentionally not committed.
 
-From the repository root:
+The decoder does not execute pickle objects. It preserves original sentences,
+lemmas and morphology codes. `dcs_chunks` is the flattened lemma sequence,
+not a second list of inflected surface words. Reviewers must supply the actual
+left/right inflected forms, exact observed span, tags, and external-boundary
+confirmation. The initial 200-item queue is a convenience sample, not a gold test set.
+Source offsets refer to the original IAST sentence. The worksheet preserves
+the exact span as `source_surface` and removes only whitespace for the model's
+`surface`; punctuation is not silently discarded.
 
-    PYTHONPATH=src python3 -c "from panini.rules import load_rules, apply_rule; r=load_rules('data/rules/external_vowel_sandhi.jsonl')[0]; print(apply_rule(r, 'deva', 'ālaya', {'pada_boundary'}))"
+## 4. Prepare All Holdouts
 
-The output identifies EVS-001, sūtra 6.1.101, matched boundaries, tags, and the
-reconstructed surface. EVS-001 remains a draft pending qualified review.
+For the synthetic engineering test:
 
-## 4. Test the Lexical Holdout
+```sh
+.venv/bin/python scripts/prepare_experiment.py --output data/processed/my-experiment
+```
 
-Run the tracked smoke fixture:
+For independent-corpus work, use `--examples /path/to/reviewed_boundaries.jsonl`
+instead. Pending or unaligned annotations are rejected. Missing candidate
+coverage is retained as a failure, not silently removed. Freeze the reviewed
+rule snapshot with `--rules` for both preparation and inference.
 
-    python3 scripts/build_lexical_holdout.py \
-      tests/fixtures/holdout_examples.jsonl \
-      /tmp/panini-holdout-smoke \
-      --force
+Preparation saves candidates, proof traces, file hashes, counts and overlap
+audits for source-random, pair and strict-lemma splits. The strict split also
+checks annotated context lemmas; cross-partition source groups go to `mixed`.
+Synthetic lemma identifiers denote nonce stems, not real Sanskrit lemmas.
 
-Inspect its manifest:
+All output directories must be new. Use a new name for each rerun so existing
+reviews, frozen datasets and checkpoints are never overwritten accidentally.
 
-    python3 -m json.tool \
-      /tmp/panini-holdout-smoke/manifest.json
+## 5. Train and Measure
 
-Expected record counts:
+```sh
+.venv/bin/python scripts/run_experiment.py \
+  --data data/processed/my-experiment --output runs/my-experiment --ablations
+```
 
-| Split | Count |
-| --- | ---: |
-| train | 2 |
-| dev | 2 |
-| test | 2 |
-| mixed | 2 |
+Defaults: five seeds, three epochs, two layers, width 64, four attention heads,
+UTF-8 byte inputs, and CPU. `--baselines-only` needs no PyTorch.
+`--width 128 --layers 4` selects the larger research architecture.
+`--train-limit 250` supports training-only learning-curve subsampling; report
+the actual retained count if fewer examples are available.
 
-Every lexical_overlap_counts value must be zero. The mixed examples
-deliberately connect lemmas assigned to different partitions and are excluded
-from train, dev, and test.
+Read `SUMMARY.md` and `results.json` in the output folder. Scores include
+candidate recall, top-1/top-3, MRR, per-rule/family counts, macro rule accuracy,
+dev-selected abstention, parameter count, runtime and cumulative process RAM.
+Checkpoints and per-item predictions are saved. Empty synthetic contexts
+cannot demonstrate contextual disambiguation or meaningful context ablations.
 
-## 5. Audit the DCS Archive
+Independently replay the candidates and regenerate every reported metric:
 
-If datasets/DCS_pick.zip is present:
+```sh
+.venv/bin/python scripts/verify_run.py --data data/processed/my-experiment --run runs/my-experiment
+```
 
-    python3 scripts/audit_dcs_archive.py --sample 100
+## 6. Try an Analysis
 
-Expected local counts are 441,735 unique data records, no missing extracted
-records, and two ancillary Python files. The utility examines pickle opcodes
-without constructing the serialized DCS objects. It also requires zero
-manifest identity problems for byte size, MD5, and SHA-256.
+```sh
+.venv/bin/python scripts/predict_sandhi.py 'devālaya'
+.venv/bin/python scripts/predict_sandhi.py 'devālaya' \
+  --checkpoint runs/my-experiment/strict_lemma-tiny_full-7.pt
+```
 
-This is an integrity check, not an annotation-quality check. Provenance,
-checksums, citation, and the CC BY 4.0 license for this exact archive are in
-datasets/dcs_source_manifest.json.
+Inspect the candidate words and their reconstructed surface, not just the
+score. Open inversion can produce nonwords: there is no hidden test-derived
+dictionary filter or morphological analyzer. `--tags` supplies grammatical prerequisites explicitly. An unsupported
+surface yields no candidates; a checkpoint may also abstain at its saved
+development-selected threshold. No missing forms are silently concatenated.
 
-## 6. Rebuild the All-Sandhi Source Corpus
+## What Counts as Success?
 
-After pinning an `ashtadhyayi-com/data` checkout to commit
-`51bff9fb38c6f571b4a2bc8499d97576f00ffcce`, run:
-
-    PYTHONDONTWRITEBYTECODE=1 python3 \
-      scripts/build_sandhi_sutra_corpus.py \
-      --source-dir vendor/ashtadhyayi-data
-
-Expected totals are 148 records, 108 operative candidates, and 40 supporting
-records. Read docs/ALL_SANDHI_DATASET.md before treating any source candidate
-as an executable rule.
-
-## 7. Author Rules
-
-Read:
-
-    docs/RULE_AUTHORING_GUIDE.md
-
-Edit:
-
-    data/rules/external_vowel_sandhi.jsonl
-
-Validate after each rule:
-
-    python3 scripts/validate_rules.py
-
-The final release command is:
-
-    python3 scripts/validate_rules.py \
-      --expected-count 25 \
-      --publication-ready
-
-That command currently fails by design because the inventory has one draft,
-no reviewer, and incomplete source and example coverage.
-
-## 8. Understand the Experiment
-
-Read in this order:
-
-1. docs/README.md
-2. docs/ALL_SANDHI_DATASET.md
-3. docs/EXPERIMENT_PROTOCOL.md
-4. docs/RULE_AUTHORING_GUIDE.md
-5. docs/panini-neuro-symbolic-ai.md
-6. datasets/README.md
-7. docs/approach-to-solution.md
-
-## 9. Current Next Step
-
-The next scholarly milestone is expert screening of the 148 source candidates.
-In parallel, the next engineering milestone is a safe DCS-to-JSONL converter
-that:
-
-- Never executes arbitrary pickle constructors.
-- Preserves source identifiers and original text.
-- Logs rejected and ambiguous records.
-- Extracts only candidate external vowel boundaries.
-- Aligns forms and lemmas to one of the reviewed EVS rules.
-- Requires forward surface reconstruction.
-
-Do not start neural training before the rule inventory, corpus manifest,
-normalization, deduplication, and splits are frozen.
+Passing code tests and complete synthetic candidate recall show that the
+pipeline is mechanically consistent. They do not show that its rules are
+correct, exhaustive, or that the Transformer understands Sanskrit. Next,
+independent reviewers must approve the rules and actual corpus boundaries.
+Only a frozen, sufficiently sized reviewed benchmark can support the paper's
+research claims. See [EXPERIMENT_PROTOCOL.md](docs/EXPERIMENT_PROTOCOL.md).

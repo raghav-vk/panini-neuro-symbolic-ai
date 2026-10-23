@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "archive": {
+    "size_bytes": 199818951,
+    "md5": "556395ddc0f087fbf0a199a0581775d0",
+    "sha256": "7b13cc2fda84318cba23d9c7667cd3ea30600091e446dac43fae86ebe90e4e85"
+  },
+  "counts": {
+    "examined": 441735,
+    "converted": 441722,
+    "rejected": 13
+  },
+  "review_proposals": 200,
+  "selection": "sorted ZIP member order; initial review queue is convenience sample, not representative evaluation",
+  "expert_reviewed_boundaries": 0,
+  "decoder": "primitive protocol-0 stack interpreter; no pickle.load",
+  "license": "CC-BY-4.0"
+}

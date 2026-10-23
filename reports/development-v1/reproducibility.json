@@ -1,0 +1,38 @@
+{
+  "source_file_sha256": {
+    "data/rules/development_checks.jsonl": "2f375ac5699f50b4982d16a883256b2c8949c19358d02d9b697364bf599130fc",
+    "data/rules/development_sandhi.jsonl": "db18c47add979bd1188fce18204626153dc90ad95d62cb72a4781d3e990145cd",
+    "data/rules/external_vowel_sandhi.jsonl": "6a903e632d556ebcc0995f676dff3218960846b213f346e52682afd79749cfee",
+    "data/schemas/sandhi-rule.schema.json": "7173f1c900f97eea8826407bc0b0381a4e6f8eefaaf5983d4c566e0cb890e42f",
+    "data/schemas/sandhi-sutra-source.schema.json": "137b92b9a666dade392002ae4596a3c841965b917733f89d43e8eb5837c332c3",
+    "scripts/audit_dcs_archive.py": "4de4469a1d0b61ecaed7fe6d22cedb9a7107311e0cd40e0f3da8d41b3a54fe0c",
+    "scripts/build_development_rules.py": "22927d5f4d31708eeab0a521679c60138128d7e02021b6884996d07517998bbb",
+    "scripts/build_lexical_holdout.py": "6814a66943661ece00b0c16eafba07773e23934a0bd435104af69168e616dc54",
+    "scripts/build_review_page.py": "f1f6616e658634d6994158b0098ad9f68459c14ffb5fb84a2a8c57720f032f8e",
+    "scripts/build_sandhi_sutra_corpus.py": "75bf5fcf38660fb0ee286ec657a2fdb09059845e31324499409dcdbd59d3a2b5",
+    "scripts/check_review.cjs": "e3d66ff7bd2b14723538a2c2d9e60d21c90af854f0dab7cb05fd9d2e404f3951",
+    "scripts/convert_dcs.py": "287f87ec0aa7ff4874aef4a4ef69aaf89a73b51b0e23fe2cd1fb724ab7c82d87",
+    "scripts/generate_toy_dataset.py": "b8ed22900b0a7417cc6e4681de5003667af47dc7db65b0a7c7e9ca34c814e904",
+    "scripts/predict_sandhi.py": "76b7638091585b6dbc9c8d404990dcda8fe3d9f11e6d04fdd1fd2fedb721f0c5",
+    "scripts/prepare_experiment.py": "588244446c0f31969e259a155ac91b748520f83777dc7db06f7df7a0f549c0d7",
+    "scripts/run_experiment.py": "00001a3b62d562ff23eb39908e2fbc7056c8206ab3165c519af0a7a581bb9d24",
+    "scripts/summarize_development.py": "f2db79812835ab7997a41ac8fbd4bfaea4c45dc739b24cb810ea4861ff85c98a",
+    "scripts/validate_rules.py": "b792f5b1231ee7c3a2c23bded683ecf462e041b45d8405cbd0a2e6b92745c03b",
+    "scripts/verify_run.py": "9f79f30ab6de2b1bf41ad46c959c2b624f9f26bbd221774bf1ce03e1ff1a2b3a",
+    "src/generator/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "src/generator/sandhi_generator.py": "fc5720814e10625f0f03b743028f9d4edd22762918ea0903d17d98e185f4132b",
+    "src/panini/__init__.py": "efb5b1285c4fa5f68b091201edf910baa7234156a9a7fdd8297af04d488d50c4",
+    "src/panini/candidates.py": "79f67b877960ffe249600c19e4abda1ae7215ccb066256637cdbce566406aeee",
+    "src/panini/dcs.py": "1f10cbff49be9cd81d01ac26e318a3208deaa8a1f2830d52efd1cb11e5a42965",
+    "src/panini/experiment_data.py": "be6bcd8b164afbd029bad812eed7fa7929c02d1372032f2288ef84ddf8bc088d",
+    "src/panini/ranking.py": "b5da32ecbf3b2d6422482858894cbc0e35067dd9f79d0eac260cbce106864e5f",
+    "src/panini/rules.py": "6e76c4503652e905a4a9f6ac1b2a77901afb35819ea8a47dc143801088b73794",
+    "src/panini/splits.py": "299cb4c24047ae3c0d5c3d6feba37c8c4d7ed82fa8550ee9e663f5c915a7011c",
+    "src/review/worksheet.html": "72654acc0d7cba88408eb61bf584234273508983403a3ae0c2a32c2e739b108d"
+  },
+  "packages": {
+    "torch": "2.14.0",
+    "numpy": "2.5.3",
+    "pytest": "9.1.1"
+  }
+}

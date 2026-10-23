@@ -1,0 +1,13 @@
+{"member": "DCS_pick/321.p", "reason": "pickle exhausted before seeing STOP"}
+{"member": "DCS_pick/325323.p", "reason": "pickle exhausted before seeing STOP"}
+{"member": "DCS_pick/326614.p", "reason": "pickle exhausted before seeing STOP"}
+{"member": "DCS_pick/374035.p", "reason": "at position 0, opcode b'\\xd9' unknown"}
+{"member": "DCS_pick/374088.p", "reason": "at position 0, opcode b'\\x1f' unknown"}
+{"member": "DCS_pick/374090.p", "reason": "at position 0, opcode b'\\xef' unknown"}
+{"member": "DCS_pick/374091.p", "reason": "at position 0, opcode b'\\xc9' unknown"}
+{"member": "DCS_pick/374092.p", "reason": "at position 418, opcode b'H' unknown"}
+{"member": "DCS_pick/374100.p", "reason": "at position 0, opcode b'\\x1a' unknown"}
+{"member": "DCS_pick/377018.p", "reason": "at position 0, opcode b'\\xfb' unknown"}
+{"member": "DCS_pick/377019.p", "reason": "at position 0, opcode b'\\x1e' unknown"}
+{"member": "DCS_pick/377020.p", "reason": "at position 0, opcode b'\\xb7' unknown"}
+{"member": "DCS_pick/377071.p", "reason": "at position 0, opcode b'9' unknown"}

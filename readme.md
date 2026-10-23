@@ -3,8 +3,9 @@
 This repository is developing a small, reproducible neuro-symbolic research
 system for Sanskrit sandhi. The source layer now covers candidate sūtras across
 vowel, consonant, visarga, nasal/anusvāra, non-application, and supporting
-material. The first executable benchmark remains **external vowel-sandhi
-splitting** until the broader inventory receives expert operational review.
+material. A runnable development pipeline now exercises 12 narrow draft
+encodings across five families. The planned scholarly benchmark remains
+external vowel-sandhi splitting under independently reviewed rules and data.
 
 The project no longer claims to build a complete Sanskrit language model,
 English-to-Sanskrit translator, or universally correct grammar engine in its
@@ -17,10 +18,15 @@ first paper.
 Implemented:
 
 - Strictly validated JSONL contract for typed sandhi rules.
-- One illustrative draft rule with executable positive-example checking.
-- Proof traces for boundary rewrites.
-- Deterministic strict lexical splitting with zero lemma overlap.
-- Non-executing audit of the legacy DCS pickle archive.
+- Twelve cross-family draft rules, 24 positive probes, 32 negative checks,
+  and a source-linked expert review packet; the old EVS seed is retained.
+- Inverse candidates with priority-aware forward proof traces and abstention.
+- Source-grouped, pair, and strict lemma holdouts with context/source audits.
+- Non-executing DCS decoder: 441,722 converted records, 13 quarantined records.
+- A 200-item DCS boundary review queue and local browser annotation worksheet.
+- Symbolic-order, frequency, character-bigram, and tiny Transformer rankers.
+- Five-seed CPU smoke experiments, no-rule/no-context ablations, saved
+  checkpoints, predictions, metrics and resource measurements.
 - Verified DCS archive provenance, CC BY 4.0 license, and checksums.
 - Reproducible 148-record all-sandhi sūtra candidate corpus, including 108
   operative candidates and 40 supporting records.
@@ -33,10 +39,10 @@ Still required:
 - Author and independently review the complete 25-rule inventory.
 - Obtain authoritative confirmation of the ashtadhyayi-com data license.
 - Expert-screen and operationalize the broader all-sandhi source candidates.
-- Convert sentence analyses into reviewed boundary examples.
-- Implement precedence-aware candidate enumeration.
-- Implement and train baselines and the tiny ranker.
-- Run all holdouts, ablations, resource measurements, and expert evaluation.
+- Have qualified reviewers complete the boundary and rule worksheets.
+- Extend single-step encodings to the reviewed inventory and derivation chains.
+- Run the independent-corpus study, unconstrained generative comparison,
+  data-efficiency curves, and blinded expert evaluation.
 - Replace every TBD in the manuscript from saved experiment artifacts.
 
 ## Research Question
@@ -65,6 +71,11 @@ The word verified means compliant with the encoded and tested subset. It does
 not mean complete Sanskrit grammatical or semantic correctness.
 
 ## Quick Start
+
+For the complete runnable workflow, use [QUICKSTART.md](QUICKSTART.md).
+The [development results](reports/development-v1/SUMMARY.md) are engineering
+checks on nonce strings, not measured Sanskrit accuracy. The
+[review packet](data/reviews/REVIEW_PACKET.md) is ready for collaborators.
 
 The current rule and data utilities use the Python standard library. Install
 pytest for tests:

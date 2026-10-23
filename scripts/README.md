@@ -1,5 +1,24 @@
 # Experiment Utilities
 
+## Complete Development Workflow
+
+See [Quick Start](../QUICKSTART.md) for commands in execution order.
+
+| Utility | Purpose |
+| --- | --- |
+| `build_development_rules.py` | Generate 12 narrow draft rules, negative checks and the expert review packet |
+| `convert_dcs.py` | Verify archive identity, decode primitive data without pickle execution, quarantine failures |
+| `build_review_page.py` | Create a local browser worksheet for boundary annotation and JSONL export |
+| `prepare_experiment.py` | Admit synthetic or reviewed examples, build three holdouts and forward-certified candidates |
+| `run_experiment.py` | CPU baselines, five-seed ranker training, ablations, checkpoint and metric artifacts |
+| `predict_sandhi.py` | Inspect candidates/proofs and optional checkpoint-based selection or abstention |
+| `verify_run.py` | Recompute metrics from saved scores, check frozen hashes and independently replay test proofs |
+| `summarize_development.py` | Retain compact measured evidence and source hashes without raw corpus files |
+| `check_review.cjs` | Optional Playwright desktop/mobile worksheet navigation and export QA |
+
+Data/run tools require new output directories and do not overwrite prior
+reviews or experiments. Rule rebuilding only replaces generated templates.
+
 ## build_sandhi_sutra_corpus.py
 
 Builds the deterministic all-sandhi source-candidate corpus from a pinned

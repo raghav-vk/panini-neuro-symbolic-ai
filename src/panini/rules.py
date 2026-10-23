@@ -1,4 +1,4 @@
-"""Typed boundary-rewrite rules for the external vowel-sandhi experiment."""
+"""Typed boundary rewrites for explicitly scoped sandhi experiments."""
 
 from __future__ import annotations
 
@@ -11,7 +11,12 @@ from pathlib import Path
 from typing import Any
 
 
-RULE_ID_RE = re.compile(r"^EVS-[0-9]{3}$")
+RULE_ID_RE = re.compile(r"^(EVS|SDH)-[0-9]{3}$")
+SCOPES = {"external_vowel_sandhi", "external_consonant_sandhi",
+          "external_nasal_sandhi", "external_visarga_sandhi", "non_application"}
+GRAMMATICAL_TAGS = {"pada_boundary", "left_pragrhya", "right_vowel",
+                    "optional_context", "vedic_only", "compound_internal",
+                    "right_second_not_sibilant"}
 SUTRA_ID_RE = re.compile(r"^[1-8]\.[1-4]\.[0-9]+$")
 DATE_RE = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
 STATUSES = {"draft", "self_checked", "expert_reviewed"}
@@ -140,7 +145,7 @@ class Review:
 
 @dataclass(frozen=True)
 class SandhiRule:
-    """A complete, machine-checkable external vowel-sandhi rewrite rule."""
+    """A machine-checkable operational boundary rewrite with review metadata."""
 
     schema_version: int
     rule_id: str
@@ -182,16 +187,16 @@ class SandhiRule:
             },
         )
 
-        if raw["schema_version"] != 1:
+        if type(raw["schema_version"]) is not int or raw["schema_version"] != 1:
             raise RuleValidationError("rule.schema_version must be 1")
 
         rule_id = _string(raw["rule_id"], "rule.rule_id")
         if not RULE_ID_RE.fullmatch(rule_id):
-            raise RuleValidationError("rule.rule_id must match EVS-NNN")
+            raise RuleValidationError("rule.rule_id must match EVS-NNN or SDH-NNN")
 
         scope = _string(raw["scope"], "rule.scope")
-        if scope != "external_vowel_sandhi":
-            raise RuleValidationError("rule.scope must be external_vowel_sandhi")
+        if scope not in SCOPES:
+            raise RuleValidationError(f"rule.scope must be one of {sorted(SCOPES)}")
 
         status = _string(raw["status"], "rule.status")
         if status not in STATUSES:
@@ -333,6 +338,9 @@ class SandhiRule:
             )
         )
         overlap = required & forbidden
+        unknown = (required | forbidden) - GRAMMATICAL_TAGS
+        if unknown:
+            raise RuleValidationError(f"unregistered grammatical tags: {sorted(unknown)}")
         if overlap:
             raise RuleValidationError(
                 "rule.match tags cannot be both required and forbidden: "
@@ -458,7 +466,13 @@ def apply_rule(
     """Apply one boundary rule and return a proof trace when it matches."""
     if not isinstance(left, str) or not isinstance(right, str):
         raise TypeError("left and right must be strings")
+    if isinstance(tags, str):
+        raise TypeError("tags must be an iterable of registered tag names, not a string")
     tag_set = frozenset(tags)
+    if tag_set - GRAMMATICAL_TAGS:
+        raise RuleValidationError(f"unregistered grammatical tags: {sorted(tag_set - GRAMMATICAL_TAGS)}")
+    if {"pada_boundary", "compound_internal"} <= tag_set:
+        return None
     if not rule.match.required_tags <= tag_set:
         return None
     if rule.match.forbidden_tags & tag_set:

@@ -121,9 +121,9 @@ Experts and engineers should operationalize candidates in seven review steps:
 
 The current `EVS-001` rule remains a format demonstration for the narrow
 external-vowel pilot. It is not evidence that all 108 operative candidates
-have been encoded. Expanding the executable schema should follow reviewed
-examples from at least one rule in each family so the types reflect grammar
-rather than engineering guesses.
+have been encoded. A separate development inventory now adds 12 tightly scoped
+SDH draft encodings across five families with a review packet and negative
+tests. This is engineering progress, not expert confirmation of the types.
 
 ## How to Test the Dataset
 
@@ -160,9 +160,11 @@ The two datasets have different jobs:
   examples may be derived.
 
 The local `DCS_pick.zip` is now verified against Zenodo by filename, byte
-size, and MD5 and is licensed CC BY 4.0. Its 441,735 pickle records still need
-safe conversion, boundary alignment, proof reconstruction, filtering, and
-review. They must not be counted as 441,735 ready-made sandhi examples.
+size, and MD5 and is licensed CC BY 4.0. The non-executing decoder converted
+441,722 of 441,735 records and quarantined 13 malformed records. The first
+200 proposed boundaries have a local browser review worksheet. Inflected-form
+recovery, surface alignment and expert approval are still required; converted
+sentences must not be counted as ready-made gold sandhi examples.
 
 ## Licensing Boundary
 

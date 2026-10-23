@@ -105,8 +105,9 @@ Current inventory:
 
     data/rules/external_vowel_sandhi.jsonl
 
-The current inventory contains one draft example. Candidate-lattice
-development should not assume that draft is linguistically approved.
+The legacy file contains one draft example. The new development inventory at
+`data/rules/development_sandhi.jsonl` contains 12 narrow cross-family encodings,
+with a reviewer packet and executable negative checks. None is expert approved.
 
 All-sandhi source inventory:
 
@@ -214,7 +215,11 @@ The legacy toy generator concatenates unsupported inputs. That behavior is
 retained only for compatibility tests and is forbidden in reported
 experiments.
 
-## 9. Implementation Sequence
+## 9. Implementation Status
+
+The six engineering steps are implemented and exercised; the remaining work
+below separates scholarly evaluation from engineering. Reproduction commands
+are maintained in [Quick Start](../QUICKSTART.md), not duplicated here.
 
 ### Milestone 1: Rule Contract
 
@@ -229,10 +234,10 @@ Implemented:
 
 Remaining:
 
-- Twenty-four additional draft records.
-- Controlled tag vocabulary.
+- Expansion to the complete reviewed study inventory.
+- Further grammatical prerequisites beyond the current enforced tag registry.
 - Expert review.
-- Precedence tests across overlaps.
+- Full derivation-order interpretation beyond the tested single-step priorities.
 
 ### Milestone 2: Corpus Contract
 
@@ -240,12 +245,12 @@ Implemented:
 
 - Archive integrity and opcode audit.
 - Verified DCS provenance, checksums, citation, and CC BY 4.0 manifest.
+- Non-executing protocol-0 decoder and malformed-record quarantine.
+- Adjacent-lemma review proposals and local browser annotation/export.
 
 Remaining:
 
-- Safe decoder.
-- Boundary extractor.
-- Rejection taxonomy.
+- Expert decisions on the 200-item boundary worksheet.
 - Reviewed derived-example sample.
 
 ### Milestone 3: Evaluation Splits
@@ -256,17 +261,16 @@ Implemented:
 - Mixed-edge preservation.
 - Deterministic manifest.
 - Zero-overlap tests.
+- Source-grouped and pair holdouts, duplicate linkage, context-lemma auditing.
 
 Remaining:
 
-- Source-grouped random split.
-- Exact-pair holdout.
-- Duplicate-group detection.
+- Independent-corpus verification of source/pair/duplicate grouping.
 - Per-rule minimum-coverage gate.
 
 ### Milestone 4: Symbolic Lattice
 
-Remaining:
+Implemented for the draft single-step subset:
 
 - Rule index and candidate inverse generation.
 - Precedence and optionality.
@@ -275,22 +279,27 @@ Remaining:
 
 ### Milestone 5: Models
 
-Remaining:
+Implemented:
 
-- Majority, symbolic-frequency, and n-gram baselines.
-- Parameter-matched unconstrained encoder.
+- Symbolic-order, frequency, and character-bigram baselines.
 - Full candidate ranker.
 - Checkpoint and run manifests.
 
+The parameter-matched unconstrained generator remains a planned research
+comparison, not part of the completed candidate-ranking smoke experiment.
+
 ### Milestone 6: Research Evaluation
 
-Remaining:
+Measured on synthetic probes:
 
 - Five-seed run matrix.
-- Data-efficiency curves.
 - Ablations.
-- Bootstrap confidence intervals.
 - Resource measurements.
+
+Remaining for scholarly evaluation:
+
+- Independent-corpus runs and data-efficiency curves.
+- Source-cluster bootstrap confidence intervals.
 - Blinded expert audit.
 - Error taxonomy.
 

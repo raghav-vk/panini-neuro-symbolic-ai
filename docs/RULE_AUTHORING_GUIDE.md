@@ -83,9 +83,9 @@ proof that this project's interpretation is correct:
 | Field | Authoring rule |
 | --- | --- |
 | schema_version | Always 1 for this protocol |
-| rule_id | Stable EVS-NNN identifier; never recycle an identifier |
+| rule_id | Stable EVS-NNN or SDH-NNN identifier; never recycle an identifier |
 | name | Short operational name, not an unsupported translation claim |
-| scope | Always external_vowel_sandhi |
+| scope | external_vowel_sandhi, external_consonant_sandhi, external_nasal_sandhi, external_visarga_sandhi, or non_application |
 | status | draft, self_checked, or expert_reviewed |
 | source.sutra_ids | Every directly used sūtra identifier |
 | source.text_iast | Source text in the chosen transliteration |
@@ -108,11 +108,16 @@ proof that this project's interpretation is correct:
 | review | Author, independent reviewer, and date |
 | notes | Ambiguity, commentary dependence, and open questions |
 
+In the current single-step executor, an optional higher-priority rule retains
+other encoded lower-priority outcomes for the same pair. The alternate
+outcome must itself have an explicit rule, including an identity rewrite if
+appropriate. The engine never invents a universally licensed unchanged output
+or performs a full multi-step Paninian derivation.
+
 ## 5. Tag Vocabulary
 
 Use tags for grammatical conditions that cannot be represented by boundary
-characters alone. Begin with a small controlled vocabulary in a shared issue
-or future schema file. Candidate tags include:
+characters alone. The loader and schema now enforce this registered vocabulary:
 
 - pada_boundary
 - left_pragrhya
@@ -120,6 +125,17 @@ or future schema file. Candidate tags include:
 - optional_context
 - vedic_only
 - compound_internal
+- right_second_not_sibilant
+
+`pada_boundary` asserts an external word boundary; `compound_internal` asserts
+the contrary and cannot license an external rewrite at the same boundary.
+`left_pragrhya` marks the reviewed pragrhya status of the left word.
+`right_vowel` describes its first sound. `right_second_not_sibilant` is the
+explicitly checked narrow visarga prerequisite, never guessed from a lemma.
+`optional_context` and `vedic_only` are reserved reviewed context flags; the
+development inventory does not implement a Vedic rule system. Adding new tag
+names requires updating both the registry and schema with tests. The current
+matcher is a supplied-annotation interface, not a morphological tagger.
 
 Do not invent spelling variants of an existing tag. A tag must have a written
 definition and at least one positive or negative test. The first paper excludes

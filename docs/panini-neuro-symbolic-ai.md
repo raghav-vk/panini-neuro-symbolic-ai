@@ -1,13 +1,14 @@
 # Proof-Carrying External Vowel-Sandhi Splitting with Typed Pāṇinian Rules and a Tiny Transformer
 
 **Author:** Raghavendra V. Karnam
-**Working manuscript version:** 0.3, August 2026
+**Working manuscript version:** 0.4, September 2026
 **Repository:** https://github.com/raghav-vk/panini-neuro-symbolic-ai
-**Status:** Experimental protocol and implementation in progress
+**Status:** Runnable development system; independent-corpus evaluation pending
 
 > This version is not ready for arXiv resubmission. It contains a complete
-> study design but no measured model results or completed expert evaluation.
-> All TBD cells must be replaced from reproducible runs before submission.
+> study design and measured synthetic engineering results, but no completed
+> independent-corpus or expert evaluation. Planned-study TBD cells must not
+> be filled using the synthetic probe scores.
 
 ## Abstract
 
@@ -30,8 +31,12 @@ expert review. A separately versioned source layer inventories 148 sandhi-relate
 sūtra candidates across two pedagogical classifications, including 108
 operative candidates and 40 supporting records; these are an expert review
 queue, not automatically executable rules. This manuscript specifies the
-system and preregistered evaluation; empirical results are pending and no claim
-of general Sanskrit grammatical correctness is made.
+system and planned evaluation. An accompanying development implementation
+executes 12 narrow draft encodings across five families, converts the DCS
+archive without executing pickle objects, and runs a small CPU Transformer
+on synthetic nonce-string probes. Those measurements establish engineering
+reproducibility, not Sanskrit accuracy; independent-corpus results remain
+pending and no claim of general grammatical correctness is made.
 
 ## 1. Introduction
 
@@ -236,8 +241,10 @@ validation if their declared surface differs from the rewrite output.
 Publication mode rejects draft rules, unresolved licenses, unpinned source
 revisions, missing review, and insufficient examples.
 
-The current repository contains one illustrative draft. It is not a completed
-inventory and must not be used to claim 25-rule coverage.
+The repository retains the illustrative EVS seed and now contains 12 separate
+SDH development encodings spanning five families. They have 24 positive string
+probes and 32 executable negative checks, but no independent approval. Neither
+the drafts nor the source corpus establish the planned 25-rule coverage.
 
 ## 6. Symbolic Candidate Layer
 
@@ -463,7 +470,32 @@ hyperparameters and abstention thresholds on development data only.
 
 ## 11. Results
 
-No model results have been measured for this version.
+### Development Evidence (Not the Main Study)
+
+The September development run uses 2,400 constructed nonce-string boundaries
+across 12 draft encodings, not reviewed Sanskrit word pairs. Source-random and
+pair holdouts coincide because the synthetic source groups already identify
+pairs: 1,923 training, 229 development and 248 test items. The strict holdout
+retains 796/112/131 items and withholds 1,361 cross-partition items. Retained
+strict partitions have zero annotated lemma, source and surface overlap.
+
+Three non-neural baselines and the tiny ranker, with no-rule and no-context
+ablations, run on CPU over five seeds. The exact scores, parameter counts,
+resource measurements and frozen data hashes are retained in
+[the development report](../reports/development-v1/SUMMARY.md). Candidate recall
+is complete on these probes by construction and is not an independent measure
+of linguistic coverage. Synthetic contexts are empty, so context ablation is
+a software control, not a test of semantic disambiguation. No reliable benefit
+from rule-ID features or claim of research-model superiority follows from
+this experiment.
+
+The non-executing DCS conversion examined 441,735 archive records, converted
+441,722 and quarantined 13 malformed records with explicit reasons. It created
+200 boundary proposals for expert annotation; none is represented as gold.
+These proposals expose lemma slots and source sentences, leaving inflected
+forms and surface alignment to review rather than inventing them from lemmas.
+
+The following tables remain templates for the **independent-corpus study**.
 
 ### 11.1 Dataset and Candidate Coverage
 
