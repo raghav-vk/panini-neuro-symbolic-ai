@@ -209,3 +209,12 @@ def test_cli_prepares_and_runs_baselines(tmp_path):
     command[command.index(str(output))] = str(tmp_path / "tampered")
     result = subprocess.run(command, capture_output=True, text=True)
     assert result.returncode != 0 and "hash mismatch" in result.stderr
+
+
+def test_tie_averaged_top1_removes_index_tie_break():
+    row = {"example_id": "x", "rule_id": "SDH-001", "surface": "ā", "gold_indices": [0],
+           "candidates": [{"left": "a", "right": "a", "proofs": []}, {"left": "ā", "right": "a", "proofs": []}]}
+    result, _ = metrics([row], [[0.0, 0.0]])
+    assert result["top1"] == 1.0 and result["top1_tie_averaged"] == 0.5 and result["tied_top_rows"] == 1
+    result, _ = metrics([row], [[1.0, 0.0]])
+    assert result["top1_tie_averaged"] == 1.0 and result["tied_top_rows"] == 0

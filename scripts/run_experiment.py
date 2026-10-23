@@ -101,16 +101,18 @@ def main():
             results["results"].append(entry)
             (args.output / f"{split}-{name}-{seed}-predictions.jsonl").write_text("".join(json.dumps(r) + "\n" for r in predictions))
             (args.output / "results.json").write_text(json.dumps(results, indent=2) + "\n")
-            print(f"{split} {name} seed={seed}: top1={report['top1']:.3f} recall={report['candidate_recall']:.3f} fit={fit_seconds:.1f}s", flush=True)
+            print(f"{split} {name} seed={seed}: top1={report['top1']:.3f} tie_avg={report['top1_tie_averaged']:.3f} recall={report['candidate_recall']:.3f} fit={fit_seconds:.1f}s", flush=True)
     lines = ["# Development Experiment Results", "", f"Data: **{manifest['data_kind']}**. {CAVEATS.get(manifest['data_kind'], CAVEATS['synthetic_engineering_smoke'])[0]}", "",
-             "| Split | Model | Seeds | Mean top-1 | SD | Candidate recall |", "|---|---|---:|---:|---:|---:|"]
+             "| Split | Model | Seeds | Mean top-1 | SD | Tie-averaged top-1 | Candidate recall |", "|---|---|---:|---:|---:|---:|---:|"]
     for split in args.splits:
         for name in dict.fromkeys(r["model"] for r in results["results"]):
             group = [r for r in results["results"] if r["split"] == split and r["model"] == name]
             values = [r["test"]["top1"] for r in group]
-            lines.append(f"| {split} | {name} | {len(group)} | {statistics.mean(values):.4f} | {statistics.stdev(values) if len(values)>1 else 0:.4f} | {group[0]['test']['candidate_recall']:.4f} |")
+            tie_averaged = statistics.mean(r["test"]["top1_tie_averaged"] for r in group)
+            lines.append(f"| {split} | {name} | {len(group)} | {statistics.mean(values):.4f} | {statistics.stdev(values) if len(values)>1 else 0:.4f} | {tie_averaged:.4f} | {group[0]['test']['candidate_recall']:.4f} |")
     lines += ["", CAVEATS.get(manifest["data_kind"], CAVEATS["synthetic_engineering_smoke"])[1],
               "Source-random and pair splits may coincide when source groups already identify pairs. Strict mixed rows remain excluded and counted.",
+              "Top-1 breaks score ties by candidate index, which is alphabetical; tie-averaged top-1 is the expected score under random tie-breaking.",
               "Hyperparameters fixed before test; epoch and abstention threshold selected on dev only. Test is not used for training.",
               "Intervals in JSON are itemwise Wilson intervals, not source-cluster bootstrap intervals. RSS is cumulative process peak, not model-only memory.",
               "No unconstrained generative baseline or independently reviewed Sanskrit benchmark is claimed by this smoke experiment."]

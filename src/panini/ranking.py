@@ -51,13 +51,17 @@ class Baseline:
 
 def metrics(rows, scores, threshold=0.0):
     total, covered, correct, top3, proof_valid, accepted, accepted_correct = len(rows), 0, 0, 0, 0, 0, 0
-    groups, reciprocal, predictions = {}, 0.0, []
+    groups, reciprocal, predictions, tie_averaged, tied = {}, 0.0, [], 0.0, 0
     for row, values in zip(rows, scores, strict=True):
         if len(values) != len(row["candidates"]) or any(not math.isfinite(x) for x in values):
             raise ValueError("invalid candidate scores")
         order = sorted(range(len(values)), key=lambda i: (-values[i], i))
         gold = row["gold_indices"]
         hit = bool(order and order[0] in gold)
+        # Index order is alphabetical, so breaking ties by index is a hidden heuristic.
+        best = [i for i in order if values[i] == values[order[0]]] if order else []
+        tied += len(best) > 1
+        tie_averaged += sum(i in gold for i in best) / len(best) if best else 0
         covered += bool(gold)
         correct += hit
         top3 += any(i in gold for i in order[:3])
@@ -88,6 +92,7 @@ def metrics(rows, scores, threshold=0.0):
         interval = None
     rule_groups = [value for key, value in groups.items() if key in {r["rule_id"] for r in rows}]
     return {"examples": total, "candidate_recall": rate(covered, total), "top1": rate(correct, total),
+            "top1_tie_averaged": rate(tie_averaged, total), "tied_top_rows": tied,
             "macro_rule_top1": sum(g["correct"]/g["count"] for g in rule_groups)/len(rule_groups) if rule_groups else None,
             "top3": rate(top3, total), "mrr": rate(reciprocal, total), "conditional_top1": rate(correct, covered),
             "abstention_rate": rate(total-accepted, total), "accepted_accuracy": rate(accepted_correct, accepted),
