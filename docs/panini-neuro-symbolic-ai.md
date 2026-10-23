@@ -125,9 +125,10 @@ ashtadhyayi.com, including sūtra and commentary data. From pinned commit
 selects 148 sandhi-related source records using the union of the relevant
 Siddhānta Kaumudī and Laghu Siddhānta Kaumudī chapter assignments. It records
 the exact file and commit rather than treating the repository as an unversioned
-grammar oracle. The repository snapshot contains no license file, so its
-author-reported Apache-2.0 status remains unverified and modern commentary is
-not copied into the released source inventory.
+grammar oracle. The repository snapshot contains no license file; its
+maintainer permits use in products offered free of charge and forbids
+commercial use. Only sūtra identifiers, ancient sūtra text, and factual
+classifications are copied; modern commentary is not.
 
 The Digital Corpus of Sanskrit provides morphologically analyzed Sanskrit
 material. The local legacy archive examined for this project is verified as
@@ -601,11 +602,13 @@ Fifth, results on external vowel sandhi do not justify claims about full word
 segmentation, morphology, syntax, translation, literary quality, or language
 modeling.
 
-Finally, the DCS archive's CC BY 4.0 terms are verified, but the claimed
-Apache-2.0 status of the pinned ashtadhyayi-com snapshot is not evidenced by a
-repository license file. If rights for modern annotations cannot be confirmed,
-release only ancient source text, code, manifests, hashes, and reconstruction
-instructions rather than copied commentary or translations.
+Finally, the DCS archive is released under CC BY 4.0. The ashtadhyayi-com
+material is available only for products offered free of charge and may not be
+used commercially, which is stricter than this project's Apache-2.0 code
+license. The release therefore keeps that material under its upstream terms
+and includes only ancient source text, factual classifications, code,
+manifests, hashes, and reconstruction instructions, not modern commentary or
+translations.
 
 ## 15. Conclusion
 

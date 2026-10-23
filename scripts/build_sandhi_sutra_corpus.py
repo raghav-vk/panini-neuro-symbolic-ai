@@ -33,6 +33,11 @@ ROLE_BY_TYPE_CODE = {
     "AT": "transference_principle",
 }
 PINNED_SOURCE_COMMIT = "51bff9fb38c6f571b4a2bc8499d97576f00ffcce"
+UPSTREAM_TERMS = (
+    "This data is available for use as long as the product generated from "
+    "this data is made available for free for others. Commercial use of the "
+    "dataset is not allowed."
+)
 
 
 class CorpusBuildError(ValueError):
@@ -205,18 +210,25 @@ def build_manifest(
             "file_sha256": source_file_sha256,
         },
         "license": {
-            "claimed_spdx": "Apache-2.0",
-            "claim_evidence": "supplied by project author",
-            "checked_on": "2026-08-12",
+            "spdx": "LicenseRef-ashtadhyayi-com-free-noncommercial",
+            "terms": UPSTREAM_TERMS,
+            "terms_evidence": (
+                "written reply from ashtadhyayi.com maintainer Neelesh Bodas "
+                "to the project author, 2024-02-18"
+            ),
+            "checked_on": "2026-10-23",
             "verified_at_source_commit": False,
             "repository_license_file_found": False,
             "github_license_api_status": 404,
-            "redistribution_status": "review_required",
+            "commercial_use_permitted": False,
+            "redistribution_status": "free_noncommercial_only",
             "note": (
                 "The pinned repository snapshot contains no LICENSE, NOTICE, "
-                "or COPYING file. Confirm the grant with the upstream owner "
-                "before redistributing modern annotations. This artifact omits "
-                "modern commentary and translations."
+                "or COPYING file; the terms come from the maintainer's written "
+                "reply. They are stricter than this repository's Apache-2.0 "
+                "license, so this artifact is distributed under the upstream "
+                "terms, not Apache-2.0. See THIRD_PARTY_NOTICES.md. This "
+                "artifact omits modern commentary and translations."
             ),
         },
         "selection": {

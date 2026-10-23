@@ -171,3 +171,6 @@ def test_committed_corpus_matches_its_manifest():
     assert len(manifest["source"]["file_sha256"]) == 64
     assert manifest["license"]["verified_at_source_commit"] is False
     assert manifest["license"]["github_license_api_status"] == 404
+    assert manifest["license"]["terms"] == corpus_builder.UPSTREAM_TERMS
+    assert manifest["license"]["commercial_use_permitted"] is False
+    assert manifest["license"]["redistribution_status"] == "free_noncommercial_only"

@@ -66,10 +66,10 @@ Before authoring:
    precedence relations must be represented.
 
 The ashtadhyayi-com source corpus is pinned to commit
-`51bff9fb38c6f571b4a2bc8499d97576f00ffcce` and rebuilt deterministically. The
-project author's Apache-2.0 license claim is not evidenced by a license file in
-that snapshot. Obtain confirmation from the upstream owner before copying
-modern commentary or translation fields:
+`51bff9fb38c6f571b4a2bc8499d97576f00ffcce` and rebuilt deterministically. Its
+maintainer permits use only in products offered free of charge and forbids
+commercial use; see THIRD_PARTY_NOTICES.md. Do not copy modern commentary or
+translation fields into this repository:
 
     https://github.com/ashtadhyayi-com/data
 

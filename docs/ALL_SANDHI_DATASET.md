@@ -69,8 +69,8 @@ Every JSONL record contains:
 The formal contract is
 `data/schemas/sandhi-sutra-source.schema.json`. Modern translations,
 commentary, expanded interpretations, and examples are not copied into this
-release because the source repository's claimed Apache-2.0 grant could not be
-verified from a license file at the pinned commit.
+release. The source's terms allow only free, non-commercial use; see the
+license section below.
 
 ## Rebuild Exactly
 
