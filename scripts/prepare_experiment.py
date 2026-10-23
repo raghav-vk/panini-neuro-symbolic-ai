@@ -41,7 +41,7 @@ def main():
     manifest = {"data_kind": kind,
                 "rules_sha256": digest(args.rules.read_text()), "rules": [r.rule_id for r in rules],
                 "rules_expert_reviewed": sum(r.status == "expert_reviewed" for r in rules), "splits": {}}
-    for method in ("source_random", "pair", "strict_lemma"):
+    for method in ("source_random", "pair", "strict_lemma", "strict_right_lemma"):
         splits, audit = split_examples(records, method, args.seed)
         directory = args.output / method
         directory.mkdir()

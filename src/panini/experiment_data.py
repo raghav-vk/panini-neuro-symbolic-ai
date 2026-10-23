@@ -129,9 +129,20 @@ def lemma_set(record):
             *(lemma for pair in record.get("accepted_pair_lemmas", []) for lemma in pair)}
 
 
+def right_word_lemmas(record):
+    """Lemmas of the right-hand word, including compound members fused into its surface."""
+    return set(record.get("right_word_lemmas") or [record["right_lemma"]])
+
+
 def split_examples(records, method, seed=1729):
-    """Group duplicates/sources before assignment; strict includes context lemmas."""
-    if method not in {"source_random", "pair", "strict_lemma"}:
+    """Group duplicates/sources before assignment; strict includes context lemmas.
+
+    strict_right_lemma holds out only the right-hand word (protocol amendment 0.2): left
+    words of the indeclinable scope form a closed class that training must contain. It
+    deduplicates to distinct analysis types, ignoring context, so frequent forms such as
+    caiva cannot dominate a partition.
+    """
+    if method not in {"source_random", "pair", "strict_lemma", "strict_right_lemma"}:
         raise ValueError("unknown split method")
     clean, seen, ids, duplicates = [], set(), set(), 0
     for raw in records:
@@ -139,7 +150,8 @@ def split_examples(records, method, seed=1729):
         if record["example_id"] in ids:
             raise ValueError("duplicate example identity")
         ids.add(record["example_id"])
-        key = digest({k: record.get(k) for k in ("surface", "left", "right", "context", "tags", "accepted_pairs")})
+        fields = ("surface", "left", "right", "tags", "accepted_pairs")
+        key = digest({k: record.get(k) for k in fields + (() if method == "strict_right_lemma" else ("context",))})
         if key in seen:
             duplicates += 1
             # Preserve source linkage through duplicate rows until grouping ends.
@@ -174,6 +186,10 @@ def split_examples(records, method, seed=1729):
         if method == "strict_lemma":
             buckets = {_assign_bucket(seed, lemma, lemma_ratios) for r in records_in_group for lemma in lemma_set(r)}
             bucket = next(iter(buckets)) if len(buckets) == 1 else "mixed"
+        elif method == "strict_right_lemma":
+            # One word, not two endpoints: example ratios apply without the square-root correction.
+            buckets = {_assign_bucket(seed, lemma, DEFAULT_RATIOS) for r in records_in_group for lemma in right_word_lemmas(r)}
+            bucket = next(iter(buckets)) if len(buckets) == 1 else "mixed"
         else:
             key = min(r["example_id"] for r in records_in_group)
             bucket = _assign_bucket(seed, key, DEFAULT_RATIOS)
@@ -187,6 +203,7 @@ def split_examples(records, method, seed=1729):
         a, b = splits[left], splits[right]
         overlaps[f"{left}_{right}"] = {
             "lemmas_including_context": len(set().union(*(lemma_set(r) for r in a)) & set().union(*(lemma_set(r) for r in b))),
+            "right_word_lemmas": len(set().union(*(right_word_lemmas(r) for r in a)) & set().union(*(right_word_lemmas(r) for r in b))),
             "pairs": len({(r["left_lemma"], r["right_lemma"]) for r in a} & {(r["left_lemma"], r["right_lemma"]) for r in b}),
             "sources": len({r["source_group"] for r in a} & {r["source_group"] for r in b}),
             "surfaces": len({r["surface"] for r in a} & {r["surface"] for r in b})}
@@ -196,6 +213,8 @@ def split_examples(records, method, seed=1729):
             assert overlap["pairs"] == 0
         if method == "strict_lemma":
             assert overlap["lemmas_including_context"] == 0
+        if method == "strict_right_lemma":
+            assert overlap["right_word_lemmas"] == 0
     return splits, {"method": method, "seed": seed, "input_count": len(clean), "duplicates_removed": duplicates,
                     "counts": {k: len(v) for k, v in splits.items()}, "overlaps": overlaps,
                     "per_rule": {k: dict(Counter(r["rule_id"] for r in v)) for k, v in splits.items()},

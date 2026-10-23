@@ -96,7 +96,7 @@ def test_decoder_rejects_trailing_bytes_size_and_alignment():
         decode_record(legacy(state()), max_bytes=2)
 
 
-@pytest.mark.parametrize("method", ["source_random", "pair", "strict_lemma"])
+@pytest.mark.parametrize("method", ["source_random", "pair", "strict_lemma", "strict_right_lemma"])
 def test_splits_are_reproducible_and_grouped(method):
     records = synthetic_examples(RULES, per_rule=40)
     first, audit = split_examples(records, method)
@@ -202,7 +202,7 @@ def test_cli_prepares_and_runs_baselines(tmp_path):
     subprocess.run([sys.executable, str(ROOT / "scripts/prepare_experiment.py"), "--per-rule", "40", "--output", str(data)], check=True, capture_output=True)
     command = [sys.executable, str(ROOT / "scripts/run_experiment.py"), "--data", str(data), "--output", str(output), "--baselines-only"]
     subprocess.run(command, check=True, capture_output=True)
-    assert len(json.loads((output / "results.json").read_text())["results"]) == 9
+    assert len(json.loads((output / "results.json").read_text())["results"]) == 12
     subprocess.run([sys.executable, str(ROOT / "scripts/verify_run.py"), "--data", str(data), "--run", str(output)], check=True, capture_output=True)
     with (data / "source_random/train.jsonl").open("a") as handle:
         handle.write("\n")

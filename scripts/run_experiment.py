@@ -33,7 +33,8 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--data", type=Path, default=ROOT / "data/processed/development")
     p.add_argument("--output", type=Path, default=ROOT / "runs/development")
-    p.add_argument("--splits", nargs="+", choices=["source_random", "pair", "strict_lemma"], default=["source_random", "pair", "strict_lemma"])
+    p.add_argument("--splits", nargs="+", choices=["source_random", "pair", "strict_lemma", "strict_right_lemma"],
+                   help="default: every split in the data manifest")
     p.add_argument("--seeds", nargs="+", type=int, default=[7, 11, 19, 23, 29])
     p.add_argument("--epochs", type=int, default=3)
     p.add_argument("--width", type=int, default=64)
@@ -47,6 +48,7 @@ def main():
         p.error("invalid training dimensions, epochs, or limit")
     args.output.mkdir(parents=True, exist_ok=False)
     manifest = json.loads((args.data / "manifest.json").read_text())
+    args.splits = args.splits or list(manifest["splits"])
     results = {"data_kind": manifest["data_kind"], "data_manifest": manifest, "configuration": {k: str(v) if isinstance(v, Path) else v for k, v in vars(args).items()},
                "python": sys.version, "platform": platform.platform(), "device": "cpu", "results": []}
     if not args.baselines_only:

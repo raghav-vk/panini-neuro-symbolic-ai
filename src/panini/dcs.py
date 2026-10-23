@@ -214,7 +214,7 @@ def external_vowel_boundaries(record, context_window=1):
             yield {
                 "example_id": f"DCS-{record['sent_id']}-{c}-{j}", "source_group": f"DCS-{record['sent_id']}",
                 "left": lemmas[j], "right": slp1_to_iast(right[0] + chunk[junction_end:]),
-                "left_lemma": lemmas[j], "right_lemma": lemmas[j + 1],
+                "left_lemma": lemmas[j], "right_lemma": lemmas[j + 1], "right_word_lemmas": lemmas[j + 1:],
                 "surface": surface, "source_surface": surface,
                 "source_sentence_iast": sentence_iast, "source_span": [start_iast, start_iast + len(surface)],
                 "observed_junction": slp1_to_iast(chunk[len(left) - 1:junction_end]),

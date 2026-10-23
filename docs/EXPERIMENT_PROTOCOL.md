@@ -1,6 +1,6 @@
 # Experimental Protocol: Proof-Carrying External Vowel-Sandhi Splitting
 
-**Protocol version:** 0.1
+**Protocol version:** 0.2 (amendment of 2026-10-23: right-word holdout, section 9.5)
 **Status:** Planned independent-corpus study; development smoke run separately frozen
 **Primary task:** Rank rule-licensed analyses of one external vowel-sandhi boundary
 **Compute target:** CPU or one modest consumer GPU
@@ -46,7 +46,8 @@ gold split in its candidate set?
 more accurately than symbolic-only and frequency-based baselines?
 
 **RQ3: Lexical generalization.** Does the improvement remain when neither
-lemma in a test pair appears in training?
+lemma in a test pair appears in training? Phase 1 tests unseen right-hand
+words only; see amendment 0.2 in section 9.5.
 
 **RQ4: Data efficiency.** How does performance change with 250, 1,000, 5,000,
 and all available training examples?
@@ -306,6 +307,40 @@ When work identifiers are available, reserve entire works or editions as a
 secondary robustness test. This detects leakage from repeated passages and
 source-specific orthography. Do not substitute this for strict lexical
 holdout; it tests a different failure mode.
+
+### 9.5 Right-Word Holdout (Amendment 0.2)
+
+Decided on 2026-10-23 after the split counts were inspected and before any
+model was run on corpus data. One correction followed, also before any model
+run: the right-word split uses plain example ratios rather than the two-endpoint
+square-root ratios of section 9.3. A single-seed timing run of the baselines and
+neural ranker was then made before this text was written. Its scores did not
+change the split design.
+
+The first corpus-derived dataset is silver data extracted from DCS by
+`scripts/extract_dcs_boundaries.py`. Its left words are chunk-initial
+indeclinables, the only left words whose inflected form equals the lemma.
+They form a closed class: 211 lemmas cover 39,838 examples, and *ca* alone
+opens about 17,000. Under section 9.3, 96 percent of examples became mixed and
+the test set kept 36 examples, far below the 500-example minimum.
+
+The amendment is staged:
+
+1. **Phase 1.** RQ3 is tested on unseen right-hand words. Each lemma of the
+   right-hand word, including compound members fused into its surface, is
+   assigned to one partition with the plain 80/10/10 example ratios. Left
+   indeclinables may occur in every partition. Examples are deduplicated to
+   distinct analysis types (surface, left, right, tags), ignoring context, so
+   frequent forms such as *caiva* are counted once. Source and identical-surface
+   grouping are unchanged. Train, dev and test right-word lemma intersections
+   must be empty.
+2. **Phase 2.** Before the paper is final, extend the data to inflected left
+   words using a morphological generator, so the section 9.3 both-lemma
+   holdout becomes feasible. Phase 1 results must be reported as right-word
+   holdout results, never as section 9.3 results.
+
+The split is built by `prepare_experiment.py` as `strict_right_lemma`, next to
+the unchanged section 9.3 split `strict_lemma`.
 
 ## 10. Candidate Generator
 

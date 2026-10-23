@@ -101,3 +101,16 @@ def test_cli_extracts_and_prepares_silver_splits(tmp_path):
     subprocess.run([sys.executable, str(ROOT / "scripts/prepare_experiment.py"), "--silver-examples",
                     str(extracted / "examples.jsonl"), "--output", str(prepared)], check=True, capture_output=True)
     assert json.loads((prepared / "manifest.json").read_text())["data_kind"] == "dcs_silver_alignment"
+
+
+def test_right_word_holdout_shares_left_words_and_counts_types_once():
+    from panini.experiment_data import split_examples
+    rows = []
+    for i, right in enumerate(["api", "atra", "anya", "artha", "eva", "iti", "upari", "asya"] * 3):
+        surface = iast_to_slp1("c" + {"a": "ā", "e": "ai", "i": "e", "u": "o"}[right[0]] + right[1:])
+        [(example, _)] = external_vowel_boundaries(record(surface, [["ca", right]], [["2", "2"]], sent_id=i))
+        rows.append({**label(example, RULES), "context": f"ctx{i}", "context_lemmas": [f"ctx{i}"]})
+    splits, audit = split_examples(rows, "strict_right_lemma")
+    assert audit["duplicates_removed"] == 16  # contexts differ, but each analysis type is kept once
+    assert sum(len(v) for v in splits.values()) == 8
+    assert all(o["right_word_lemmas"] == 0 for o in audit["overlaps"].values())
