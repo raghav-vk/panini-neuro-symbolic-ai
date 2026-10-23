@@ -1,7 +1,8 @@
 # Third-Party Data Notices
 
-Project code and original documentation use the repository's MIT license.
-Third-party datasets retain their own terms and are not relicensed as MIT.
+Project code and original documentation use the repository's Apache-2.0
+license. Third-party datasets retain their own terms and are not relicensed
+under Apache-2.0.
 
 ## DCS_pick
 
@@ -26,15 +27,26 @@ The all-sandhi source-candidate corpus was generated from
 
 Repository: https://github.com/ashtadhyayi-com/data
 
-The project author reports that this source is Apache-2.0. That claim could
-not be independently verified from the pinned snapshot because it contains
-no `LICENSE`, `NOTICE`, or `COPYING` file. The generated corpus therefore
-contains only sūtra identifiers, ancient sūtra text, factual classification
-fields, and provenance; it omits modern commentary and translations. Confirm
-the rights statement with the upstream owner before distributing those modern
-annotations or changing the manifest's `redistribution_status`.
+### Terms of use
 
-Apache-2.0 is a permissive license, not a copyleft license: it requires its
-license and notices to be preserved when applicable, but it does not by itself
-require every downstream work to publish source code. This project remains
-open source under MIT independently of that distinction.
+The pinned snapshot contains no `LICENSE`, `NOTICE`, or `COPYING` file. The
+terms below come from a written reply by the ashtadhyayi.com maintainer,
+Neelesh Bodas, to the project author on 18 February 2024:
+
+> This data is available for use as long as the product generated from this
+> data is made available for free for others. Commercial use of the dataset
+> is not allowed.
+
+These terms are stricter than Apache-2.0, which permits commercial use.
+Therefore:
+
+- Artifacts derived from this source, including
+  `data/sources/ashtadhyayi_sandhi_sutras.jsonl` and the sūtra identifiers
+  and text copied into `data/rules/development_sandhi.jsonl`, are provided
+  free of charge under the upstream terms above, not under Apache-2.0.
+- Do not use those artifacts, or products generated from them, commercially.
+- The generated corpus contains only sūtra identifiers, ancient sūtra text,
+  factual classification fields, and provenance. It omits modern commentary
+  and translations.
+
+Anyone redistributing these artifacts must keep this notice with them.

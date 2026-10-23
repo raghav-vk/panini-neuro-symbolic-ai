@@ -192,6 +192,8 @@ named reviewer's approval.
 
 ## License
 
-Project code and original documentation are licensed under MIT; see LICENSE.
-Third-party data and source material retain their own licenses and must be
-documented separately; see THIRD_PARTY_NOTICES.md.
+Project code and original documentation are licensed under the Apache
+License 2.0; see LICENSE and NOTICE. Third-party data and source material
+retain their own terms; see THIRD_PARTY_NOTICES.md. In particular,
+ashtadhyayi-com material may only be used in products offered free of charge
+and may not be used commercially.

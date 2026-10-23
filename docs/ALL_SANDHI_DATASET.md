@@ -169,12 +169,12 @@ sentences must not be counted as ready-made gold sandhi examples.
 ## Licensing Boundary
 
 The DCS record's CC BY 4.0 license is verified in
-`datasets/dcs_source_manifest.json`. The ashtadhyayi-com source license is not:
-the project author supplied an Apache-2.0 claim, but the pinned repository has
-no license or notice file. `data/sources/ashtadhyayi_sandhi_manifest.json` keeps
-that distinction machine-readable.
+`datasets/dcs_source_manifest.json`. The pinned ashtadhyayi-com repository has
+no license or notice file. Its maintainer stated the terms in writing on
+18 February 2024: use is allowed only if the resulting product is free for
+others, and commercial use is not allowed. See THIRD_PARTY_NOTICES.md.
 
-Apache-2.0 is permissive rather than copyleft; it does not by itself require
-downstream source publication. This repository is nevertheless open source
-under MIT. Before releasing copied modern annotations, obtain an authoritative
-upstream rights statement and preserve any required license and notice text.
+Those terms are stricter than this repository's Apache-2.0 license, so
+artifacts derived from ashtadhyayi-com are distributed under the upstream
+terms rather than Apache-2.0. Modern commentary and translations remain
+excluded.
