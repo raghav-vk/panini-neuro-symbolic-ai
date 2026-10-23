@@ -5,9 +5,12 @@ import random
 from collections import Counter
 
 
-def model_text(record, candidate, use_rules=True, use_context=True):
+def model_text(record, candidate, use_rules=True, use_context=True, mark_boundary=False):
     # Never expose gold indices, lemmas, review metadata or the gold rule_id.
     fields = [record["surface"], candidate["left"], candidate["right"]]
+    if mark_boundary:
+        # The candidates of one surface differ only here, so spell the junction out.
+        fields.append(candidate["left"][-2:] + "|" + candidate["right"][:2])
     if use_rules:
         fields.append(",".join(sorted({p["rule_id"] for p in candidate["proofs"]})))
     if use_context:
@@ -15,6 +18,15 @@ def model_text(record, candidate, use_rules=True, use_context=True):
         if context:
             fields.append(context)
     return "\x1f".join(fields)
+
+
+LONG_VOWELS = ("ai", "au", "ā", "ī", "ū", "ṝ", "ḹ", "e", "o")
+
+
+def boundary_long_vowels(candidate):
+    """Long vowels at the restored boundary: left word's final, right word's initial."""
+    left, right = candidate["left"], candidate["right"]
+    return any(left.endswith(v) for v in LONG_VOWELS) + any(right.startswith(v) for v in LONG_VOWELS)
 
 
 class Baseline:
@@ -38,6 +50,12 @@ class Baseline:
             elif self.name == "frequency":
                 value = sum(math.log1p(self.words[w]) for w in (c["left"], c["right"]))
                 value += math.log1p(max((self.rules[p["rule_id"]] for p in c["proofs"]), default=0))
+            elif self.name == "frequency_short_vowel":
+                # Frequency, with ties broken toward short boundary vowels: the explicit form of
+                # the preference that alphabetical index tie-breaking hides.
+                value = sum(math.log1p(self.words[w]) for w in (c["left"], c["right"]))
+                value += math.log1p(max((self.rules[p["rule_id"]] for p in c["proofs"]), default=0))
+                value -= 1e-3 * boundary_long_vowels(c)
             elif self.name == "character_bigram":
                 value = 0.0
                 for word in (c["left"], c["right"]):
@@ -109,25 +127,33 @@ def select_threshold(dev, scores, target=0.9):
     return max(eligible)[1] if eligible else 1.01
 
 
-def make_transformer(width=64, layers=2, heads=4, max_length=192):
+def make_transformer(width=64, layers=2, heads=4, max_length=192, pooling="mean", mark_boundary=False):
     import torch
     from torch import nn
 
     class TinyRanker(nn.Module):
         def __init__(self):
             super().__init__()
-            self.max_length = max_length
-            self.embedding = nn.Embedding(257, width, padding_idx=0)
-            self.position = nn.Embedding(max_length, width)
+            if pooling not in {"mean", "cls"}:
+                raise ValueError("pooling must be mean or cls")
+            self.max_length, self.pooling, self.mark_boundary = max_length, pooling, mark_boundary
+            # Byte b is token b + 1; 0 pads; 257 is the summary token for cls pooling.
+            self.embedding = nn.Embedding(258 if pooling == "cls" else 257, width, padding_idx=0)
+            self.position = nn.Embedding(max_length + (pooling == "cls"), width)
             layer = nn.TransformerEncoderLayer(width, heads, width * 4, dropout=0.1, batch_first=True)
             self.encoder = nn.TransformerEncoder(layer, layers, enable_nested_tensor=False)
             self.output = nn.Linear(width, 1)
 
         def forward(self, tokens):
+            if self.pooling == "cls":
+                tokens = torch.cat([torch.full((tokens.shape[0], 1), 257, dtype=tokens.dtype), tokens], 1)
             padding = tokens == 0
             x = self.embedding(tokens) + self.position(torch.arange(tokens.shape[1]))
             x = self.encoder(x, src_key_padding_mask=padding)
-            x = (x * (~padding).unsqueeze(-1)).sum(1) / (~padding).sum(1, keepdim=True)
+            if self.pooling == "cls":
+                x = x[:, 0]
+            else:
+                x = (x * (~padding).unsqueeze(-1)).sum(1) / (~padding).sum(1, keepdim=True)
             return self.output(x).squeeze(-1)
 
     return TinyRanker()
@@ -135,7 +161,7 @@ def make_transformer(width=64, layers=2, heads=4, max_length=192):
 
 def score_neural(model, rows, use_rules=True, use_context=True, gradients=False):
     import torch
-    texts = [model_text(r, c, use_rules, use_context).encode("utf-8") for r in rows for c in r["candidates"]]
+    texts = [model_text(r, c, use_rules, use_context, model.mark_boundary).encode("utf-8") for r in rows for c in r["candidates"]]
     if not texts:
         return [torch.empty(0) for _ in rows]
     if max(map(len, texts)) > model.max_length:
@@ -154,13 +180,14 @@ def predict_neural(model, rows, use_rules=True, use_context=True):
             for s in score_neural(model, rows[start:start+16], use_rules, use_context)]
 
 
-def train_neural(train, dev, seed=7, epochs=3, width=64, layers=2, use_rules=True, use_context=True, max_length=192):
+def train_neural(train, dev, seed=7, epochs=3, width=64, layers=2, use_rules=True, use_context=True, max_length=192,
+                 pooling="mean", mark_boundary=False):
     import copy
     import torch
     torch.manual_seed(seed)
     torch.set_num_threads(2)
     torch.use_deterministic_algorithms(True)
-    model = make_transformer(width, layers, max_length=max_length)
+    model = make_transformer(width, layers, max_length=max_length, pooling=pooling, mark_boundary=mark_boundary)
     optimizer = torch.optim.AdamW(model.parameters(), lr=0.001, weight_decay=0.01)
     eligible = [r for r in train if r["gold_indices"]]
     if not eligible or not dev:

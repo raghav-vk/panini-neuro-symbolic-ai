@@ -202,7 +202,7 @@ def test_cli_prepares_and_runs_baselines(tmp_path):
     subprocess.run([sys.executable, str(ROOT / "scripts/prepare_experiment.py"), "--per-rule", "40", "--output", str(data)], check=True, capture_output=True)
     command = [sys.executable, str(ROOT / "scripts/run_experiment.py"), "--data", str(data), "--output", str(output), "--baselines-only"]
     subprocess.run(command, check=True, capture_output=True)
-    assert len(json.loads((output / "results.json").read_text())["results"]) == 12
+    assert len(json.loads((output / "results.json").read_text())["results"]) == 16
     subprocess.run([sys.executable, str(ROOT / "scripts/verify_run.py"), "--data", str(data), "--run", str(output)], check=True, capture_output=True)
     with (data / "source_random/train.jsonl").open("a") as handle:
         handle.write("\n")
@@ -218,3 +218,23 @@ def test_tie_averaged_top1_removes_index_tie_break():
     assert result["top1"] == 1.0 and result["top1_tie_averaged"] == 0.5 and result["tied_top_rows"] == 1
     result, _ = metrics([row], [[1.0, 0.0]])
     assert result["top1_tie_averaged"] == 1.0 and result["tied_top_rows"] == 0
+
+
+def test_frequency_short_vowel_breaks_frequency_ties_toward_short_vowels():
+    from panini.ranking import Baseline
+    row = {"candidates": [{"left": "ca", "right": "āpi", "proofs": []}, {"left": "ca", "right": "api", "proofs": []}]}
+    scores = Baseline("frequency_short_vowel", []).score(row)
+    assert scores[1] > scores[0]
+
+
+@pytest.mark.parametrize("pooling, mark_boundary", [("cls", False), ("mean", True)])
+def test_ranker_options_train_and_roundtrip(tmp_path, pooling, mark_boundary):
+    torch = pytest.importorskip("torch")
+    from panini.ranking import train_neural, predict_neural, make_transformer
+    rows = enriched()
+    model, _ = train_neural(rows[:40], rows[40:50], epochs=1, width=16, layers=1, pooling=pooling, mark_boundary=mark_boundary)
+    path = tmp_path / "model.pt"
+    torch.save(model.state_dict(), path)
+    restored = make_transformer(width=16, layers=1, pooling=pooling, mark_boundary=mark_boundary)
+    restored.load_state_dict(torch.load(path, weights_only=True))
+    assert predict_neural(model, rows[50:60]) == predict_neural(restored, rows[50:60])
