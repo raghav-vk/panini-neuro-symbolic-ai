@@ -8,8 +8,9 @@ See [Quick Start](../QUICKSTART.md) for commands in execution order.
 | --- | --- |
 | `build_development_rules.py` | Generate 12 narrow draft rules, negative checks and the expert review packet |
 | `convert_dcs.py` | Verify archive identity, decode primitive data without pickle execution, quarantine failures |
+| `extract_dcs_boundaries.py` | Align DCS lemmas to attested surfaces as silver external vowel-sandhi examples, without consulting rules |
 | `build_review_page.py` | Create a local browser worksheet for boundary annotation and JSONL export |
-| `prepare_experiment.py` | Admit synthetic or reviewed examples, build three holdouts and forward-certified candidates |
+| `prepare_experiment.py` | Admit synthetic, silver DCS or reviewed examples, build three holdouts and forward-certified candidates |
 | `run_experiment.py` | CPU baselines, five-seed ranker training, ablations, checkpoint and metric artifacts |
 | `predict_sandhi.py` | Inspect candidates/proofs and optional checkpoint-based selection or abstention |
 | `verify_run.py` | Recompute metrics from saved scores, check frozen hashes and independently replay test proofs |

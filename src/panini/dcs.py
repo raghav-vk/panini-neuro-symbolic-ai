@@ -1,6 +1,7 @@
 """Non-executing decoder for the primitive protocol-0 DCS record subset."""
 
 import pickletools
+import re
 import unicodedata
 
 
@@ -147,3 +148,110 @@ def boundary_proposals(record):
                "tags": [], "context": "", "context_lemmas": [], "rule_id": None,
                "review_status": "pending", "reviewer": "", "reviewed_at": "", "external_boundary_confirmed": False,
                "notes": "Supply inflected forms, source span, boundary type, contextual lemmas and applicable tags; lemmas are not pre-sandhi forms."}
+
+
+_IAST_TO_SLP1 = sorted(((v, k) for k, v in SLP1.items()), key=lambda item: -len(item[0]))
+SLP1_VOWELS = frozenset("aAiIuUfFxXeEoO")
+# Observed junction material for vowel sandhi: vowels, glides, r (ṛ-guṇa) and avagraha.
+JUNCTION_CHARACTERS = SLP1_VOWELS | set("yvr'")
+INDECLINABLE, COMPOUND_MEMBER = "2", "3"
+# Indeclinables that DCS codes as "2" but that mainly form compounds (mahā-ṛṣi, sa-indra):
+# their boundary is compound-internal, not external. Expert review should confirm this list.
+COMPOUND_PREFIXES = frozenset({"mahā", "sa", "su", "ati", "prati", "nānā", "go", "dus", "ku"})
+
+
+def iast_to_slp1(text):
+    """Greedy inverse of slp1_to_iast; IAST 'ai'/'au' are read as diphthongs."""
+    text, out, i = unicodedata.normalize("NFC", text), [], 0
+    while i < len(text):
+        for iast, slp1 in _IAST_TO_SLP1:
+            if text.startswith(iast, i):
+                out.append(slp1)
+                i += len(iast)
+                break
+        else:
+            out.append(text[i])
+            i += 1
+    return "".join(out)
+
+
+def external_vowel_boundaries(record, context_window=1):
+    """Align DCS lemma annotations to attested surfaces without consulting sandhi rules.
+
+    Yields (example, None) or (None, rejection_reason) for every adjacent lemma pair
+    whose left lemma ends and right lemma begins in a vowel. Only boundaries whose
+    inflected forms are fully determined are kept: an indeclinable (code 2, form equals
+    lemma) opening its whitespace chunk, followed by a non-verbal word that runs to the
+    chunk end. Compound-forming prefixes are excluded.
+    The fused junction is read from the surface, so rule coverage stays a measurement.
+    """
+    sentence = record["sentence"]
+    chunks = [(m.start(), m.group()) for m in re.finditer(r"\S+", sentence)]
+    if len(chunks) != len(record["lemmas"]):
+        yield None, "chunk_group_mismatch"
+        return
+    try:
+        sentence_iast = slp1_to_iast(sentence)
+    except ValueError:
+        yield None, "surface_unsupported"
+        return
+    for c, ((offset, chunk), lemmas, codes) in enumerate(zip(chunks, record["lemmas"], record["cng"])):
+        for j in range(len(lemmas) - 1):
+            left, right = iast_to_slp1(lemmas[j]), iast_to_slp1(lemmas[j + 1])
+            if not (left and right and left[-1] in SLP1_VOWELS and right[0] in SLP1_VOWELS):
+                continue
+            reason = _boundary_rejection(chunk, left, right, codes, j, lemmas[j])
+            if isinstance(reason, str):
+                yield None, reason
+                continue
+            junction_end = reason
+            start_iast = len(slp1_to_iast(sentence[:offset]))
+            surface = slp1_to_iast(chunk)
+            assert sentence_iast[start_iast:start_iast + len(surface)] == surface
+            window = range(max(0, c - context_window), min(len(chunks), c + context_window + 1))
+            neighbours = [k for k in window if k != c]
+            context = " ".join(slp1_to_iast(chunks[k][1]) if k != c else "_" for k in window)
+            yield {
+                "example_id": f"DCS-{record['sent_id']}-{c}-{j}", "source_group": f"DCS-{record['sent_id']}",
+                "left": lemmas[j], "right": slp1_to_iast(right[0] + chunk[junction_end:]),
+                "left_lemma": lemmas[j], "right_lemma": lemmas[j + 1],
+                "surface": surface, "source_surface": surface,
+                "source_sentence_iast": sentence_iast, "source_span": [start_iast, start_iast + len(surface)],
+                "observed_junction": slp1_to_iast(chunk[len(left) - 1:junction_end]),
+                "vowel_pair": [slp1_to_iast(left[-1]), slp1_to_iast(right[0])],
+                "left_morphology": codes[j], "right_morphology": codes[j + 1:],
+                "tags": ["pada_boundary"], "boundary_type": "indeclinable_left_external",
+                "context": context if neighbours else "",
+                "context_lemmas": [*lemmas[j + 2:], *(l for k in neighbours for l in record["lemmas"][k])],
+                "review_status": "silver_unreviewed", "data_kind": "dcs_silver_alignment",
+                "external_boundary_confirmed": False,
+            }, None
+
+
+def _boundary_rejection(chunk, left, right, codes, j, lemma):
+    """Return a rejection reason, or the surface offset where the right word's body begins."""
+    if codes[j] == COMPOUND_MEMBER:
+        return "compound_internal_left"
+    if codes[j] != INDECLINABLE:
+        return "inflected_left_form_unknown"
+    if j != 0:
+        return "left_not_chunk_initial"
+    if lemma in COMPOUND_PREFIXES:
+        return "left_compound_prefix"
+    # Verbal forms may add an augment or reduplication, so their initial vowel is not the root's.
+    if codes[j + 1].startswith("-"):
+        return "right_verb_initial_uncertain"
+    # The right word must extend to the chunk end: only compound members may intervene.
+    if any(code != COMPOUND_MEMBER for code in codes[j + 1:-1]):
+        return "right_end_fused"
+    if not chunk.startswith(left[:-1]):
+        return "left_misaligned"
+    body = right[1:1 + min(3, max(1, len(right) - 2))]
+    if not body:
+        return "right_too_short"
+    start = len(left) - 1
+    ends = [k for k in range(start + 1, min(start + 4, len(chunk)) + 1)
+            if chunk.startswith(body, k) and set(chunk[start:k]) <= JUNCTION_CHARACTERS]
+    if len(ends) != 1:
+        return "junction_ambiguous" if ends else "junction_unresolved"
+    return ends[0]

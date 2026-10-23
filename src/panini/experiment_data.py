@@ -49,6 +49,21 @@ def validate_reviewed(record, rules):
     if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", record.get("reviewed_at", "")):
         raise ValueError("review date required")
     date.fromisoformat(record["reviewed_at"])
+    if record.get("external_boundary_confirmed") is not True:
+        raise ValueError("reviewer must confirm an external word boundary")
+    return _validate_alignment(record, rules)
+
+
+def validate_silver(record, rules):
+    """Automatic DCS alignments: attested surfaces and annotated lemmas, never expert gold."""
+    if record.get("data_kind") != "dcs_silver_alignment" or record.get("review_status") != "silver_unreviewed":
+        raise ValueError("silver examples must come from the DCS alignment extractor")
+    if record.get("external_boundary_confirmed") is not False:
+        raise ValueError("silver examples cannot claim reviewer confirmation")
+    return _validate_alignment(record, rules)
+
+
+def _validate_alignment(record, rules):
     for key in ("example_id", "source_group", "left", "right", "left_lemma", "right_lemma", "surface", "rule_id"):
         if not isinstance(record.get(key), str) or not record[key].strip():
             raise ValueError(f"missing {key}")
@@ -68,8 +83,6 @@ def validate_reviewed(record, rules):
         raise ValueError("each inflected word must be a single form")
     if not isinstance(record.get("tags"), list) or not isinstance(record.get("context_lemmas"), list):
         raise ValueError("tags and context_lemmas must be arrays")
-    if record.get("external_boundary_confirmed") is not True:
-        raise ValueError("reviewer must confirm an external word boundary")
     if "pada_boundary" not in record["tags"]:
         raise ValueError("external example requires pada_boundary tag")
     if any(not isinstance(x, str) or not x.strip() for x in record["tags"] + record["context_lemmas"]):

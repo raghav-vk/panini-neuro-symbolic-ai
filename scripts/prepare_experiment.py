@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from panini.rules import load_rules
 from panini.candidates import enumerate_candidates, gold_indices
-from panini.experiment_data import synthetic_examples, split_examples, validate_reviewed, digest
+from panini.experiment_data import synthetic_examples, split_examples, validate_reviewed, validate_silver, digest
 
 
 def write_jsonl(path, rows):
@@ -21,7 +21,9 @@ def write_jsonl(path, rows):
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--rules", type=Path, default=ROOT / "data/rules/development_sandhi.jsonl")
-    p.add_argument("--examples", type=Path, help="independently reviewed boundaries; omit for synthetic smoke data")
+    source = p.add_mutually_exclusive_group()
+    source.add_argument("--examples", type=Path, help="independently reviewed boundaries; omit for synthetic smoke data")
+    source.add_argument("--silver-examples", type=Path, help="unreviewed DCS alignments from extract_dcs_boundaries.py")
     p.add_argument("--per-rule", type=int, default=200)
     p.add_argument("--seed", type=int, default=1729)
     p.add_argument("--output", type=Path, default=ROOT / "data/processed/development")
@@ -29,11 +31,14 @@ def main():
     rules = load_rules(args.rules)
     if args.examples:
         records = [validate_reviewed(json.loads(line), rules) for line in args.examples.read_text().splitlines() if line.strip()]
+    elif args.silver_examples:
+        records = [validate_silver(json.loads(line), rules) for line in args.silver_examples.read_text().splitlines() if line.strip()]
     else:
         records = synthetic_examples(rules, args.per_rule, args.seed)
     args.output.mkdir(parents=True, exist_ok=False)
     write_jsonl(args.output / "examples.jsonl", records)
-    manifest = {"data_kind": "reviewed_corpus" if args.examples else "synthetic_engineering_smoke",
+    kind = "reviewed_corpus" if args.examples else "dcs_silver_alignment" if args.silver_examples else "synthetic_engineering_smoke"
+    manifest = {"data_kind": kind,
                 "rules_sha256": digest(args.rules.read_text()), "rules": [r.rule_id for r in rules],
                 "rules_expert_reviewed": sum(r.status == "expert_reviewed" for r in rules), "splits": {}}
     for method in ("source_random", "pair", "strict_lemma"):

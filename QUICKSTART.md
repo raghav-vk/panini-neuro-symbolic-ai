@@ -54,6 +54,23 @@ Source offsets refer to the original IAST sentence. The worksheet preserves
 the exact span as `source_surface` and removes only whitespace for the model's
 `surface`; punctuation is not silently discarded.
 
+### Silver DCS Examples
+
+To derive real examples automatically from the converted sentences:
+
+```sh
+.venv/bin/python scripts/extract_dcs_boundaries.py \
+  --sentences data/processed/my-dcs/sentences.jsonl --output data/processed/my-silver
+```
+
+The extractor keeps only boundaries whose inflected forms are fully determined:
+an indeclinable opening a whitespace chunk, joined to a non-verbal word that
+runs to the chunk end. It reads the fused junction from the attested surface and
+the gold words from DCS lemmas, never from the sandhi rules, so candidate recall
+remains a measurement. `report.json` counts every rejection reason and junction
+type; `review_sample.jsonl` is a stratified sample for expert audit. These are
+silver data, not expert-reviewed gold.
+
 ## 4. Prepare All Holdouts
 
 For the synthetic engineering test:
@@ -63,7 +80,8 @@ For the synthetic engineering test:
 ```
 
 For independent-corpus work, use `--examples /path/to/reviewed_boundaries.jsonl`
-instead. Pending or unaligned annotations are rejected. Missing candidate
+instead, or `--silver-examples data/processed/my-silver/examples.jsonl` for
+silver DCS data. Pending or unaligned annotations are rejected. Missing candidate
 coverage is retained as a failure, not silently removed. Freeze the reviewed
 rule snapshot with `--rules` for both preparation and inference.
 

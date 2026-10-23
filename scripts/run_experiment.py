@@ -16,6 +16,19 @@ sys.path.insert(0, str(ROOT / "src"))
 from panini.ranking import Baseline, metrics, select_threshold, train_neural, predict_neural
 
 
+CAVEATS = {
+    "synthetic_engineering_smoke": (
+        "Not evidence of Sanskrit accuracy or contextual understanding.",
+        "Coverage is circular on generator-derived probes. Empty synthetic contexts cannot establish contextual gains."),
+    "dcs_silver_alignment": (
+        "Attested DCS surfaces aligned automatically from DCS lemma annotations; draft rules and silver data are not expert reviewed.",
+        "Alignment does not consult the rules, so candidate recall measures rule coverage of the extracted scope only."),
+    "reviewed_corpus": (
+        "Independently reviewed boundaries; check the data manifest for rule review status.",
+        "Candidate recall is measured against reviewed gold analyses."),
+}
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--data", type=Path, default=ROOT / "data/processed/development")
@@ -87,14 +100,14 @@ def main():
             (args.output / f"{split}-{name}-{seed}-predictions.jsonl").write_text("".join(json.dumps(r) + "\n" for r in predictions))
             (args.output / "results.json").write_text(json.dumps(results, indent=2) + "\n")
             print(f"{split} {name} seed={seed}: top1={report['top1']:.3f} recall={report['candidate_recall']:.3f} fit={fit_seconds:.1f}s", flush=True)
-    lines = ["# Development Experiment Results", "", f"Data: **{manifest['data_kind']}**. Not evidence of Sanskrit accuracy or contextual understanding.", "",
+    lines = ["# Development Experiment Results", "", f"Data: **{manifest['data_kind']}**. {CAVEATS.get(manifest['data_kind'], CAVEATS['synthetic_engineering_smoke'])[0]}", "",
              "| Split | Model | Seeds | Mean top-1 | SD | Candidate recall |", "|---|---|---:|---:|---:|---:|"]
     for split in args.splits:
         for name in dict.fromkeys(r["model"] for r in results["results"]):
             group = [r for r in results["results"] if r["split"] == split and r["model"] == name]
             values = [r["test"]["top1"] for r in group]
             lines.append(f"| {split} | {name} | {len(group)} | {statistics.mean(values):.4f} | {statistics.stdev(values) if len(values)>1 else 0:.4f} | {group[0]['test']['candidate_recall']:.4f} |")
-    lines += ["", "Coverage is circular on generator-derived probes. Empty synthetic contexts cannot establish contextual gains.",
+    lines += ["", CAVEATS.get(manifest["data_kind"], CAVEATS["synthetic_engineering_smoke"])[1],
               "Source-random and pair splits may coincide when source groups already identify pairs. Strict mixed rows remain excluded and counted.",
               "Hyperparameters fixed before test; epoch and abstention threshold selected on dev only. Test is not used for training.",
               "Intervals in JSON are itemwise Wilson intervals, not source-cluster bootstrap intervals. RSS is cumulative process peak, not model-only memory.",
