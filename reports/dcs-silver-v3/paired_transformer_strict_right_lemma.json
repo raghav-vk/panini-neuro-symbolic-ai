@@ -1,0 +1,53 @@
+{
+  "split": "strict_right_lemma",
+  "baseline": "linear_features_short_vowel",
+  "examples": 821,
+  "baseline_top1": 0.9427527405602923,
+  "models": {
+    "tiny_full": {
+      "mean_difference": -0.04628501827040195,
+      "ci95": [
+        -0.05943970767356881,
+        -0.034348355663824603
+      ],
+      "per_seed": [
+        {
+          "seed": 7,
+          "top1": 0.8745432399512789,
+          "wins": 7,
+          "losses": 63,
+          "mcnemar_p": 2.2750760151658833e-12
+        },
+        {
+          "seed": 11,
+          "top1": 0.8940316686967114,
+          "wins": 4,
+          "losses": 44,
+          "mcnemar_p": 1.5138326148189662e-09
+        },
+        {
+          "seed": 19,
+          "top1": 0.8867235079171741,
+          "wins": 7,
+          "losses": 53,
+          "mcnemar_p": 7.671918274276823e-10
+        },
+        {
+          "seed": 23,
+          "top1": 0.9135200974421437,
+          "wins": 5,
+          "losses": 29,
+          "mcnemar_p": 3.8558151572942734e-05
+        },
+        {
+          "seed": 29,
+          "top1": 0.9135200974421437,
+          "wins": 9,
+          "losses": 33,
+          "mcnemar_p": 0.00027153923429068527
+        }
+      ]
+    }
+  },
+  "note": "Itemwise paired bootstrap over test examples of the seed-mean accuracy difference; exact McNemar per seed. Baseline correctness uses index tie-breaking."
+}

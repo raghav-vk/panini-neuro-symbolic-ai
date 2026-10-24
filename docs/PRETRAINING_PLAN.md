@@ -1,8 +1,7 @@
 # Plan: Self-Supervised Pretraining for the Neural Ranker
 
-**Status:** Draft, 2026-10-24. Not yet a protocol amendment. Nothing here has
-been run. Once approved, it becomes amendment 0.5 of
-`docs/EXPERIMENT_PROTOCOL.md` before any pretraining run.
+**Status:** Adopted as amendment 0.5 of `docs/EXPERIMENT_PROTOCOL.md`
+(section 11.3) on 2026-10-24. Nothing here has been run yet.
 
 ## 1. Why
 

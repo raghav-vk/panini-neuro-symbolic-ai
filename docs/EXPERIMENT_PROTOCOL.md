@@ -1,6 +1,6 @@
 # Experimental Protocol: Proof-Carrying External Vowel-Sandhi Splitting
 
-**Protocol version:** 0.4 (amendments of 2026-10-23/24: right-word holdout, section 9.5; silver-data rules and ranker settings, sections 11.1 and 11.2)
+**Protocol version:** 0.5 (amendments of 2026-10-23/24: right-word holdout, section 9.5; silver-data rules and ranker settings, sections 11.1 and 11.2; pretraining plan, section 11.3)
 **Status:** Planned independent-corpus study; development smoke run separately frozen
 **Primary task:** Rank rule-licensed analyses of one external vowel-sandhi boundary
 **Compute target:** CPU or one modest consumer GPU
@@ -457,6 +457,22 @@ variants on the right-word holdout, with paired bootstrap intervals
 ones. Further neural architectures are new hypotheses and need a new
 amendment and a fresh evaluation set or an explicitly disclosed reuse of this
 test set.
+
+**Outcome (2026-10-24).** On the right-word holdout test set
+`linear_features_short_vowel` scored 0.943 (0.946 tie-averaged). The
+Transformer with the same features scored 0.897, a paired difference of
+−0.046 (95% CI −0.059 to −0.034). The residual Transformer scored 0.943, a
+paired difference of 0.000 (−0.005 to +0.005). See
+`reports/dcs-silver-v3/SUMMARY.md`.
+
+### 11.3 Self-Supervised Pretraining (Amendment 0.5)
+
+Adopted on 2026-10-24, before any pretraining run. The plan is
+`docs/PRETRAINING_PLAN.md`: its hypotheses H-P1 to H-P3, decontaminated
+corpora P-A (main) and P-B (strict), objectives, comparisons, order of work
+and stopping rules. All decisions are made on dev. Before the final test run,
+the settings are frozen in a further amendment, and the fourth use of the
+right-word holdout test set is disclosed.
 
 ## 12. Baselines
 
