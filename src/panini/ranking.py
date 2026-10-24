@@ -127,17 +127,19 @@ def select_threshold(dev, scores, target=0.9):
     return max(eligible)[1] if eligible else 1.01
 
 
-def build_lexicon(train, external=False):
+def build_lexicon(train, external=False, boundary_vowels=False):
     """Training-split word and rule counts for the optional lexical feature head.
 
-    external adds the candidates' kosha_left/kosha_right flags (scripts/annotate_lexicon.py) as features.
+    external adds the candidates' kosha_left/kosha_right flags (scripts/annotate_lexicon.py) as features;
+    boundary_vowels adds the long-vowel count at the restored boundary.
     """
     left, right, rules = Counter(), Counter(), Counter()
     for row in train:
         left[row["left"]] += 1
         right[row["right"]] += 1
         rules[row["rule_id"]] += 1
-    return {"left": dict(left), "right": dict(right), "rules": dict(rules), "external": external}
+    return {"left": dict(left), "right": dict(right), "rules": dict(rules), "external": external,
+            "boundary_vowels": boundary_vowels}
 
 
 LEXICAL_FEATURES = 5
@@ -158,11 +160,48 @@ def lexical_features(lexicon, row, candidate, exclude_self=False, use_rules=True
     features = [math.log1p(left), math.log1p(right), float(left > 0), float(right > 0), math.log1p(rule)]
     if lexicon.get("external"):
         features += [float(candidate["kosha_left"]), float(candidate["kosha_right"])]
+    if lexicon.get("boundary_vowels"):
+        features.append(float(boundary_long_vowels(candidate)))
     return features
 
 
 def feature_count(lexicon):
-    return LEXICAL_FEATURES + 2 * bool(lexicon.get("external"))
+    return LEXICAL_FEATURES + 2 * bool(lexicon.get("external")) + bool(lexicon.get("boundary_vowels"))
+
+
+class LinearBaseline:
+    """Linear ranker over the lexical-head features alone, ties broken toward short boundary vowels.
+
+    The strongest non-neural comparison for the feature head: same inputs, no Transformer.
+    """
+
+    def __init__(self, train, external=False, epochs=20, seed=7):
+        import torch
+        torch.manual_seed(seed)
+        self.lexicon = build_lexicon(train, external)
+        self.linear = torch.nn.Linear(feature_count(self.lexicon), 1)
+        optimizer = torch.optim.AdamW(self.linear.parameters(), lr=0.01)
+        rows = [r for r in train if r["gold_indices"]]
+        features = [torch.tensor([lexical_features(self.lexicon, r, c, exclude_self=True) for c in r["candidates"]]) for r in rows]
+        for epoch in range(epochs):
+            order = list(range(len(rows)))
+            random.Random(seed + epoch).shuffle(order)
+            for start in range(0, len(order), 64):
+                batch = order[start:start+64]
+                scores = [self.linear(features[i]).squeeze(-1) for i in batch]
+                loss = torch.stack([torch.logsumexp(s, 0) - torch.logsumexp(s[rows[i]["gold_indices"]], 0)
+                                    for i, s in zip(batch, scores)]).mean()
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
+
+    def score(self, row):
+        import torch
+        if not row["candidates"]:
+            return []
+        with torch.no_grad():
+            values = self.linear(torch.tensor([lexical_features(self.lexicon, row, c) for c in row["candidates"]])).squeeze(-1).tolist()
+        return [v - 1e-3 * boundary_long_vowels(c) for v, c in zip(values, row["candidates"])]
 
 
 def make_transformer(width=64, layers=2, heads=4, max_length=192, pooling="mean", mark_boundary=False, lexicon=None):
@@ -228,14 +267,15 @@ def predict_neural(model, rows, use_rules=True, use_context=True):
 
 
 def train_neural(train, dev, seed=7, epochs=3, width=64, layers=2, use_rules=True, use_context=True, max_length=192,
-                 pooling="mean", mark_boundary=False, lexical=False, external_lexicon=False):
+                 pooling="mean", mark_boundary=False, lexical=False, external_lexicon=False, boundary_vowel_feature=False):
     import copy
     import torch
     torch.manual_seed(seed)
     torch.set_num_threads(2)
     torch.use_deterministic_algorithms(True)
     model = make_transformer(width, layers, max_length=max_length, pooling=pooling, mark_boundary=mark_boundary,
-                             lexicon=build_lexicon(train, external_lexicon) if lexical or external_lexicon else None)
+                             lexicon=build_lexicon(train, external_lexicon, boundary_vowel_feature)
+                             if lexical or external_lexicon or boundary_vowel_feature else None)
     optimizer = torch.optim.AdamW(model.parameters(), lr=0.001, weight_decay=0.01)
     eligible = [r for r in train if r["gold_indices"]]
     if not eligible or not dev:

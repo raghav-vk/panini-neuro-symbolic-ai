@@ -13,7 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from panini.ranking import Baseline, metrics, select_threshold, train_neural, predict_neural
+from panini.ranking import Baseline, LinearBaseline, metrics, select_threshold, train_neural, predict_neural
 
 
 CAVEATS = {
@@ -45,6 +45,8 @@ def main():
     p.add_argument("--lexical", action="store_true", help="add a training-split word/rule count feature head")
     p.add_argument("--external-lexicon", action="store_true",
                    help="also feed kosha flags to the feature head; data from annotate_lexicon.py, implies --lexical")
+    p.add_argument("--boundary-vowel-feature", action="store_true",
+                   help="add the boundary long-vowel count to the feature head; implies --lexical")
     p.add_argument("--train-limit", type=int, help="learning-curve subset; sampled by fixed training-only hash")
     p.add_argument("--baselines-only", action="store_true")
     p.add_argument("--ablations", action="store_true")
@@ -73,6 +75,8 @@ def main():
         if args.train_limit:
             rows["train"] = sorted(rows["train"], key=lambda r: hashlib.sha256(r["example_id"].encode()).hexdigest())[:args.train_limit]
         variants = [(name, None) for name in ("symbolic_order", "frequency", "frequency_short_vowel", "character_bigram")]
+        if args.lexical or args.external_lexicon or args.boundary_vowel_feature:
+            variants.append(("linear_features_short_vowel", None))
         if not args.baselines_only:
             modes = ["tiny_full"] + (["tiny_no_rules", "tiny_no_context"] if args.ablations else [])
             variants += [(name, seed) for name in modes for seed in args.seeds]
@@ -80,7 +84,8 @@ def main():
             start = time.perf_counter()
             info = {}
             if seed is None:
-                model = Baseline(name, rows["train"])
+                model = (LinearBaseline(rows["train"], args.external_lexicon) if name == "linear_features_short_vowel"
+                         else Baseline(name, rows["train"]))
                 dev_scores = [model.score(r) for r in rows["dev"]]
                 fit_seconds = time.perf_counter() - start
                 predict_start = time.perf_counter()
@@ -90,7 +95,8 @@ def main():
                 model, info = train_neural(rows["train"], rows["dev"], seed=seed, epochs=args.epochs, width=args.width, layers=args.layers,
                                            use_rules=rules, use_context=context, max_length=args.max_length,
                                            pooling=args.pooling, mark_boundary=args.mark_boundary, lexical=args.lexical,
-                                           external_lexicon=args.external_lexicon)
+                                           external_lexicon=args.external_lexicon,
+                                           boundary_vowel_feature=args.boundary_vowel_feature)
                 dev_scores = predict_neural(model, rows["dev"], rules, context)
                 fit_seconds = time.perf_counter() - start
                 predict_start = time.perf_counter()

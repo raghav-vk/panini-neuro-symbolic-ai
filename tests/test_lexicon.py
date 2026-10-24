@@ -52,3 +52,20 @@ def test_external_ranker_trains_and_roundtrips(tmp_path):
     restored = make_transformer(width=16, layers=1, lexicon=state["lexicon"])
     restored.load_state_dict(state["state_dict"])
     assert predict_neural(model, rows[50:60]) == predict_neural(restored, rows[50:60])
+
+
+def test_boundary_vowel_feature_and_linear_baseline():
+    pytest.importorskip("torch")
+    from test_development_pipeline import enriched
+    from panini.ranking import LinearBaseline, boundary_long_vowels, metrics
+    rows = enriched()
+    annotate(rows, FakeLexicon({c["left"] for r in rows for c in r["candidates"]}))
+    lexicon = build_lexicon(rows, external=True, boundary_vowels=True)
+    candidate = rows[0]["candidates"][0]
+    features = lexical_features(lexicon, rows[0], candidate)
+    assert len(features) == feature_count(lexicon) == 8 and features[-1] == boundary_long_vowels(candidate)
+    baseline = LinearBaseline(rows[:40], external=True, epochs=2)
+    scores = [baseline.score(r) for r in rows[40:]]
+    assert [len(s) for s in scores] == [len(r["candidates"]) for r in rows[40:]]
+    assert scores == [LinearBaseline(rows[:40], external=True, epochs=2).score(r) for r in rows[40:]]
+    assert 0 <= metrics(rows[40:], scores)[0]["top1"] <= 1
