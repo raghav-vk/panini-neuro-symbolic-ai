@@ -13,6 +13,8 @@ See [Quick Start](../QUICKSTART.md) for commands in execution order.
 | `prepare_experiment.py` | Admit synthetic, silver DCS or reviewed examples, build three holdouts and forward-certified candidates |
 | `run_experiment.py` | CPU baselines, five-seed ranker training, ablations, checkpoint and metric artifacts |
 | `compare_paired.py` | Paired bootstrap and per-seed McNemar comparison of saved test predictions against a baseline |
+| `fetch_vidyut_data.py` | Download and verify the pinned Vidyut data release (optional external lexicon; non-commercial terms) |
+| `annotate_lexicon.py` | Copy prepared splits and flag candidate words found in the Vidyut kosha, for `--external-lexicon` |
 | `predict_sandhi.py` | Inspect candidates/proofs and optional checkpoint-based selection or abstention |
 | `verify_run.py` | Recompute metrics from saved scores, check frozen hashes and independently replay test proofs |
 | `summarize_development.py` | Retain compact measured evidence and source hashes without raw corpus files |

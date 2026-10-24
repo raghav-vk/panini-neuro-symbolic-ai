@@ -50,3 +50,27 @@ Therefore:
   and translations.
 
 Anyone redistributing these artifacts must keep this notice with them.
+
+## Vidyut kosha (optional external lexicon)
+
+`scripts/fetch_vidyut_data.py` downloads the prebuilt Vidyut 0.4.0 data
+release into `data/external/` (gitignored) and verifies its SHA-256:
+
+    https://github.com/ambuda-org/vidyut/releases/download/py-0.4.0/data-0.4.0.zip
+
+Vidyut's code is MIT licensed (https://github.com/ambuda-org/vidyut). Its
+kosha (word list) is built from `sanskrit/data`
+(https://github.com/sanskrit/data), whose sources carry their own terms:
+
+- learnsanskrit.org: CC0 1.0 (public domain).
+- Sanskrit Heritage Site: Lesser General Public License for Linguistic
+  Resources.
+- Monier-Williams dictionary: CC BY-NC-SA 3.0. Non-commercial; derivative
+  works must use the same license.
+
+The kosha is used only as a local research dependency, through the
+`--external-lexicon` ranker option. The kosha and the `kosha_left` and
+`kosha_right` flags derived from it are not committed or redistributed.
+Checkpoints trained with that option record only learned feature weights and
+training-split counts, but should be treated as covered by the
+non-commercial, share-alike terms above. Do not use them commercially.

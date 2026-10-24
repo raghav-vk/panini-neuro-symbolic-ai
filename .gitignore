@@ -14,3 +14,6 @@ data/processed/
 runs/
 checkpoints/
 .venv/
+
+# External lexicon data (fetched, never committed)
+data/external/

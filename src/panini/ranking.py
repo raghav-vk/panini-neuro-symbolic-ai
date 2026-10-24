@@ -127,14 +127,17 @@ def select_threshold(dev, scores, target=0.9):
     return max(eligible)[1] if eligible else 1.01
 
 
-def build_lexicon(train):
-    """Training-split word and rule counts for the optional lexical feature head."""
+def build_lexicon(train, external=False):
+    """Training-split word and rule counts for the optional lexical feature head.
+
+    external adds the candidates' kosha_left/kosha_right flags (scripts/annotate_lexicon.py) as features.
+    """
     left, right, rules = Counter(), Counter(), Counter()
     for row in train:
         left[row["left"]] += 1
         right[row["right"]] += 1
         rules[row["rule_id"]] += 1
-    return {"left": dict(left), "right": dict(right), "rules": dict(rules)}
+    return {"left": dict(left), "right": dict(right), "rules": dict(rules), "external": external}
 
 
 LEXICAL_FEATURES = 5
@@ -152,7 +155,14 @@ def lexical_features(lexicon, row, candidate, exclude_self=False, use_rules=True
         # Otherwise "seen in training" would mark every training gold and nothing at evaluation time.
         left -= candidate["left"] == row["left"]
         right -= candidate["right"] == row["right"]
-    return [math.log1p(left), math.log1p(right), float(left > 0), float(right > 0), math.log1p(rule)]
+    features = [math.log1p(left), math.log1p(right), float(left > 0), float(right > 0), math.log1p(rule)]
+    if lexicon.get("external"):
+        features += [float(candidate["kosha_left"]), float(candidate["kosha_right"])]
+    return features
+
+
+def feature_count(lexicon):
+    return LEXICAL_FEATURES + 2 * bool(lexicon.get("external"))
 
 
 def make_transformer(width=64, layers=2, heads=4, max_length=192, pooling="mean", mark_boundary=False, lexicon=None):
@@ -173,7 +183,7 @@ def make_transformer(width=64, layers=2, heads=4, max_length=192, pooling="mean"
             self.output = nn.Linear(width, 1)
             self.lexicon = lexicon
             if lexicon is not None:
-                self.lexical = nn.Linear(LEXICAL_FEATURES, 1)
+                self.lexical = nn.Linear(feature_count(lexicon), 1)
 
         def forward(self, tokens, features=None):
             if self.pooling == "cls":
@@ -218,14 +228,14 @@ def predict_neural(model, rows, use_rules=True, use_context=True):
 
 
 def train_neural(train, dev, seed=7, epochs=3, width=64, layers=2, use_rules=True, use_context=True, max_length=192,
-                 pooling="mean", mark_boundary=False, lexical=False):
+                 pooling="mean", mark_boundary=False, lexical=False, external_lexicon=False):
     import copy
     import torch
     torch.manual_seed(seed)
     torch.set_num_threads(2)
     torch.use_deterministic_algorithms(True)
     model = make_transformer(width, layers, max_length=max_length, pooling=pooling, mark_boundary=mark_boundary,
-                             lexicon=build_lexicon(train) if lexical else None)
+                             lexicon=build_lexicon(train, external_lexicon) if lexical or external_lexicon else None)
     optimizer = torch.optim.AdamW(model.parameters(), lr=0.001, weight_decay=0.01)
     eligible = [r for r in train if r["gold_indices"]]
     if not eligible or not dev:

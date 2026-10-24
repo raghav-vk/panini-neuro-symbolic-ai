@@ -43,14 +43,18 @@ def main():
     p.add_argument("--pooling", choices=["mean", "cls"], default="mean")
     p.add_argument("--mark-boundary", action="store_true", help="add an explicit junction field to model inputs")
     p.add_argument("--lexical", action="store_true", help="add a training-split word/rule count feature head")
+    p.add_argument("--external-lexicon", action="store_true",
+                   help="also feed kosha flags to the feature head; data from annotate_lexicon.py, implies --lexical")
     p.add_argument("--train-limit", type=int, help="learning-curve subset; sampled by fixed training-only hash")
     p.add_argument("--baselines-only", action="store_true")
     p.add_argument("--ablations", action="store_true")
     args = p.parse_args()
     if args.epochs < 1 or args.width < 4 or args.width % 4 or args.layers < 1 or (args.train_limit is not None and args.train_limit < 1):
         p.error("invalid training dimensions, epochs, or limit")
-    args.output.mkdir(parents=True, exist_ok=False)
     manifest = json.loads((args.data / "manifest.json").read_text())
+    if args.external_lexicon and "external_lexicon" not in manifest:
+        p.error("--external-lexicon needs splits annotated by annotate_lexicon.py")
+    args.output.mkdir(parents=True, exist_ok=False)
     args.splits = args.splits or list(manifest["splits"])
     results = {"data_kind": manifest["data_kind"], "data_manifest": manifest, "configuration": {k: str(v) if isinstance(v, Path) else v for k, v in vars(args).items()},
                "python": sys.version, "platform": platform.platform(), "device": "cpu", "results": []}
@@ -85,7 +89,8 @@ def main():
                 rules, context = name != "tiny_no_rules", name != "tiny_no_context"
                 model, info = train_neural(rows["train"], rows["dev"], seed=seed, epochs=args.epochs, width=args.width, layers=args.layers,
                                            use_rules=rules, use_context=context, max_length=args.max_length,
-                                           pooling=args.pooling, mark_boundary=args.mark_boundary, lexical=args.lexical)
+                                           pooling=args.pooling, mark_boundary=args.mark_boundary, lexical=args.lexical,
+                                           external_lexicon=args.external_lexicon)
                 dev_scores = predict_neural(model, rows["dev"], rules, context)
                 fit_seconds = time.perf_counter() - start
                 predict_start = time.perf_counter()

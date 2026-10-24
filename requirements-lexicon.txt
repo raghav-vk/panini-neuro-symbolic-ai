@@ -1,0 +1,3 @@
+# Optional external lexicon (Vidyut kosha) for the --external-lexicon ranker feature.
+# The package is MIT; its prebuilt data includes CC BY-NC-SA 3.0 material, see THIRD_PARTY_NOTICES.md.
+vidyut==0.4.0

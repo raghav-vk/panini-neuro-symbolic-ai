@@ -90,6 +90,19 @@ audits for source-random, pair and strict-lemma splits. The strict split also
 checks annotated context lemmas; cross-partition source groups go to `mixed`.
 Synthetic lemma identifiers denote nonce stems, not real Sanskrit lemmas.
 
+Optional external lexicon (research use only; Monier-Williams data in the
+kosha is CC BY-NC-SA 3.0, see `THIRD_PARTY_NOTICES.md`):
+
+```sh
+.venv/bin/pip install -r requirements-lexicon.txt
+.venv/bin/python scripts/fetch_vidyut_data.py
+.venv/bin/python scripts/annotate_lexicon.py \
+  --data data/processed/my-experiment --output data/processed/my-experiment-kosha
+```
+
+Then pass `--external-lexicon` to `run_experiment.py` with the annotated
+directory.
+
 All output directories must be new. Use a new name for each rerun so existing
 reviews, frozen datasets and checkpoints are never overwritten accidentally.
 

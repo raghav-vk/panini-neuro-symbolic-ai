@@ -23,6 +23,8 @@ def main():
     p.add_argument("--context", default="")
     p.add_argument("--checkpoint", type=Path)
     p.add_argument("--top-k", type=int, default=5)
+    p.add_argument("--kosha", type=Path, default=ROOT / "data/external/vidyut-0.4.0/kosha",
+                   help="needed for checkpoints trained with --external-lexicon")
     args = p.parse_args()
     candidates = enumerate_candidates(args.surface, load_rules(args.rules), args.tags)
     threshold, values = 0.0, [0.0] * len(candidates)
@@ -36,6 +38,9 @@ def main():
                                  pooling=state.get("pooling", "mean"), mark_boundary=state.get("mark_boundary", False),
                                  lexicon=state.get("lexicon"))
         model.load_state_dict(state["state_dict"])
+        if (state.get("lexicon") or {}).get("external"):
+            from panini.lexicon import KoshaLexicon, annotate
+            annotate([{"candidates": candidates}], KoshaLexicon(args.kosha))
         values = predict_neural(model, [{"surface": args.surface, "context": args.context, "candidates": candidates}], state["use_rules"], state["use_context"])[0]
         threshold = state["threshold"]
     ranked = sorted(range(len(values)), key=lambda i: (-values[i], i))
