@@ -47,6 +47,9 @@ def main():
                    help="also feed kosha flags to the feature head; data from annotate_lexicon.py, implies --lexical")
     p.add_argument("--boundary-vowel-feature", action="store_true",
                    help="add the boundary long-vowel count to the feature head; implies --lexical")
+    p.add_argument("--residual", action="store_true",
+                   help="start from the fitted linear_features_short_vowel baseline and train only a Transformer "
+                        "correction; requires --boundary-vowel-feature")
     p.add_argument("--train-limit", type=int, help="learning-curve subset; sampled by fixed training-only hash")
     p.add_argument("--baselines-only", action="store_true")
     p.add_argument("--ablations", action="store_true")
@@ -54,6 +57,8 @@ def main():
     if args.epochs < 1 or args.width < 4 or args.width % 4 or args.layers < 1 or (args.train_limit is not None and args.train_limit < 1):
         p.error("invalid training dimensions, epochs, or limit")
     manifest = json.loads((args.data / "manifest.json").read_text())
+    if args.residual and not args.boundary_vowel_feature:
+        p.error("--residual requires --boundary-vowel-feature")
     if args.external_lexicon and "external_lexicon" not in manifest:
         p.error("--external-lexicon needs splits annotated by annotate_lexicon.py")
     args.output.mkdir(parents=True, exist_ok=False)
@@ -96,7 +101,7 @@ def main():
                                            use_rules=rules, use_context=context, max_length=args.max_length,
                                            pooling=args.pooling, mark_boundary=args.mark_boundary, lexical=args.lexical,
                                            external_lexicon=args.external_lexicon,
-                                           boundary_vowel_feature=args.boundary_vowel_feature)
+                                           boundary_vowel_feature=args.boundary_vowel_feature, residual=args.residual)
                 dev_scores = predict_neural(model, rows["dev"], rules, context)
                 fit_seconds = time.perf_counter() - start
                 predict_start = time.perf_counter()

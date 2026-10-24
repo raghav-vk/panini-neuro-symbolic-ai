@@ -177,7 +177,12 @@ class LinearBaseline:
 
     def __init__(self, train, external=False, epochs=20, seed=7):
         import torch
-        torch.manual_seed(seed)
+        with torch.random.fork_rng():  # do not reset the caller's random state
+            torch.manual_seed(seed)
+            self._fit(train, external, epochs, seed)
+
+    def _fit(self, train, external, epochs, seed):
+        import torch
         self.lexicon = build_lexicon(train, external)
         self.linear = torch.nn.Linear(feature_count(self.lexicon), 1)
         optimizer = torch.optim.AdamW(self.linear.parameters(), lr=0.01)
@@ -242,6 +247,26 @@ def make_transformer(width=64, layers=2, heads=4, max_length=192, pooling="mean"
     return TinyRanker()
 
 
+def init_residual(model, baseline):
+    """Start from a fitted LinearBaseline: frozen head with its weights, zero Transformer output.
+
+    At initialisation the model scores exactly as the baseline (the short-vowel tie-break becomes the
+    boundary-vowel feature weight), so training can only add a correction learned from the input text.
+    """
+    import torch
+    if not (model.lexicon and model.lexicon.get("boundary_vowels")) or model.lexical.in_features != baseline.linear.in_features + 1:
+        raise ValueError("residual training needs the baseline's features plus the boundary-vowel feature")
+    with torch.no_grad():
+        model.lexical.weight[:, :-1] = baseline.linear.weight
+        model.lexical.weight[:, -1] = -1e-3
+        model.lexical.bias.copy_(baseline.linear.bias)
+        model.output.weight.zero_()
+        model.output.bias.zero_()
+    for parameter in model.lexical.parameters():
+        parameter.requires_grad_(False)
+    return model
+
+
 def score_neural(model, rows, use_rules=True, use_context=True, gradients=False, exclude_self=False):
     import torch
     texts = [model_text(r, c, use_rules, use_context, model.mark_boundary).encode("utf-8") for r in rows for c in r["candidates"]]
@@ -267,7 +292,8 @@ def predict_neural(model, rows, use_rules=True, use_context=True):
 
 
 def train_neural(train, dev, seed=7, epochs=3, width=64, layers=2, use_rules=True, use_context=True, max_length=192,
-                 pooling="mean", mark_boundary=False, lexical=False, external_lexicon=False, boundary_vowel_feature=False):
+                 pooling="mean", mark_boundary=False, lexical=False, external_lexicon=False, boundary_vowel_feature=False,
+                 residual=False):
     import copy
     import torch
     torch.manual_seed(seed)
@@ -275,8 +301,10 @@ def train_neural(train, dev, seed=7, epochs=3, width=64, layers=2, use_rules=Tru
     torch.use_deterministic_algorithms(True)
     model = make_transformer(width, layers, max_length=max_length, pooling=pooling, mark_boundary=mark_boundary,
                              lexicon=build_lexicon(train, external_lexicon, boundary_vowel_feature)
-                             if lexical or external_lexicon or boundary_vowel_feature else None)
-    optimizer = torch.optim.AdamW(model.parameters(), lr=0.001, weight_decay=0.01)
+                             if lexical or external_lexicon or boundary_vowel_feature or residual else None)
+    if residual:
+        init_residual(model, LinearBaseline(train, external_lexicon))
+    optimizer = torch.optim.AdamW([p for p in model.parameters() if p.requires_grad], lr=0.001, weight_decay=0.01)
     eligible = [r for r in train if r["gold_indices"]]
     if not eligible or not dev:
         raise ValueError("need covered training examples and a nonempty development split")

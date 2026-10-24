@@ -69,3 +69,19 @@ def test_boundary_vowel_feature_and_linear_baseline():
     assert [len(s) for s in scores] == [len(r["candidates"]) for r in rows[40:]]
     assert scores == [LinearBaseline(rows[:40], external=True, epochs=2).score(r) for r in rows[40:]]
     assert 0 <= metrics(rows[40:], scores)[0]["top1"] <= 1
+
+
+def test_residual_model_starts_exactly_at_the_linear_baseline():
+    pytest.importorskip("torch")
+    from test_development_pipeline import enriched
+    from panini.ranking import LinearBaseline, init_residual, make_transformer, predict_neural, train_neural
+    rows = enriched()
+    annotate(rows, FakeLexicon({c["left"] for r in rows[::3] for c in r["candidates"]}))
+    baseline = LinearBaseline(rows[:40], external=True, epochs=2)
+    model = make_transformer(width=16, layers=1, lexicon=build_lexicon(rows[:40], external=True, boundary_vowels=True))
+    init_residual(model, baseline)
+    for got, want in zip(predict_neural(model, rows[40:]), [baseline.score(r) for r in rows[40:]]):
+        assert got == pytest.approx(want, abs=1e-5)
+    trained, _ = train_neural(rows[:40], rows[40:50], epochs=1, width=16, layers=1, external_lexicon=True,
+                              boundary_vowel_feature=True, residual=True)
+    assert not any(p.requires_grad for p in trained.lexical.parameters())

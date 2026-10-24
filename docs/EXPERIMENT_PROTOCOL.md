@@ -1,6 +1,6 @@
 # Experimental Protocol: Proof-Carrying External Vowel-Sandhi Splitting
 
-**Protocol version:** 0.3 (amendments of 2026-10-23: right-word holdout, section 9.5; silver-data rules and ranker settings, section 11.1)
+**Protocol version:** 0.4 (amendments of 2026-10-23/24: right-word holdout, section 9.5; silver-data rules and ranker settings, sections 11.1 and 11.2)
 **Status:** Planned independent-corpus study; development smoke run separately frozen
 **Primary task:** Rank rule-licensed analyses of one external vowel-sandhi boundary
 **Compute target:** CPU or one modest consumer GPU
@@ -420,6 +420,43 @@ epochs, width 64, 2 layers, mean pooling and maximum length 300.
 scored 0.822 against 0.831 for the baseline, a paired difference of −0.002
 (95% CI −0.013 to +0.009). See `reports/dcs-silver-v2/SUMMARY.md`. Any further
 ranker change must be decided on dev and recorded here before the next test run.
+
+### 11.2 External Lexicon and Final Silver Comparison (Amendment 0.4)
+
+Decided on 2026-10-24 on development data only, after the section 11.1 test
+run and before any test run with these settings.
+
+**Lexicon.** Candidates are flagged as found or not found in the Vidyut 0.4.0
+kosha after word-final sandhi is undone (`scripts/annotate_lexicon.py`). The
+kosha is not derived from DCS. It contains CC BY-NC-SA 3.0 Monier-Williams
+data and is used only as a local research dependency (`THIRD_PARTY_NOTICES.md`).
+
+**Dev results** (right-word holdout, 988 examples; neural rows are three-seed means):
+
+| Ranker | Dev top-1 |
+| --- | --- |
+| Frequency, short-vowel tie-break | 0.800 |
+| Transformer + lexical head (section 11.1) | 0.817 (epoch 3) |
+| Linear head features + kosha + short-vowel tie-break (`linear_features_short_vowel`) | 0.909 |
+| Transformer + head with kosha and boundary-vowel features | 0.876 (epoch 3), 0.892 (best) |
+| Residual: Transformer correction on the frozen linear model (`--residual`) | 0.906 (epoch 3), 0.910 (best) |
+
+The residual model starts exactly at the linear model. Its dev accuracy falls
+as training continues. The stopping rule, fixed before that run, was to stop
+tuning unless it beat 0.909 by more than the seed spread (0.006). It did not.
+
+**Test runs.** Fixed: 3 epochs with best epoch chosen on dev, width 64, 2
+layers, mean pooling, maximum length 300, seeds 7, 11, 19, 23, 29.
+
+1. All four splits, `--external-lexicon --boundary-vowel-feature`.
+2. Right-word holdout, the same flags plus `--residual`.
+
+The primary comparison is `linear_features_short_vowel` against both neural
+variants on the right-word holdout, with paired bootstrap intervals
+(`scripts/compare_paired.py`). All results are reported, including negative
+ones. Further neural architectures are new hypotheses and need a new
+amendment and a fresh evaluation set or an explicitly disclosed reuse of this
+test set.
 
 ## 12. Baselines
 
