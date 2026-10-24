@@ -1,6 +1,6 @@
 # Experimental Protocol: Proof-Carrying External Vowel-Sandhi Splitting
 
-**Protocol version:** 0.2 (amendment of 2026-10-23: right-word holdout, section 9.5)
+**Protocol version:** 0.3 (amendments of 2026-10-23: right-word holdout, section 9.5; silver-data rules and ranker settings, section 11.1)
 **Status:** Planned independent-corpus study; development smoke run separately frozen
 **Primary task:** Rank rule-licensed analyses of one external vowel-sandhi boundary
 **Compute target:** CPU or one modest consumer GPU
@@ -386,6 +386,35 @@ candidate set.
 Select architecture and optimization settings on development data only.
 Record optimizer, learning rate, batch size, maximum length, early-stopping
 rule, seed, epochs, parameter count, wall time, peak RAM, and peak VRAM.
+
+### 11.1 Silver DCS Settings (Amendment 0.3)
+
+Decided on 2026-10-23, on development data only, before the five-seed test run.
+
+**Rules.** Six draft vowel rules were added (SDH-013 to SDH-018: vṛddhi
+6.1.88, u + u 6.1.101, a + ṛ 6.1.87, and yaṇ 6.1.77 before vowels other than
+a). They were chosen from the junction counts of all 39,838 silver examples,
+including the test partition. This used observed surfaces only, never ranker
+scores. Coverage rose from 68.1 to 99.97 percent of tokens, and dev candidate
+recall from 0.847 to 0.999. Before this, a single-seed timing run with the
+original 12 rules had reported test scores (section 9.5). Those scores are
+superseded and are not results.
+
+**Ranker.** The silver-data ranker adds a lexical feature head (`--lexical`).
+It is a linear score added to the Transformer score. Its inputs are
+training-split counts of the candidate's left word, right word and best
+licensing rule, plus seen-in-training flags. On training rows, the row's own
+occurrence is left out of the counts. Three-seed dev top-1 (best epoch):
+
+| Ranker | Dev top-1 |
+| --- | --- |
+| Transformer alone | 0.766 |
+| Feature head alone | 0.592 |
+| Frequency with short-vowel tie-break | 0.800 |
+| Transformer + feature head | 0.824 |
+
+Dev accuracy peaks at epochs 2 to 4 and then declines. The test run fixes 3
+epochs, width 64, 2 layers, mean pooling and maximum length 300.
 
 ## 12. Baselines
 

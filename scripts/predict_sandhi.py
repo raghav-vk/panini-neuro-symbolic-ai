@@ -33,7 +33,8 @@ def main():
         if state["rules_sha256"] != digest(args.rules.read_text()):
             p.error("checkpoint was trained with a different rule snapshot")
         model = make_transformer(state["width"], state["layers"], max_length=state["max_length"],
-                                 pooling=state.get("pooling", "mean"), mark_boundary=state.get("mark_boundary", False))
+                                 pooling=state.get("pooling", "mean"), mark_boundary=state.get("mark_boundary", False),
+                                 lexicon=state.get("lexicon"))
         model.load_state_dict(state["state_dict"])
         values = predict_neural(model, [{"surface": args.surface, "context": args.context, "candidates": candidates}], state["use_rules"], state["use_context"])[0]
         threshold = state["threshold"]

@@ -42,6 +42,7 @@ def main():
     p.add_argument("--max-length", type=int, default=192)
     p.add_argument("--pooling", choices=["mean", "cls"], default="mean")
     p.add_argument("--mark-boundary", action="store_true", help="add an explicit junction field to model inputs")
+    p.add_argument("--lexical", action="store_true", help="add a training-split word/rule count feature head")
     p.add_argument("--train-limit", type=int, help="learning-curve subset; sampled by fixed training-only hash")
     p.add_argument("--baselines-only", action="store_true")
     p.add_argument("--ablations", action="store_true")
@@ -84,7 +85,7 @@ def main():
                 rules, context = name != "tiny_no_rules", name != "tiny_no_context"
                 model, info = train_neural(rows["train"], rows["dev"], seed=seed, epochs=args.epochs, width=args.width, layers=args.layers,
                                            use_rules=rules, use_context=context, max_length=args.max_length,
-                                           pooling=args.pooling, mark_boundary=args.mark_boundary)
+                                           pooling=args.pooling, mark_boundary=args.mark_boundary, lexical=args.lexical)
                 dev_scores = predict_neural(model, rows["dev"], rules, context)
                 fit_seconds = time.perf_counter() - start
                 predict_start = time.perf_counter()
@@ -93,7 +94,7 @@ def main():
             threshold = select_threshold(rows["dev"], dev_scores)
             if seed is not None:
                 torch.save({"state_dict": model.state_dict(), "width": args.width, "layers": args.layers, "max_length": args.max_length,
-                            "pooling": args.pooling, "mark_boundary": args.mark_boundary, "use_rules": rules, "use_context": context, "threshold": threshold,
+                            "pooling": args.pooling, "mark_boundary": args.mark_boundary, "lexicon": model.lexicon, "use_rules": rules, "use_context": context, "threshold": threshold,
                             "rules_sha256": manifest["rules_sha256"]}, args.output / f"{split}-{name}-{seed}.pt")
             report, predictions = metrics(rows["test"], scores)
             selective, _ = metrics(rows["test"], scores, threshold)

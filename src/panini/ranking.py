@@ -127,7 +127,32 @@ def select_threshold(dev, scores, target=0.9):
     return max(eligible)[1] if eligible else 1.01
 
 
-def make_transformer(width=64, layers=2, heads=4, max_length=192, pooling="mean", mark_boundary=False):
+def build_lexicon(train):
+    """Training-split word and rule counts for the optional lexical feature head."""
+    left, right, rules = Counter(), Counter(), Counter()
+    for row in train:
+        left[row["left"]] += 1
+        right[row["right"]] += 1
+        rules[row["rule_id"]] += 1
+    return {"left": dict(left), "right": dict(right), "rules": dict(rules)}
+
+
+LEXICAL_FEATURES = 5
+
+
+def lexical_features(lexicon, row, candidate, exclude_self=False):
+    """Counts for one candidate; exclude_self drops a training row's own occurrence (leave-one-out)."""
+    left = lexicon["left"].get(candidate["left"], 0)
+    right = lexicon["right"].get(candidate["right"], 0)
+    rule = max((lexicon["rules"].get(p["rule_id"], 0) for p in candidate["proofs"]), default=0)
+    if exclude_self:
+        # Otherwise "seen in training" would mark every training gold and nothing at evaluation time.
+        left -= candidate["left"] == row["left"]
+        right -= candidate["right"] == row["right"]
+    return [math.log1p(left), math.log1p(right), float(left > 0), float(right > 0), math.log1p(rule)]
+
+
+def make_transformer(width=64, layers=2, heads=4, max_length=192, pooling="mean", mark_boundary=False, lexicon=None):
     import torch
     from torch import nn
 
@@ -143,8 +168,11 @@ def make_transformer(width=64, layers=2, heads=4, max_length=192, pooling="mean"
             layer = nn.TransformerEncoderLayer(width, heads, width * 4, dropout=0.1, batch_first=True)
             self.encoder = nn.TransformerEncoder(layer, layers, enable_nested_tensor=False)
             self.output = nn.Linear(width, 1)
+            self.lexicon = lexicon
+            if lexicon is not None:
+                self.lexical = nn.Linear(LEXICAL_FEATURES, 1)
 
-        def forward(self, tokens):
+        def forward(self, tokens, features=None):
             if self.pooling == "cls":
                 tokens = torch.cat([torch.full((tokens.shape[0], 1), 257, dtype=tokens.dtype), tokens], 1)
             padding = tokens == 0
@@ -154,12 +182,15 @@ def make_transformer(width=64, layers=2, heads=4, max_length=192, pooling="mean"
                 x = x[:, 0]
             else:
                 x = (x * (~padding).unsqueeze(-1)).sum(1) / (~padding).sum(1, keepdim=True)
-            return self.output(x).squeeze(-1)
+            score = self.output(x).squeeze(-1)
+            if self.lexicon is not None:
+                score = score + self.lexical(features).squeeze(-1)
+            return score
 
     return TinyRanker()
 
 
-def score_neural(model, rows, use_rules=True, use_context=True, gradients=False):
+def score_neural(model, rows, use_rules=True, use_context=True, gradients=False, exclude_self=False):
     import torch
     texts = [model_text(r, c, use_rules, use_context, model.mark_boundary).encode("utf-8") for r in rows for c in r["candidates"]]
     if not texts:
@@ -169,8 +200,11 @@ def score_neural(model, rows, use_rules=True, use_context=True, gradients=False)
     tokens = torch.zeros((len(texts), max(map(len, texts))), dtype=torch.long)
     for i, text in enumerate(texts):
         tokens[i, :len(text)] = torch.tensor([x + 1 for x in text])
+    features = None
+    if model.lexicon is not None:
+        features = torch.tensor([lexical_features(model.lexicon, r, c, exclude_self) for r in rows for c in r["candidates"]])
     with torch.set_grad_enabled(gradients):
-        scores = model(tokens)
+        scores = model(tokens, features)
     return list(scores.split([len(r["candidates"]) for r in rows]))
 
 
@@ -181,13 +215,14 @@ def predict_neural(model, rows, use_rules=True, use_context=True):
 
 
 def train_neural(train, dev, seed=7, epochs=3, width=64, layers=2, use_rules=True, use_context=True, max_length=192,
-                 pooling="mean", mark_boundary=False):
+                 pooling="mean", mark_boundary=False, lexical=False):
     import copy
     import torch
     torch.manual_seed(seed)
     torch.set_num_threads(2)
     torch.use_deterministic_algorithms(True)
-    model = make_transformer(width, layers, max_length=max_length, pooling=pooling, mark_boundary=mark_boundary)
+    model = make_transformer(width, layers, max_length=max_length, pooling=pooling, mark_boundary=mark_boundary,
+                             lexicon=build_lexicon(train) if lexical else None)
     optimizer = torch.optim.AdamW(model.parameters(), lr=0.001, weight_decay=0.01)
     eligible = [r for r in train if r["gold_indices"]]
     if not eligible or not dev:
@@ -199,7 +234,7 @@ def train_neural(train, dev, seed=7, epochs=3, width=64, layers=2, use_rules=Tru
         losses = []
         for start in range(0, len(eligible), 16):
             batch = eligible[start:start+16]
-            scores = score_neural(model, batch, use_rules, use_context, gradients=True)
+            scores = score_neural(model, batch, use_rules, use_context, gradients=True, exclude_self=True)
             loss = torch.stack([torch.logsumexp(s, 0) - torch.logsumexp(s[r["gold_indices"]], 0) for r, s in zip(batch, scores)]).mean()
             optimizer.zero_grad()
             loss.backward()

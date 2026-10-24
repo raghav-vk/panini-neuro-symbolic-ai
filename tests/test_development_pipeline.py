@@ -227,14 +227,26 @@ def test_frequency_short_vowel_breaks_frequency_ties_toward_short_vowels():
     assert scores[1] > scores[0]
 
 
-@pytest.mark.parametrize("pooling, mark_boundary", [("cls", False), ("mean", True)])
-def test_ranker_options_train_and_roundtrip(tmp_path, pooling, mark_boundary):
+@pytest.mark.parametrize("pooling, mark_boundary, lexical", [("cls", False, False), ("mean", True, False), ("mean", False, True)])
+def test_ranker_options_train_and_roundtrip(tmp_path, pooling, mark_boundary, lexical):
     torch = pytest.importorskip("torch")
     from panini.ranking import train_neural, predict_neural, make_transformer
     rows = enriched()
-    model, _ = train_neural(rows[:40], rows[40:50], epochs=1, width=16, layers=1, pooling=pooling, mark_boundary=mark_boundary)
+    model, _ = train_neural(rows[:40], rows[40:50], epochs=1, width=16, layers=1, pooling=pooling, mark_boundary=mark_boundary,
+                            lexical=lexical)
     path = tmp_path / "model.pt"
-    torch.save(model.state_dict(), path)
-    restored = make_transformer(width=16, layers=1, pooling=pooling, mark_boundary=mark_boundary)
-    restored.load_state_dict(torch.load(path, weights_only=True))
+    torch.save({"state_dict": model.state_dict(), "lexicon": model.lexicon}, path)
+    state = torch.load(path, weights_only=True)
+    restored = make_transformer(width=16, layers=1, pooling=pooling, mark_boundary=mark_boundary, lexicon=state["lexicon"])
+    restored.load_state_dict(state["state_dict"])
     assert predict_neural(model, rows[50:60]) == predict_neural(restored, rows[50:60])
+
+
+def test_lexical_features_leave_the_training_row_out():
+    from panini.ranking import build_lexicon, lexical_features
+    rows = enriched(2)
+    lexicon = build_lexicon(rows)
+    row = rows[0]
+    gold = row["candidates"][row["gold_indices"][0]]
+    seen, held_out = lexical_features(lexicon, row, gold), lexical_features(lexicon, row, gold, exclude_self=True)
+    assert seen[2] == 1.0 and held_out[0] < seen[0]
