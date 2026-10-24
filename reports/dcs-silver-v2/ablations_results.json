@@ -1,0 +1,4656 @@
+{
+  "data_kind": "dcs_silver_alignment",
+  "data_manifest": {
+    "data_kind": "dcs_silver_alignment",
+    "rules_sha256": "ee78633b18380000fbe70417057b402b1bddcc5bb549857d0a88cd16c3572576",
+    "rules": [
+      "SDH-001",
+      "SDH-002",
+      "SDH-003",
+      "SDH-004",
+      "SDH-005",
+      "SDH-006",
+      "SDH-007",
+      "SDH-008",
+      "SDH-009",
+      "SDH-010",
+      "SDH-011",
+      "SDH-012",
+      "SDH-013",
+      "SDH-014",
+      "SDH-015",
+      "SDH-016",
+      "SDH-017",
+      "SDH-018"
+    ],
+    "rules_expert_reviewed": 0,
+    "splits": {
+      "source_random": {
+        "method": "source_random",
+        "seed": 1729,
+        "input_count": 39838,
+        "duplicates_removed": 3369,
+        "counts": {
+          "train": 32749,
+          "dev": 1828,
+          "test": 1892,
+          "mixed": 0
+        },
+        "overlaps": {
+          "train_dev": {
+            "lemmas_including_context": 2066,
+            "right_word_lemmas": 707,
+            "pairs": 466,
+            "sources": 0,
+            "surfaces": 0
+          },
+          "train_test": {
+            "lemmas_including_context": 2112,
+            "right_word_lemmas": 743,
+            "pairs": 558,
+            "sources": 0,
+            "surfaces": 0
+          },
+          "dev_test": {
+            "lemmas_including_context": 1047,
+            "right_word_lemmas": 351,
+            "pairs": 142,
+            "sources": 0,
+            "surfaces": 0
+          }
+        },
+        "per_rule": {
+          "train": {
+            "SDH-004": 1473,
+            "SDH-001": 15080,
+            "SDH-013": 9215,
+            "SDH-003": 2199,
+            "SDH-006": 520,
+            "SDH-017": 1344,
+            "SDH-005": 2049,
+            "SDH-018": 384,
+            "SDH-014": 125,
+            "SDH-002": 189,
+            "SDH-015": 76,
+            "SDH-016": 83,
+            "UNSUPPORTED": 12
+          },
+          "dev": {
+            "SDH-001": 1143,
+            "SDH-004": 139,
+            "SDH-016": 16,
+            "SDH-002": 13,
+            "SDH-003": 118,
+            "SDH-013": 110,
+            "SDH-005": 108,
+            "SDH-006": 52,
+            "SDH-018": 19,
+            "SDH-017": 90,
+            "SDH-014": 14,
+            "SDH-015": 6
+          },
+          "test": {
+            "SDH-004": 164,
+            "SDH-001": 1092,
+            "SDH-003": 94,
+            "SDH-006": 73,
+            "SDH-005": 153,
+            "SDH-014": 16,
+            "SDH-017": 62,
+            "SDH-015": 9,
+            "SDH-013": 144,
+            "SDH-018": 32,
+            "SDH-016": 14,
+            "SDH-002": 39
+          },
+          "mixed": {}
+        },
+        "dataset_sha256": "1fd37459d88b28a9e4375558c85ec6fe6c94ac697debba9752959084fd00aae1",
+        "context_policy": "all annotated context lemmas participate in strict assignment",
+        "grouping": "source and identical surface components; pair holdout additionally groups lemma pairs",
+        "file_sha256": {
+          "train": "b23d401c54a261d182a6cb27863ce82d8195b3b03effac9009cd10b1677ad0f7",
+          "dev": "0a1807bdfd595f2229a5f8a4796cdae9c5698f3f0f6a0986d5f8c98580b7ccaa",
+          "test": "4f93165ffef186e41dcbcb9e2de07846e7d29dd65a7e0a078ffba9548fe796bb",
+          "mixed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "candidate_coverage": {
+          "train": {
+            "examples": 32749,
+            "covered": 32737,
+            "ambiguous": 32749,
+            "total_candidates": 239831
+          },
+          "dev": {
+            "examples": 1828,
+            "covered": 1828,
+            "ambiguous": 1828,
+            "total_candidates": 16480
+          },
+          "test": {
+            "examples": 1892,
+            "covered": 1892,
+            "ambiguous": 1892,
+            "total_candidates": 16986
+          },
+          "mixed": {
+            "examples": 0,
+            "covered": 0,
+            "ambiguous": 0,
+            "total_candidates": 0
+          }
+        }
+      },
+      "pair": {
+        "method": "pair",
+        "seed": 1729,
+        "input_count": 39838,
+        "duplicates_removed": 3369,
+        "counts": {
+          "train": 33637,
+          "dev": 1490,
+          "test": 1342,
+          "mixed": 0
+        },
+        "overlaps": {
+          "train_dev": {
+            "lemmas_including_context": 1715,
+            "right_word_lemmas": 519,
+            "pairs": 0,
+            "sources": 0,
+            "surfaces": 0
+          },
+          "train_test": {
+            "lemmas_including_context": 1724,
+            "right_word_lemmas": 549,
+            "pairs": 0,
+            "sources": 0,
+            "surfaces": 0
+          },
+          "dev_test": {
+            "lemmas_including_context": 756,
+            "right_word_lemmas": 198,
+            "pairs": 0,
+            "sources": 0,
+            "surfaces": 0
+          }
+        },
+        "per_rule": {
+          "train": {
+            "SDH-004": 1526,
+            "SDH-001": 15555,
+            "SDH-013": 9350,
+            "SDH-003": 2262,
+            "SDH-006": 557,
+            "SDH-017": 1373,
+            "SDH-005": 2082,
+            "SDH-018": 386,
+            "SDH-014": 136,
+            "SDH-002": 220,
+            "SDH-015": 84,
+            "SDH-016": 94,
+            "UNSUPPORTED": 12
+          },
+          "dev": {
+            "SDH-001": 954,
+            "SDH-016": 14,
+            "SDH-002": 13,
+            "SDH-003": 86,
+            "SDH-013": 65,
+            "SDH-005": 89,
+            "SDH-006": 43,
+            "SDH-018": 18,
+            "SDH-017": 86,
+            "SDH-004": 110,
+            "SDH-014": 10,
+            "SDH-015": 2
+          },
+          "test": {
+            "SDH-004": 140,
+            "SDH-001": 806,
+            "SDH-006": 45,
+            "SDH-014": 9,
+            "SDH-003": 63,
+            "SDH-005": 139,
+            "SDH-018": 31,
+            "SDH-017": 37,
+            "SDH-016": 5,
+            "SDH-013": 54,
+            "SDH-002": 8,
+            "SDH-015": 5
+          },
+          "mixed": {}
+        },
+        "dataset_sha256": "1fd37459d88b28a9e4375558c85ec6fe6c94ac697debba9752959084fd00aae1",
+        "context_policy": "all annotated context lemmas participate in strict assignment",
+        "grouping": "source and identical surface components; pair holdout additionally groups lemma pairs",
+        "file_sha256": {
+          "train": "08a1976df1cc377cc60124315e62955611947554f4c4426852858760f34e0449",
+          "dev": "53751ed5d60bd8bc3e22cdfd00a45742618429ecc7d9dd78b52711a9591fdf93",
+          "test": "9a87db48dadfbbade5a89c881d4ce24a033f1a704999593631c7a452929f9cfb",
+          "mixed": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "candidate_coverage": {
+          "train": {
+            "examples": 33637,
+            "covered": 33625,
+            "ambiguous": 33637,
+            "total_candidates": 247684
+          },
+          "dev": {
+            "examples": 1490,
+            "covered": 1490,
+            "ambiguous": 1490,
+            "total_candidates": 13159
+          },
+          "test": {
+            "examples": 1342,
+            "covered": 1342,
+            "ambiguous": 1342,
+            "total_candidates": 12454
+          },
+          "mixed": {
+            "examples": 0,
+            "covered": 0,
+            "ambiguous": 0,
+            "total_candidates": 0
+          }
+        }
+      },
+      "strict_lemma": {
+        "method": "strict_lemma",
+        "seed": 1729,
+        "input_count": 39838,
+        "duplicates_removed": 3369,
+        "counts": {
+          "train": 1334,
+          "dev": 34,
+          "test": 36,
+          "mixed": 35065
+        },
+        "overlaps": {
+          "train_dev": {
+            "lemmas_including_context": 0,
+            "right_word_lemmas": 0,
+            "pairs": 0,
+            "sources": 0,
+            "surfaces": 0
+          },
+          "train_test": {
+            "lemmas_including_context": 0,
+            "right_word_lemmas": 0,
+            "pairs": 0,
+            "sources": 0,
+            "surfaces": 0
+          },
+          "dev_test": {
+            "lemmas_including_context": 0,
+            "right_word_lemmas": 0,
+            "pairs": 0,
+            "sources": 0,
+            "surfaces": 0
+          }
+        },
+        "per_rule": {
+          "train": {
+            "SDH-001": 691,
+            "SDH-005": 166,
+            "SDH-013": 81,
+            "SDH-004": 125,
+            "SDH-018": 28,
+            "SDH-003": 65,
+            "SDH-014": 15,
+            "SDH-015": 13,
+            "SDH-006": 63,
+            "SDH-017": 76,
+            "SDH-002": 7,
+            "SDH-016": 3,
+            "UNSUPPORTED": 1
+          },
+          "dev": {
+            "SDH-003": 3,
+            "SDH-001": 21,
+            "SDH-005": 3,
+            "SDH-004": 5,
+            "SDH-006": 1,
+            "SDH-016": 1
+          },
+          "test": {
+            "SDH-001": 27,
+            "SDH-004": 7,
+            "SDH-013": 2
+          },
+          "mixed": {
+            "SDH-004": 1639,
+            "SDH-001": 16576,
+            "SDH-013": 9386,
+            "SDH-003": 2343,
+            "SDH-006": 581,
+            "SDH-016": 109,
+            "SDH-002": 234,
+            "SDH-017": 1420,
+            "SDH-018": 407,
+            "SDH-005": 2141,
+            "SDH-014": 140,
+            "SDH-015": 78,
+            "UNSUPPORTED": 11
+          }
+        },
+        "dataset_sha256": "1fd37459d88b28a9e4375558c85ec6fe6c94ac697debba9752959084fd00aae1",
+        "context_policy": "all annotated context lemmas participate in strict assignment",
+        "grouping": "source and identical surface components; pair holdout additionally groups lemma pairs",
+        "file_sha256": {
+          "train": "f8f18ec8ca3bd1e11d5613c7736d5bd553f2e289ec192aa1660592fe6f774594",
+          "dev": "92c6f11906dd2a89b0d94c3b093699c2ae57a7ea0b8d0a7ae1da31bd8d591565",
+          "test": "d6858b0eaafc6fbff1ef7194fb99bf5f2250d1776b39f48f9b4953a46b0a4395",
+          "mixed": "83784daaf6797aeff2af098442725413b2ab6f765338c6d81da37924e5208d39"
+        },
+        "candidate_coverage": {
+          "train": {
+            "examples": 1334,
+            "covered": 1333,
+            "ambiguous": 1334,
+            "total_candidates": 12550
+          },
+          "dev": {
+            "examples": 34,
+            "covered": 34,
+            "ambiguous": 34,
+            "total_candidates": 328
+          },
+          "test": {
+            "examples": 36,
+            "covered": 36,
+            "ambiguous": 36,
+            "total_candidates": 302
+          },
+          "mixed": {
+            "examples": 35065,
+            "covered": 35054,
+            "ambiguous": 35065,
+            "total_candidates": 260117
+          }
+        }
+      },
+      "strict_right_lemma": {
+        "method": "strict_right_lemma",
+        "seed": 1729,
+        "input_count": 39838,
+        "duplicates_removed": 26284,
+        "counts": {
+          "train": 9066,
+          "dev": 988,
+          "test": 821,
+          "mixed": 2679
+        },
+        "overlaps": {
+          "train_dev": {
+            "lemmas_including_context": 936,
+            "right_word_lemmas": 0,
+            "pairs": 0,
+            "sources": 0,
+            "surfaces": 0
+          },
+          "train_test": {
+            "lemmas_including_context": 836,
+            "right_word_lemmas": 0,
+            "pairs": 0,
+            "sources": 0,
+            "surfaces": 0
+          },
+          "dev_test": {
+            "lemmas_including_context": 372,
+            "right_word_lemmas": 0,
+            "pairs": 0,
+            "sources": 0,
+            "surfaces": 0
+          }
+        },
+        "per_rule": {
+          "train": {
+            "SDH-004": 856,
+            "SDH-001": 5260,
+            "SDH-003": 461,
+            "SDH-013": 511,
+            "SDH-006": 324,
+            "SDH-016": 60,
+            "SDH-005": 842,
+            "SDH-018": 133,
+            "SDH-017": 391,
+            "SDH-014": 97,
+            "SDH-002": 68,
+            "SDH-015": 53,
+            "UNSUPPORTED": 10
+          },
+          "dev": {
+            "SDH-006": 37,
+            "SDH-001": 611,
+            "SDH-005": 99,
+            "SDH-018": 13,
+            "SDH-004": 73,
+            "SDH-013": 83,
+            "SDH-003": 16,
+            "SDH-016": 8,
+            "SDH-017": 42,
+            "SDH-015": 4,
+            "UNSUPPORTED": 1,
+            "SDH-002": 1
+          },
+          "test": {
+            "SDH-001": 503,
+            "SDH-002": 7,
+            "SDH-005": 101,
+            "SDH-004": 49,
+            "SDH-013": 14,
+            "SDH-006": 44,
+            "SDH-003": 53,
+            "SDH-017": 24,
+            "SDH-018": 12,
+            "SDH-014": 8,
+            "SDH-015": 4,
+            "SDH-016": 1,
+            "UNSUPPORTED": 1
+          },
+          "mixed": {
+            "SDH-001": 1638,
+            "SDH-013": 171,
+            "SDH-004": 207,
+            "SDH-003": 141,
+            "SDH-017": 111,
+            "SDH-006": 77,
+            "SDH-018": 35,
+            "SDH-005": 229,
+            "SDH-014": 19,
+            "SDH-002": 20,
+            "SDH-016": 14,
+            "SDH-015": 17
+          }
+        },
+        "dataset_sha256": "1fd37459d88b28a9e4375558c85ec6fe6c94ac697debba9752959084fd00aae1",
+        "context_policy": "all annotated context lemmas participate in strict assignment",
+        "grouping": "source and identical surface components; pair holdout additionally groups lemma pairs",
+        "file_sha256": {
+          "train": "fc47eddacf7e49a673099a2c7fb9ef73b6ddcad6b4e2fffcfc41d83af3492ae8",
+          "dev": "850514e053832596cfe4d9aff89ee5a18c77d972bcb0b2cfac86eda0d7436c5c",
+          "test": "45bf11e6ead7a48b61c95961b38aa3a13a7051990b7b7fd2e6d20a2364da9b23",
+          "mixed": "78dc5de57f059d79fe9be50f0da54b44fd7fd11ddc55d3512292191074a775c1"
+        },
+        "candidate_coverage": {
+          "train": {
+            "examples": 9066,
+            "covered": 9056,
+            "ambiguous": 9066,
+            "total_candidates": 86555
+          },
+          "dev": {
+            "examples": 988,
+            "covered": 987,
+            "ambiguous": 988,
+            "total_candidates": 8486
+          },
+          "test": {
+            "examples": 821,
+            "covered": 820,
+            "ambiguous": 821,
+            "total_candidates": 7563
+          },
+          "mixed": {
+            "examples": 2679,
+            "covered": 2679,
+            "ambiguous": 2679,
+            "total_candidates": 29188
+          }
+        }
+      }
+    }
+  },
+  "configuration": {
+    "data": "data/processed/dcs-silver-v2-splits",
+    "output": "runs/dcs-silver-v2-lexical-ablations",
+    "splits": [
+      "strict_right_lemma"
+    ],
+    "seeds": [
+      7,
+      11,
+      19,
+      23,
+      29
+    ],
+    "epochs": 3,
+    "width": 64,
+    "layers": 2,
+    "max_length": 300,
+    "pooling": "mean",
+    "mark_boundary": false,
+    "lexical": true,
+    "train_limit": null,
+    "baselines_only": false,
+    "ablations": true
+  },
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:33) [Clang 22.1.3 ]",
+  "platform": "macOS-26.5.2-arm64-arm-64bit",
+  "device": "cpu",
+  "results": [
+    {
+      "split": "strict_right_lemma",
+      "model": "symbolic_order",
+      "seed": null,
+      "test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.6065773447015834,
+        "top1_tie_averaged": 0.14055229518079645,
+        "tied_top_rows": 821,
+        "macro_rule_top1": 0.49078519436855,
+        "top3": 0.8440925700365408,
+        "mrr": 0.7426180148416299,
+        "conditional_top1": 0.6073170731707317,
+        "abstention_rate": 0.0,
+        "accepted_accuracy": 0.6065773447015834,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.0,
+        "top1_wilson95_itemwise": [
+          0.5727389695077633,
+          0.639422977707314
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 273,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 498,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 96,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 33,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 3,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 11,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 22,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "selective_test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.6065773447015834,
+        "top1_tie_averaged": 0.14055229518079645,
+        "tied_top_rows": 821,
+        "macro_rule_top1": 0.49078519436855,
+        "top3": 0.8440925700365408,
+        "mrr": 0.7426180148416299,
+        "conditional_top1": 0.6073170731707317,
+        "abstention_rate": 0.9585870889159561,
+        "accepted_accuracy": 1.0,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.5,
+        "top1_wilson95_itemwise": [
+          0.5727389695077633,
+          0.639422977707314
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 273,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 498,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 96,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 33,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 3,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 11,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 22,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "fit_seconds_including_dev": 0.022536707983817905,
+      "test_inference_seconds": 0.0006638329941779375,
+      "process_peak_rss_mib_cumulative": 583.578125,
+      "train_examples": 9066
+    },
+    {
+      "split": "strict_right_lemma",
+      "model": "frequency",
+      "seed": null,
+      "test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8246041412911084,
+        "top1_tie_averaged": 0.6114494518879415,
+        "tied_top_rows": 615,
+        "macro_rule_top1": 0.5326498701035048,
+        "top3": 0.9902557856272838,
+        "mrr": 0.9086006225470293,
+        "conditional_top1": 0.8256097560975609,
+        "abstention_rate": 0.0,
+        "accepted_accuracy": 0.8246041412911084,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.0,
+        "top1_wilson95_itemwise": [
+          0.7970944078548736,
+          0.8490902656630479
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 433,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 677,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 4,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 23,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 9,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "selective_test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8246041412911084,
+        "top1_tie_averaged": 0.6114494518879415,
+        "tied_top_rows": 615,
+        "macro_rule_top1": 0.5326498701035048,
+        "top3": 0.9902557856272838,
+        "mrr": 0.9086006225470293,
+        "conditional_top1": 0.8256097560975609,
+        "abstention_rate": 0.7539585870889159,
+        "accepted_accuracy": 0.9702970297029703,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.5,
+        "top1_wilson95_itemwise": [
+          0.7970944078548736,
+          0.8490902656630479
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 433,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 677,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 4,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 23,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 9,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "fit_seconds_including_dev": 0.02480562499840744,
+      "test_inference_seconds": 0.0042276669992133975,
+      "process_peak_rss_mib_cumulative": 585.09375,
+      "train_examples": 9066
+    },
+    {
+      "split": "strict_right_lemma",
+      "model": "frequency_short_vowel",
+      "seed": null,
+      "test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8246041412911084,
+        "top1_tie_averaged": 0.830694275274056,
+        "tied_top_rows": 21,
+        "macro_rule_top1": 0.5326498701035048,
+        "top3": 0.9902557856272838,
+        "mrr": 0.9086006225470293,
+        "conditional_top1": 0.8256097560975609,
+        "abstention_rate": 0.0,
+        "accepted_accuracy": 0.8246041412911084,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.0,
+        "top1_wilson95_itemwise": [
+          0.7970944078548736,
+          0.8490902656630479
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 433,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 677,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 4,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 23,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 9,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "selective_test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8246041412911084,
+        "top1_tie_averaged": 0.830694275274056,
+        "tied_top_rows": 21,
+        "macro_rule_top1": 0.5326498701035048,
+        "top3": 0.9902557856272838,
+        "mrr": 0.9086006225470293,
+        "conditional_top1": 0.8256097560975609,
+        "abstention_rate": 0.6747868453105969,
+        "accepted_accuracy": 0.9400749063670412,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.5,
+        "top1_wilson95_itemwise": [
+          0.7970944078548736,
+          0.8490902656630479
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 433,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 677,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 4,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 23,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 9,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "fit_seconds_including_dev": 0.030084250000072643,
+      "test_inference_seconds": 0.0105175839853473,
+      "process_peak_rss_mib_cumulative": 585.890625,
+      "train_examples": 9066
+    },
+    {
+      "split": "strict_right_lemma",
+      "model": "character_bigram",
+      "seed": null,
+      "test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.582216808769793,
+        "top1_tie_averaged": 0.582216808769793,
+        "tied_top_rows": 1,
+        "macro_rule_top1": 0.4829394869045479,
+        "top3": 0.833130328867235,
+        "mrr": 0.7232859879327597,
+        "conditional_top1": 0.5829268292682926,
+        "abstention_rate": 0.0,
+        "accepted_accuracy": 0.582216808769793,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.0,
+        "top1_wilson95_itemwise": [
+          0.5481736896247172,
+          0.615494098226914
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 261,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 478,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 88,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 41,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 9,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 38,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 9,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 20,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 8,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "selective_test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.582216808769793,
+        "top1_tie_averaged": 0.582216808769793,
+        "tied_top_rows": 1,
+        "macro_rule_top1": 0.4829394869045479,
+        "top3": 0.833130328867235,
+        "mrr": 0.7232859879327597,
+        "conditional_top1": 0.5829268292682926,
+        "abstention_rate": 0.7917174177831913,
+        "accepted_accuracy": 0.9415204678362573,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.75,
+        "top1_wilson95_itemwise": [
+          0.5481736896247172,
+          0.615494098226914
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 261,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 478,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 88,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 41,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 9,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 38,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 9,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 20,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 8,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "fit_seconds_including_dev": 0.03364850001526065,
+      "test_inference_seconds": 0.013187458011088893,
+      "process_peak_rss_mib_cumulative": 585.90625,
+      "train_examples": 9066
+    },
+    {
+      "split": "strict_right_lemma",
+      "model": "tiny_full",
+      "seed": 7,
+      "test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8294762484774665,
+        "top1_tie_averaged": 0.8294762484774665,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.5885866078221924,
+        "top3": 0.9963459196102314,
+        "mrr": 0.9117993929199774,
+        "conditional_top1": 0.8304878048780487,
+        "abstention_rate": 0.0,
+        "accepted_accuracy": 0.8294762484774665,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.0,
+        "top1_wilson95_itemwise": [
+          0.8022295079467255,
+          0.8536539974438851
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 427,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 681,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 1,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 8,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 14,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "selective_test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8294762484774665,
+        "top1_tie_averaged": 0.8294762484774665,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.5885866078221924,
+        "top3": 0.9963459196102314,
+        "mrr": 0.9117993929199774,
+        "conditional_top1": 0.8304878048780487,
+        "abstention_rate": 0.47868453105968334,
+        "accepted_accuracy": 0.9345794392523364,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.75,
+        "top1_wilson95_itemwise": [
+          0.8022295079467255,
+          0.8536539974438851
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 427,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 681,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 1,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 8,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 14,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "fit_seconds_including_dev": 150.69262837499264,
+      "test_inference_seconds": 1.0991190840140916,
+      "process_peak_rss_mib_cumulative": 2183.296875,
+      "train_examples": 9066,
+      "history": [
+        {
+          "epoch": 1,
+          "loss": 0.9479341932931131,
+          "dev_top1": 0.8188259109311741
+        },
+        {
+          "epoch": 2,
+          "loss": 0.36054449141446776,
+          "dev_top1": 0.8269230769230769
+        },
+        {
+          "epoch": 3,
+          "loss": 0.2962739953488217,
+          "dev_top1": 0.8188259109311741
+        }
+      ],
+      "best_dev_top1": 0.8269230769230769,
+      "parameters": 135687,
+      "uncovered_training_examples_excluded_from_loss": 10
+    },
+    {
+      "split": "strict_right_lemma",
+      "model": "tiny_full",
+      "seed": 11,
+      "test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8172959805115713,
+        "top1_tie_averaged": 0.8172959805115713,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.5749227893644957,
+        "top3": 0.9939098660170523,
+        "mrr": 0.9050867119076619,
+        "conditional_top1": 0.8182926829268292,
+        "abstention_rate": 0.0,
+        "accepted_accuracy": 0.8172959805115713,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.0,
+        "top1_wilson95_itemwise": [
+          0.7894053594336516,
+          0.8422310662752361
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 419,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 671,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 8,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "selective_test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8172959805115713,
+        "top1_tie_averaged": 0.8172959805115713,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.5749227893644957,
+        "top3": 0.9939098660170523,
+        "mrr": 0.9050867119076619,
+        "conditional_top1": 0.8182926829268292,
+        "abstention_rate": 0.44336175395858707,
+        "accepted_accuracy": 0.888402625820569,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.75,
+        "top1_wilson95_itemwise": [
+          0.7894053594336516,
+          0.8422310662752361
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 419,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 671,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 8,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "fit_seconds_including_dev": 147.57055541701266,
+      "test_inference_seconds": 1.0988580419798382,
+      "process_peak_rss_mib_cumulative": 2271.0625,
+      "train_examples": 9066,
+      "history": [
+        {
+          "epoch": 1,
+          "loss": 1.3155051096484012,
+          "dev_top1": 0.7995951417004049
+        },
+        {
+          "epoch": 2,
+          "loss": 0.4025578728149721,
+          "dev_top1": 0.8228744939271255
+        },
+        {
+          "epoch": 3,
+          "loss": 0.30728734125360163,
+          "dev_top1": 0.8178137651821862
+        }
+      ],
+      "best_dev_top1": 0.8228744939271255,
+      "parameters": 135687,
+      "uncovered_training_examples_excluded_from_loss": 10
+    },
+    {
+      "split": "strict_right_lemma",
+      "model": "tiny_full",
+      "seed": 19,
+      "test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.830694275274056,
+        "top1_tie_averaged": 0.830694275274056,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.653375152111093,
+        "top3": 0.9951278928136419,
+        "mrr": 0.9121836513736638,
+        "conditional_top1": 0.8317073170731707,
+        "abstention_rate": 0.0,
+        "accepted_accuracy": 0.830694275274056,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.0,
+        "top1_wilson95_itemwise": [
+          0.803514450901595,
+          0.8547937624571882
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 429,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 682,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 8,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 1,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "selective_test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.830694275274056,
+        "top1_tie_averaged": 0.830694275274056,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.653375152111093,
+        "top3": 0.9951278928136419,
+        "mrr": 0.9121836513736638,
+        "conditional_top1": 0.8317073170731707,
+        "abstention_rate": 0.42509135200974424,
+        "accepted_accuracy": 0.8728813559322034,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.75,
+        "top1_wilson95_itemwise": [
+          0.803514450901595,
+          0.8547937624571882
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 429,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 682,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 8,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 1,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "fit_seconds_including_dev": 149.02129520798917,
+      "test_inference_seconds": 1.0771145000180695,
+      "process_peak_rss_mib_cumulative": 2271.0625,
+      "train_examples": 9066,
+      "history": [
+        {
+          "epoch": 1,
+          "loss": 0.6168111019863257,
+          "dev_top1": 0.8441295546558705
+        },
+        {
+          "epoch": 2,
+          "loss": 0.36829088199159704,
+          "dev_top1": 0.8340080971659919
+        },
+        {
+          "epoch": 3,
+          "loss": 0.3094138713033587,
+          "dev_top1": 0.832995951417004
+        }
+      ],
+      "best_dev_top1": 0.8441295546558705,
+      "parameters": 135687,
+      "uncovered_training_examples_excluded_from_loss": 10
+    },
+    {
+      "split": "strict_right_lemma",
+      "model": "tiny_full",
+      "seed": 23,
+      "test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8063337393422655,
+        "top1_tie_averaged": 0.8063337393422655,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.5640839760902948,
+        "top3": 0.9939098660170523,
+        "mrr": 0.899776695087292,
+        "conditional_top1": 0.8073170731707318,
+        "abstention_rate": 0.0,
+        "accepted_accuracy": 0.8063337393422655,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.0,
+        "top1_wilson95_itemwise": [
+          0.7779009138574113,
+          0.8319131401379254
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 411,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 662,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 8,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 0,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "selective_test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8063337393422655,
+        "top1_tie_averaged": 0.8063337393422655,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.5640839760902948,
+        "top3": 0.9939098660170523,
+        "mrr": 0.899776695087292,
+        "conditional_top1": 0.8073170731707318,
+        "abstention_rate": 0.6151035322777101,
+        "accepted_accuracy": 0.9208860759493671,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.75,
+        "top1_wilson95_itemwise": [
+          0.7779009138574113,
+          0.8319131401379254
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 411,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 662,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 8,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 0,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "fit_seconds_including_dev": 151.0772404159943,
+      "test_inference_seconds": 1.1043658749840688,
+      "process_peak_rss_mib_cumulative": 2312.21875,
+      "train_examples": 9066,
+      "history": [
+        {
+          "epoch": 1,
+          "loss": 1.2261321745786566,
+          "dev_top1": 0.7995951417004049
+        },
+        {
+          "epoch": 2,
+          "loss": 0.3997006770157561,
+          "dev_top1": 0.8238866396761133
+        },
+        {
+          "epoch": 3,
+          "loss": 0.31178597550404785,
+          "dev_top1": 0.8117408906882592
+        }
+      ],
+      "best_dev_top1": 0.8238866396761133,
+      "parameters": 135687,
+      "uncovered_training_examples_excluded_from_loss": 10
+    },
+    {
+      "split": "strict_right_lemma",
+      "model": "tiny_full",
+      "seed": 29,
+      "test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8270401948842875,
+        "top1_tie_averaged": 0.8270401948842875,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.5856086740563446,
+        "top3": 0.9939098660170523,
+        "mrr": 0.9100182704019487,
+        "conditional_top1": 0.8280487804878048,
+        "abstention_rate": 0.0,
+        "accepted_accuracy": 0.8270401948842875,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.0,
+        "top1_wilson95_itemwise": [
+          0.7996610313359744,
+          0.8513730581182919
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 426,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 679,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 8,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 2,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "selective_test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8270401948842875,
+        "top1_tie_averaged": 0.8270401948842875,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.5856086740563446,
+        "top3": 0.9939098660170523,
+        "mrr": 0.9100182704019487,
+        "conditional_top1": 0.8280487804878048,
+        "abstention_rate": 0.6747868453105969,
+        "accepted_accuracy": 0.9588014981273408,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.9,
+        "top1_wilson95_itemwise": [
+          0.7996610313359744,
+          0.8513730581182919
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 426,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 679,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 8,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 2,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "fit_seconds_including_dev": 155.7303993749956,
+      "test_inference_seconds": 1.0780816250189673,
+      "process_peak_rss_mib_cumulative": 2833.734375,
+      "train_examples": 9066,
+      "history": [
+        {
+          "epoch": 1,
+          "loss": 1.2404016411662524,
+          "dev_top1": 0.7682186234817814
+        },
+        {
+          "epoch": 2,
+          "loss": 0.3936322044725974,
+          "dev_top1": 0.8309716599190283
+        },
+        {
+          "epoch": 3,
+          "loss": 0.30341102523801605,
+          "dev_top1": 0.8248987854251012
+        }
+      ],
+      "best_dev_top1": 0.8309716599190283,
+      "parameters": 135687,
+      "uncovered_training_examples_excluded_from_loss": 10
+    },
+    {
+      "split": "strict_right_lemma",
+      "model": "tiny_no_rules",
+      "seed": 7,
+      "test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.830694275274056,
+        "top1_tie_averaged": 0.830694275274056,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.5766050037703682,
+        "top3": 0.9963459196102314,
+        "mrr": 0.912132900257139,
+        "conditional_top1": 0.8317073170731707,
+        "abstention_rate": 0.0,
+        "accepted_accuracy": 0.830694275274056,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.0,
+        "top1_wilson95_itemwise": [
+          0.803514450901595,
+          0.8547937624571882
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 430,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 682,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 8,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "selective_test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.830694275274056,
+        "top1_tie_averaged": 0.830694275274056,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.5766050037703682,
+        "top3": 0.9963459196102314,
+        "mrr": 0.912132900257139,
+        "conditional_top1": 0.8317073170731707,
+        "abstention_rate": 0.5066991473812423,
+        "accepted_accuracy": 0.9160493827160494,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.75,
+        "top1_wilson95_itemwise": [
+          0.803514450901595,
+          0.8547937624571882
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 430,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 682,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 8,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "fit_seconds_including_dev": 132.60161283399793,
+      "test_inference_seconds": 0.9153208750067279,
+      "process_peak_rss_mib_cumulative": 2833.734375,
+      "train_examples": 9066,
+      "history": [
+        {
+          "epoch": 1,
+          "loss": 0.9011750308132003,
+          "dev_top1": 0.8238866396761133
+        },
+        {
+          "epoch": 2,
+          "loss": 0.3635779021854114,
+          "dev_top1": 0.8248987854251012
+        },
+        {
+          "epoch": 3,
+          "loss": 0.3014615539711482,
+          "dev_top1": 0.8248987854251012
+        }
+      ],
+      "best_dev_top1": 0.8248987854251012,
+      "parameters": 135687,
+      "uncovered_training_examples_excluded_from_loss": 10
+    },
+    {
+      "split": "strict_right_lemma",
+      "model": "tiny_no_rules",
+      "seed": 11,
+      "test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8233861144945189,
+        "top1_tie_averaged": 0.8233861144945189,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.5726352326534797,
+        "top3": 0.9805115712545676,
+        "mrr": 0.9038349389141105,
+        "conditional_top1": 0.824390243902439,
+        "abstention_rate": 0.0,
+        "accepted_accuracy": 0.8233861144945189,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.0,
+        "top1_wilson95_itemwise": [
+          0.7958117815645772,
+          0.847948183985172
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 425,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 676,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 8,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 23,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "selective_test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8233861144945189,
+        "top1_tie_averaged": 0.8233861144945189,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.5726352326534797,
+        "top3": 0.9805115712545676,
+        "mrr": 0.9038349389141105,
+        "conditional_top1": 0.824390243902439,
+        "abstention_rate": 0.7442143727161997,
+        "accepted_accuracy": 0.9571428571428572,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.75,
+        "top1_wilson95_itemwise": [
+          0.7958117815645772,
+          0.847948183985172
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 425,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 676,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 8,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 23,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "fit_seconds_including_dev": 133.99298354200437,
+      "test_inference_seconds": 0.9079001249920111,
+      "process_peak_rss_mib_cumulative": 2833.734375,
+      "train_examples": 9066,
+      "history": [
+        {
+          "epoch": 1,
+          "loss": 1.3158677412006121,
+          "dev_top1": 0.8289473684210527
+        },
+        {
+          "epoch": 2,
+          "loss": 0.4054882952897372,
+          "dev_top1": 0.8228744939271255
+        },
+        {
+          "epoch": 3,
+          "loss": 0.31201229118100327,
+          "dev_top1": 0.812753036437247
+        }
+      ],
+      "best_dev_top1": 0.8289473684210527,
+      "parameters": 135687,
+      "uncovered_training_examples_excluded_from_loss": 10
+    },
+    {
+      "split": "strict_right_lemma",
+      "model": "tiny_no_rules",
+      "seed": 19,
+      "test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8380024360535931,
+        "top1_tie_averaged": 0.8380024360535931,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.6703174543416657,
+        "top3": 0.9951278928136419,
+        "mrr": 0.9159053999187984,
+        "conditional_top1": 0.8390243902439024,
+        "abstention_rate": 0.0,
+        "accepted_accuracy": 0.8380024360535931,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.0,
+        "top1_wilson95_itemwise": [
+          0.8112342311877266,
+          0.8616222299800903
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 432,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 688,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 11,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 1,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "selective_test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8380024360535931,
+        "top1_tie_averaged": 0.8380024360535931,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.6703174543416657,
+        "top3": 0.9951278928136419,
+        "mrr": 0.9159053999187984,
+        "conditional_top1": 0.8390243902439024,
+        "abstention_rate": 0.3812423873325213,
+        "accepted_accuracy": 0.8661417322834646,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.75,
+        "top1_wilson95_itemwise": [
+          0.8112342311877266,
+          0.8616222299800903
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 432,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 688,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 11,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 1,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "fit_seconds_including_dev": 132.62505725002848,
+      "test_inference_seconds": 0.8959168340079486,
+      "process_peak_rss_mib_cumulative": 2833.734375,
+      "train_examples": 9066,
+      "history": [
+        {
+          "epoch": 1,
+          "loss": 0.6142637596166176,
+          "dev_top1": 0.8370445344129555
+        },
+        {
+          "epoch": 2,
+          "loss": 0.3714391644188456,
+          "dev_top1": 0.8279352226720648
+        },
+        {
+          "epoch": 3,
+          "loss": 0.3116066503756459,
+          "dev_top1": 0.8157894736842105
+        }
+      ],
+      "best_dev_top1": 0.8370445344129555,
+      "parameters": 135687,
+      "uncovered_training_examples_excluded_from_loss": 10
+    },
+    {
+      "split": "strict_right_lemma",
+      "model": "tiny_no_rules",
+      "seed": 23,
+      "test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8319123020706456,
+        "top1_tie_averaged": 0.8319123020706456,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.5820995092648736,
+        "top3": 0.9951278928136419,
+        "mrr": 0.9135200974421439,
+        "conditional_top1": 0.8329268292682926,
+        "abstention_rate": 0.0,
+        "accepted_accuracy": 0.8319123020706456,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.0,
+        "top1_wilson95_itemwise": [
+          0.804799868949226,
+          0.8559330523777295
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 430,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 683,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 9,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "selective_test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8319123020706456,
+        "top1_tie_averaged": 0.8319123020706456,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.5820995092648736,
+        "top3": 0.9951278928136419,
+        "mrr": 0.9135200974421439,
+        "conditional_top1": 0.8329268292682926,
+        "abstention_rate": 0.38855054811205847,
+        "accepted_accuracy": 0.8904382470119522,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.75,
+        "top1_wilson95_itemwise": [
+          0.804799868949226,
+          0.8559330523777295
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 430,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 683,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 9,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "fit_seconds_including_dev": 133.80724191700574,
+      "test_inference_seconds": 0.9215956659754738,
+      "process_peak_rss_mib_cumulative": 2833.734375,
+      "train_examples": 9066,
+      "history": [
+        {
+          "epoch": 1,
+          "loss": 1.2145665833469836,
+          "dev_top1": 0.8117408906882592
+        },
+        {
+          "epoch": 2,
+          "loss": 0.3968625792397627,
+          "dev_top1": 0.8228744939271255
+        },
+        {
+          "epoch": 3,
+          "loss": 0.3108261468764329,
+          "dev_top1": 0.8238866396761133
+        }
+      ],
+      "best_dev_top1": 0.8238866396761133,
+      "parameters": 135687,
+      "uncovered_training_examples_excluded_from_loss": 10
+    },
+    {
+      "split": "strict_right_lemma",
+      "model": "tiny_no_rules",
+      "seed": 29,
+      "test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8246041412911084,
+        "top1_tie_averaged": 0.8246041412911084,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.5797650076403976,
+        "top3": 0.9939098660170523,
+        "mrr": 0.9087384195179569,
+        "conditional_top1": 0.8256097560975609,
+        "abstention_rate": 0.0,
+        "accepted_accuracy": 0.8246041412911084,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.0,
+        "top1_wilson95_itemwise": [
+          0.7970944078548736,
+          0.8490902656630479
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 425,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 677,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 46,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 9,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "selective_test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8246041412911084,
+        "top1_tie_averaged": 0.8246041412911084,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.5797650076403976,
+        "top3": 0.9939098660170523,
+        "mrr": 0.9087384195179569,
+        "conditional_top1": 0.8256097560975609,
+        "abstention_rate": 0.6638246041412911,
+        "accepted_accuracy": 0.9492753623188406,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.9,
+        "top1_wilson95_itemwise": [
+          0.7970944078548736,
+          0.8490902656630479
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 425,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 677,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 46,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 9,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "fit_seconds_including_dev": 132.00974829201004,
+      "test_inference_seconds": 0.9132011659967247,
+      "process_peak_rss_mib_cumulative": 2833.734375,
+      "train_examples": 9066,
+      "history": [
+        {
+          "epoch": 1,
+          "loss": 1.2531609767949201,
+          "dev_top1": 0.7945344129554656
+        },
+        {
+          "epoch": 2,
+          "loss": 0.3971766035727393,
+          "dev_top1": 0.8228744939271255
+        },
+        {
+          "epoch": 3,
+          "loss": 0.3093875459800129,
+          "dev_top1": 0.8157894736842105
+        }
+      ],
+      "best_dev_top1": 0.8228744939271255,
+      "parameters": 135687,
+      "uncovered_training_examples_excluded_from_loss": 10
+    },
+    {
+      "split": "strict_right_lemma",
+      "model": "tiny_no_context",
+      "seed": 7,
+      "test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.830694275274056,
+        "top1_tie_averaged": 0.830694275274056,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.5969787183561688,
+        "top3": 0.9914738124238733,
+        "mrr": 0.9113614832859658,
+        "conditional_top1": 0.8317073170731707,
+        "abstention_rate": 0.0,
+        "accepted_accuracy": 0.830694275274056,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.0,
+        "top1_wilson95_itemwise": [
+          0.803514450901595,
+          0.8547937624571882
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 429,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 682,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 2,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 8,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 12,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "selective_test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.830694275274056,
+        "top1_tie_averaged": 0.830694275274056,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.5969787183561688,
+        "top3": 0.9914738124238733,
+        "mrr": 0.9113614832859658,
+        "conditional_top1": 0.8317073170731707,
+        "abstention_rate": 0.48599269183922045,
+        "accepted_accuracy": 0.933649289099526,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.75,
+        "top1_wilson95_itemwise": [
+          0.803514450901595,
+          0.8547937624571882
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 429,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 682,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 2,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 8,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 12,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "fit_seconds_including_dev": 90.1541205829999,
+      "test_inference_seconds": 0.5584272090054583,
+      "process_peak_rss_mib_cumulative": 2833.734375,
+      "train_examples": 9066,
+      "history": [
+        {
+          "epoch": 1,
+          "loss": 0.9240845464722849,
+          "dev_top1": 0.8299595141700404
+        },
+        {
+          "epoch": 2,
+          "loss": 0.34913945207273583,
+          "dev_top1": 0.8299595141700404
+        },
+        {
+          "epoch": 3,
+          "loss": 0.2841778333321898,
+          "dev_top1": 0.8238866396761133
+        }
+      ],
+      "best_dev_top1": 0.8299595141700404,
+      "parameters": 135687,
+      "uncovered_training_examples_excluded_from_loss": 10
+    },
+    {
+      "split": "strict_right_lemma",
+      "model": "tiny_no_context",
+      "seed": 11,
+      "test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.830694275274056,
+        "top1_tie_averaged": 0.830694275274056,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.587288157594675,
+        "top3": 0.9951278928136419,
+        "mrr": 0.9120429982792952,
+        "conditional_top1": 0.8317073170731707,
+        "abstention_rate": 0.0,
+        "accepted_accuracy": 0.830694275274056,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.0,
+        "top1_wilson95_itemwise": [
+          0.803514450901595,
+          0.8547937624571882
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 428,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 682,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 10,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "selective_test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.830694275274056,
+        "top1_tie_averaged": 0.830694275274056,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.587288157594675,
+        "top3": 0.9951278928136419,
+        "mrr": 0.9120429982792952,
+        "conditional_top1": 0.8317073170731707,
+        "abstention_rate": 0.40682095006090135,
+        "accepted_accuracy": 0.893223819301848,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.75,
+        "top1_wilson95_itemwise": [
+          0.803514450901595,
+          0.8547937624571882
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 428,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 682,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 10,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "fit_seconds_including_dev": 94.59158845897764,
+      "test_inference_seconds": 0.5645195840043016,
+      "process_peak_rss_mib_cumulative": 2833.734375,
+      "train_examples": 9066,
+      "history": [
+        {
+          "epoch": 1,
+          "loss": 1.258366688612072,
+          "dev_top1": 0.7965587044534413
+        },
+        {
+          "epoch": 2,
+          "loss": 0.39501121498038827,
+          "dev_top1": 0.8279352226720648
+        },
+        {
+          "epoch": 3,
+          "loss": 0.30103192353364433,
+          "dev_top1": 0.8259109311740891
+        }
+      ],
+      "best_dev_top1": 0.8279352226720648,
+      "parameters": 135687,
+      "uncovered_training_examples_excluded_from_loss": 10
+    },
+    {
+      "split": "strict_right_lemma",
+      "model": "tiny_no_context",
+      "seed": 19,
+      "test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8258221680876979,
+        "top1_tie_averaged": 0.8258221680876979,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.5825555641443878,
+        "top3": 0.9951278928136419,
+        "mrr": 0.9105272315990951,
+        "conditional_top1": 0.8268292682926829,
+        "abstention_rate": 0.0,
+        "accepted_accuracy": 0.8258221680876979,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.0,
+        "top1_wilson95_itemwise": [
+          0.7983774898654027,
+          0.8502318916206911
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 424,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 678,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 11,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 0,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "selective_test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8258221680876979,
+        "top1_tie_averaged": 0.8258221680876979,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.5825555641443878,
+        "top3": 0.9951278928136419,
+        "mrr": 0.9105272315990951,
+        "conditional_top1": 0.8268292682926829,
+        "abstention_rate": 0.38976857490864797,
+        "accepted_accuracy": 0.8822355289421158,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.75,
+        "top1_wilson95_itemwise": [
+          0.7983774898654027,
+          0.8502318916206911
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 424,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 678,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 11,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 0,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "fit_seconds_including_dev": 91.26334129099268,
+      "test_inference_seconds": 0.5647241249971557,
+      "process_peak_rss_mib_cumulative": 2833.734375,
+      "train_examples": 9066,
+      "history": [
+        {
+          "epoch": 1,
+          "loss": 0.6021163280092364,
+          "dev_top1": 0.8431174089068826
+        },
+        {
+          "epoch": 2,
+          "loss": 0.35544530997322643,
+          "dev_top1": 0.8279352226720648
+        },
+        {
+          "epoch": 3,
+          "loss": 0.2990107835392227,
+          "dev_top1": 0.8279352226720648
+        }
+      ],
+      "best_dev_top1": 0.8431174089068826,
+      "parameters": 135687,
+      "uncovered_training_examples_excluded_from_loss": 10
+    },
+    {
+      "split": "strict_right_lemma",
+      "model": "tiny_no_context",
+      "seed": 23,
+      "test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8282582216808769,
+        "top1_tie_averaged": 0.8282582216808769,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.586982300429971,
+        "top3": 0.9939098660170523,
+        "mrr": 0.9109410179751227,
+        "conditional_top1": 0.8292682926829268,
+        "abstention_rate": 0.0,
+        "accepted_accuracy": 0.8282582216808769,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.0,
+        "top1_wilson95_itemwise": [
+          0.800945036072128,
+          0.8525137613503104
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 426,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 680,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 10,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "selective_test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8282582216808769,
+        "top1_tie_averaged": 0.8282582216808769,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.586982300429971,
+        "top3": 0.9939098660170523,
+        "mrr": 0.9109410179751227,
+        "conditional_top1": 0.8292682926829268,
+        "abstention_rate": 0.3386114494518879,
+        "accepted_accuracy": 0.8950276243093923,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.75,
+        "top1_wilson95_itemwise": [
+          0.800945036072128,
+          0.8525137613503104
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 426,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 680,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 10,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 12,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 1,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "fit_seconds_including_dev": 90.39889991600649,
+      "test_inference_seconds": 0.5744026669999585,
+      "process_peak_rss_mib_cumulative": 2833.734375,
+      "train_examples": 9066,
+      "history": [
+        {
+          "epoch": 1,
+          "loss": 1.198107824624638,
+          "dev_top1": 0.7975708502024291
+        },
+        {
+          "epoch": 2,
+          "loss": 0.39000495202023233,
+          "dev_top1": 0.8208502024291497
+        },
+        {
+          "epoch": 3,
+          "loss": 0.30247855531347934,
+          "dev_top1": 0.8279352226720648
+        }
+      ],
+      "best_dev_top1": 0.8279352226720648,
+      "parameters": 135687,
+      "uncovered_training_examples_excluded_from_loss": 10
+    },
+    {
+      "split": "strict_right_lemma",
+      "model": "tiny_no_context",
+      "seed": 29,
+      "test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8221680876979294,
+        "top1_tie_averaged": 0.8221680876979294,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.5787396318990321,
+        "top3": 0.9951278928136419,
+        "mrr": 0.9077953714981729,
+        "conditional_top1": 0.823170731707317,
+        "abstention_rate": 0.0,
+        "accepted_accuracy": 0.8221680876979294,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.0,
+        "top1_wilson95_itemwise": [
+          0.7945296073188896,
+          0.8468056502626874
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 423,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 675,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 8,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 11,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 2,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "selective_test": {
+        "examples": 821,
+        "candidate_recall": 0.9987819732034104,
+        "top1": 0.8221680876979294,
+        "top1_tie_averaged": 0.8221680876979294,
+        "tied_top_rows": 0,
+        "macro_rule_top1": 0.5787396318990321,
+        "top3": 0.9951278928136419,
+        "mrr": 0.9077953714981729,
+        "conditional_top1": 0.823170731707317,
+        "abstention_rate": 0.4226552984165652,
+        "accepted_accuracy": 0.9029535864978903,
+        "selected_proof_consistency": 1.0,
+        "threshold": 0.75,
+        "top1_wilson95_itemwise": [
+          0.7945296073188896,
+          0.8468056502626874
+        ],
+        "groups": {
+          "SDH-001": {
+            "count": 503,
+            "correct": 423,
+            "covered": 503
+          },
+          "external_vowel_sandhi": {
+            "count": 820,
+            "correct": 675,
+            "covered": 820
+          },
+          "SDH-002": {
+            "count": 7,
+            "correct": 0,
+            "covered": 7
+          },
+          "SDH-005": {
+            "count": 101,
+            "correct": 100,
+            "covered": 101
+          },
+          "SDH-004": {
+            "count": 49,
+            "correct": 47,
+            "covered": 49
+          },
+          "SDH-013": {
+            "count": 14,
+            "correct": 8,
+            "covered": 14
+          },
+          "SDH-006": {
+            "count": 44,
+            "correct": 44,
+            "covered": 44
+          },
+          "SDH-003": {
+            "count": 53,
+            "correct": 13,
+            "covered": 53
+          },
+          "SDH-017": {
+            "count": 24,
+            "correct": 24,
+            "covered": 24
+          },
+          "SDH-018": {
+            "count": 12,
+            "correct": 11,
+            "covered": 12
+          },
+          "SDH-014": {
+            "count": 8,
+            "correct": 2,
+            "covered": 8
+          },
+          "SDH-015": {
+            "count": 4,
+            "correct": 3,
+            "covered": 4
+          },
+          "SDH-016": {
+            "count": 1,
+            "correct": 0,
+            "covered": 1
+          },
+          "UNSUPPORTED": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          },
+          "unsupported": {
+            "count": 1,
+            "correct": 0,
+            "covered": 0
+          }
+        }
+      },
+      "fit_seconds_including_dev": 90.6232232080074,
+      "test_inference_seconds": 0.5662713329948019,
+      "process_peak_rss_mib_cumulative": 2833.734375,
+      "train_examples": 9066,
+      "history": [
+        {
+          "epoch": 1,
+          "loss": 1.1966443252437107,
+          "dev_top1": 0.8178137651821862
+        },
+        {
+          "epoch": 2,
+          "loss": 0.3840213222264612,
+          "dev_top1": 0.8259109311740891
+        },
+        {
+          "epoch": 3,
+          "loss": 0.29755693875490147,
+          "dev_top1": 0.8259109311740891
+        }
+      ],
+      "best_dev_top1": 0.8259109311740891,
+      "parameters": 135687,
+      "uncovered_training_examples_excluded_from_loss": 10
+    }
+  ],
+  "torch": "2.14.0"
+}

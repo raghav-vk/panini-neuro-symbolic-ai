@@ -1,0 +1,141 @@
+{
+  "split": "strict_right_lemma",
+  "baseline": "frequency_short_vowel",
+  "examples": 821,
+  "baseline_top1": 0.8246041412911084,
+  "models": {
+    "tiny_full": {
+      "mean_difference": -0.0024360535931790476,
+      "ci95": [
+        -0.013154689403166867,
+        0.009013398294762486
+      ],
+      "per_seed": [
+        {
+          "seed": 7,
+          "top1": 0.8294762484774665,
+          "wins": 18,
+          "losses": 14,
+          "mcnemar_p": 0.5966148958541453
+        },
+        {
+          "seed": 11,
+          "top1": 0.8172959805115713,
+          "wins": 14,
+          "losses": 20,
+          "mcnemar_p": 0.39152830513194203
+        },
+        {
+          "seed": 19,
+          "top1": 0.830694275274056,
+          "wins": 17,
+          "losses": 12,
+          "mcnemar_p": 0.45825831964612007
+        },
+        {
+          "seed": 23,
+          "top1": 0.8063337393422655,
+          "wins": 18,
+          "losses": 33,
+          "mcnemar_p": 0.04887389231827033
+        },
+        {
+          "seed": 29,
+          "top1": 0.8270401948842875,
+          "wins": 14,
+          "losses": 12,
+          "mcnemar_p": 0.8450189828872681
+        }
+      ]
+    },
+    "tiny_no_rules": {
+      "mean_difference": 0.005115712545676006,
+      "ci95": [
+        -0.004141291108404383,
+        0.015103532277710113
+      ],
+      "per_seed": [
+        {
+          "seed": 7,
+          "top1": 0.830694275274056,
+          "wins": 14,
+          "losses": 9,
+          "mcnemar_p": 0.4048728942871094
+        },
+        {
+          "seed": 11,
+          "top1": 0.8233861144945189,
+          "wins": 13,
+          "losses": 14,
+          "mcnemar_p": 1.0
+        },
+        {
+          "seed": 19,
+          "top1": 0.8380024360535931,
+          "wins": 19,
+          "losses": 8,
+          "mcnemar_p": 0.052238985896110535
+        },
+        {
+          "seed": 23,
+          "top1": 0.8319123020706456,
+          "wins": 15,
+          "losses": 9,
+          "mcnemar_p": 0.30745625495910645
+        },
+        {
+          "seed": 29,
+          "top1": 0.8246041412911084,
+          "wins": 12,
+          "losses": 12,
+          "mcnemar_p": 1.0
+        }
+      ]
+    },
+    "tiny_no_context": {
+      "mean_difference": 0.0029232643118148613,
+      "ci95": [
+        -0.007551766138855053,
+        0.014129110840438492
+      ],
+      "per_seed": [
+        {
+          "seed": 7,
+          "top1": 0.830694275274056,
+          "wins": 15,
+          "losses": 10,
+          "mcnemar_p": 0.42435622215270996
+        },
+        {
+          "seed": 11,
+          "top1": 0.830694275274056,
+          "wins": 15,
+          "losses": 10,
+          "mcnemar_p": 0.42435622215270996
+        },
+        {
+          "seed": 19,
+          "top1": 0.8258221680876979,
+          "wins": 18,
+          "losses": 17,
+          "mcnemar_p": 1.0
+        },
+        {
+          "seed": 23,
+          "top1": 0.8282582216808769,
+          "wins": 19,
+          "losses": 16,
+          "mcnemar_p": 0.7358788008568808
+        },
+        {
+          "seed": 29,
+          "top1": 0.8221680876979294,
+          "wins": 14,
+          "losses": 16,
+          "mcnemar_p": 0.855535551905632
+        }
+      ]
+    }
+  },
+  "note": "Itemwise paired bootstrap over test examples of the seed-mean accuracy difference; exact McNemar per seed. Baseline correctness uses index tie-breaking."
+}

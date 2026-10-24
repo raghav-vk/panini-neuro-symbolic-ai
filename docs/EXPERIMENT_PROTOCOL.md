@@ -416,6 +416,11 @@ occurrence is left out of the counts. Three-seed dev top-1 (best epoch):
 Dev accuracy peaks at epochs 2 to 4 and then declines. The test run fixes 3
 epochs, width 64, 2 layers, mean pooling and maximum length 300.
 
+**Outcome (2026-10-24).** On the right-word holdout test set the full model
+scored 0.822 against 0.831 for the baseline, a paired difference of −0.002
+(95% CI −0.013 to +0.009). See `reports/dcs-silver-v2/SUMMARY.md`. Any further
+ranker change must be decided on dev and recorded here before the next test run.
+
 ## 12. Baselines
 
 Run at least these baselines under identical splits:

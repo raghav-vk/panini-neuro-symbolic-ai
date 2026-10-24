@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "data_kind": "dcs_silver_alignment",
+  "sentences_sha256": "e08cb126bde05448780e098ea45ae7a0ea14529e2423fa16fb593f9421552b03",
+  "rules_sha256": "c3083033cb13729faf68361487a4da0786a9556fa78191337ac6d25bc2b3a0ea",
+  "context_window": 1,
+  "counts": {
+    "sentences": 441722,
+    "compound_internal_left": 106265,
+    "chunk_group_mismatch": 18068,
+    "junction_unresolved": 5048,
+    "inflected_left_form_unknown": 68381,
+    "right_verb_initial_uncertain": 10698,
+    "left_compound_prefix": 5208,
+    "right_end_fused": 6458,
+    "left_not_chunk_initial": 20588,
+    "surface_unsupported": 1057,
+    "left_misaligned": 504,
+    "junction_ambiguous": 11,
+    "right_too_short": 1,
+    "extracted": 39838
+  },
+  "supported_by_rules": 39826,
+  "rule_counts": {
+    "SDH-001": 19157,
+    "SDH-013": 10197,
+    "SDH-003": 2735,
+    "SDH-005": 2426,
+    "SDH-004": 1875,
+    "SDH-017": 1656,
+    "SDH-006": 672,
+    "SDH-018": 454,
+    "SDH-002": 262,
+    "SDH-014": 173,
+    "SDH-016": 123,
+    "SDH-015": 96,
+    "UNSUPPORTED": 12
+  },
+  "junctions": {
+    "a+a→ā": 13223,
+    "a+e→ai": 8192,
+    "ā+a→ā": 3329,
+    "i+a→ya": 2405,
+    "a+ā→ā": 2098,
+    "a+i→e": 2030,
+    "ā+e→ai": 1950,
+    "a+u→o": 1387,
+    "i+e→ye": 1040,
+    "u+a→va": 667,
+    "ā+i→e": 534,
+    "ā+ā→ā": 507,
+    "i+ā→yā": 335,
+    "ā+u→o": 312,
+    "i+u→yu": 249,
+    "i+i→ī": 223,
+    "u+e→ve": 196,
+    "u+i→vi": 161,
+    "a+ū→o": 144,
+    "a+ī→e": 138,
+    "a+ṛ→ar": 102,
+    "u+ā→vā": 91,
+    "u+u→ū": 88,
+    "a+au→au": 83,
+    "a+o→au": 59,
+    "a+ai→ai": 42,
+    "i+ī→ī": 39,
+    "ā+ī→e": 33,
+    "ā+ū→o": 32,
+    "i+ū→yū": 23,
+    "ā+ṛ→ar": 21,
+    "i+au→yau": 17,
+    "ā+o→au": 16,
+    "ā+au→au": 15,
+    "ā+ai→ai": 13,
+    "u+ū→ū": 8,
+    "i+o→yo": 5,
+    "u+ī→vī": 4,
+    "i+ai→yai": 4,
+    "i+ā→ya": 3,
+    "i+ṛ→yṛ": 3,
+    "u+ai→vai": 3,
+    "u+au→vau": 2,
+    "ā+i→āi": 2,
+    "a+ṛ→aṛ": 1,
+    "a+ī→aī": 1,
+    "u+o→vo": 1,
+    "o+a→o'": 1,
+    "e+a→e'": 1,
+    "au+e→āve": 1,
+    "au+ā→āvā": 1,
+    "u+ṛ→vṛ": 1,
+    "ī+ā→yā": 1,
+    "au+a→āva": 1
+  },
+  "distinct_left_lemmas": 195,
+  "distinct_right_lemmas": 3396,
+  "top_lemma_pairs": [
+    [
+      "ca",
+      "eva",
+      4743
+    ],
+    [
+      "ca",
+      "api",
+      1707
+    ],
+    [
+      "tathā",
+      "eva",
+      1324
+    ],
+    [
+      "vā",
+      "api",
+      906
+    ],
+    [
+      "na",
+      "eva",
+      665
+    ],
+    [
+      "na",
+      "atra",
+      650
+    ],
+    [
+      "ca",
+      "anya",
+      621
+    ],
+    [
+      "ca",
+      "iti",
+      584
+    ],
+    [
+      "iti",
+      "artha",
+      459
+    ],
+    [
+      "ca",
+      "atra",
+      428
+    ],
+    [
+      "na",
+      "anya",
+      393
+    ],
+    [
+      "iti",
+      "evam",
+      381
+    ],
+    [
+      "tatra",
+      "eva",
+      379
+    ],
+    [
+      "ca",
+      "enad",
+      268
+    ],
+    [
+      "ca",
+      "eka",
+      233
+    ],
+    [
+      "tathā",
+      "api",
+      228
+    ],
+    [
+      "tatra",
+      "api",
+      204
+    ],
+    [
+      "atha",
+      "atas",
+      201
+    ],
+    [
+      "ca",
+      "idam",
+      195
+    ],
+    [
+      "ca",
+      "apara",
+      181
+    ],
+    [
+      "ca",
+      "etad",
+      170
+    ],
+    [
+      "vā",
+      "atha",
+      161
+    ],
+    [
+      "na",
+      "etad",
+      161
+    ],
+    [
+      "tathā",
+      "anya",
+      158
+    ],
+    [
+      "na",
+      "anyathā",
+      158
+    ]
+  ],
+  "review_sample": {
+    "size": 200,
+    "strategy": "round-robin over vowel_pair→junction strata",
+    "seed": 1729
+  },
+  "scope": "Indeclinable left words opening a whitespace chunk, joined to a vowel-initial word that runs to the chunk end. Alignment uses DCS lemmas and the attested surface, not sandhi rules. Silver data: not expert reviewed."
+}

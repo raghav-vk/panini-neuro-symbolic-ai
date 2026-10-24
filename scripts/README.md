@@ -12,6 +12,7 @@ See [Quick Start](../QUICKSTART.md) for commands in execution order.
 | `build_review_page.py` | Create a local browser worksheet for boundary annotation and JSONL export |
 | `prepare_experiment.py` | Admit synthetic, silver DCS or reviewed examples, build three holdouts and forward-certified candidates |
 | `run_experiment.py` | CPU baselines, five-seed ranker training, ablations, checkpoint and metric artifacts |
+| `compare_paired.py` | Paired bootstrap and per-seed McNemar comparison of saved test predictions against a baseline |
 | `predict_sandhi.py` | Inspect candidates/proofs and optional checkpoint-based selection or abstention |
 | `verify_run.py` | Recompute metrics from saved scores, check frozen hashes and independently replay test proofs |
 | `summarize_development.py` | Retain compact measured evidence and source hashes without raw corpus files |
