@@ -10,7 +10,7 @@ See [Quick Start](../QUICKSTART.md) for commands in execution order.
 | `convert_dcs.py` | Verify archive identity, decode primitive data without pickle execution, quarantine failures |
 | `extract_dcs_boundaries.py` | Align DCS lemmas to attested surfaces as silver external vowel-sandhi examples, without consulting rules |
 | `build_review_page.py` | Create a local browser worksheet for boundary annotation and JSONL export |
-| `prepare_experiment.py` | Admit synthetic, silver DCS or reviewed examples, build three holdouts and forward-certified candidates |
+| `prepare_experiment.py` | Admit synthetic, silver DCS or reviewed examples, build four holdouts and forward-certified candidates |
 | `run_experiment.py` | CPU baselines, five-seed ranker training, ablations, checkpoint and metric artifacts |
 | `compare_paired.py` | Paired bootstrap and per-seed McNemar comparison of saved test predictions against a baseline |
 | `fetch_vidyut_data.py` | Download and verify the pinned Vidyut data release (optional external lexicon; non-commercial terms) |
@@ -61,7 +61,10 @@ Verifies the ZIP against the frozen source manifest, compares ZIP and extracted
 pickle records, and samples pickle opcodes without instantiating serialized
 objects.
 
+    unzip -q datasets/DCS_pick.zip -d datasets/
     python3 scripts/audit_dcs_archive.py --sample 100
+
+The extracted copy is needed only for this audit; conversion reads the ZIP.
 
 This command checks local integrity only. Provenance and licensing for the
 exact archive are recorded separately in `datasets/dcs_source_manifest.json`;
@@ -70,20 +73,4 @@ neither artifact verifies annotation correctness.
 Use `--skip-manifest-check` only for an explicitly documented diagnostic of a
 different archive; it is not valid for a frozen experiment.
 
-## build_lexical_holdout.py
 
-Partitions normalized lemmas before examples and writes train, dev, test,
-mixed, and manifest files.
-
-    python3 scripts/build_lexical_holdout.py \
-      input-examples.jsonl \
-      output-directory
-
-Input records require example_id, left_lemma, right_lemma, and rule_id.
-
-## Legacy Toy Script
-
-`generate_toy_dataset.py` belongs to the original broad language-model
-proposal. Its output is retained only as project history and is excluded from
-the sandhi experiment. Do not use it for training, evaluation, or publication
-claims.

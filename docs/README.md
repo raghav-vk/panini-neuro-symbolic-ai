@@ -7,17 +7,19 @@ collaboration guides for the current neuro-symbolic sandhi experiment.
 
 | Document | Purpose |
 | --- | --- |
-| [Development results](../reports/development-v1/SUMMARY.md) | Measured CPU smoke experiment, conversion counts and limitations |
-| [First review packet](../data/reviews/REVIEW_PACKET.md) | Twelve cross-family draft encodings awaiting expert judgement |
+| [Silver DCS results](../reports/dcs-silver-v3/SUMMARY.md) | Current results: right-word holdout with the external lexicon |
+| [Earlier silver results](../reports/dcs-silver-v2/SUMMARY.md) | Results without the external lexicon |
+| [Development results](../reports/development-v1/SUMMARY.md) | September synthetic CPU smoke experiment |
+| [Review packet](../data/reviews/REVIEW_PACKET.md) | 18 draft rule encodings awaiting expert judgement |
 | [Working paper](panini-neuro-symbolic-ai.md) | Manuscript being developed for archival submission |
-| [Experiment protocol](EXPERIMENT_PROTOCOL.md) | Research questions, frozen-study design, metrics, and release gates |
+| [Experiment protocol](EXPERIMENT_PROTOCOL.md) | Research questions, frozen-study design, amendments, metrics, and release gates |
+| [Pretraining plan](PRETRAINING_PLAN.md) | Adopted plan for self-supervised pretraining of the neural ranker |
 | [All-sandhi dataset](ALL_SANDHI_DATASET.md) | Reproducible 148-record source corpus and expert-screening workflow |
 | [Rule authoring guide](RULE_AUTHORING_GUIDE.md) | Convert reviewed interpretations into typed executable rules |
-| [Solution approach](approach-to-solution.md) | Current architecture, implementation sequence, and decision gates |
 | [Contributing](contributing.md) | Contribution boundaries and review requirements |
 
 For setup and verification, use the repository-level
-[Quick Start](../QUICKSTART.md) and [Verification Guide](../COMPILE_AND_TEST.md).
+[Quick Start](../QUICKSTART.md). Release gates are in protocol section 18.
 Corpus-specific requirements are in [datasets/README.md](../datasets/README.md).
 
 ## Scope

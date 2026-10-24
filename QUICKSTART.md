@@ -1,8 +1,8 @@
 # Quick Start
 
-The six-step **development pipeline runs on CPU**. Rules remain drafts and
-the synthetic experiment is not a scholarly validation of Sanskrit grammar.
-Measured artifacts are in [the development report](reports/development-v1/SUMMARY.md).
+The **development pipeline runs on CPU**. Rules remain drafts, and silver or
+synthetic results are not a scholarly validation of Sanskrit grammar. Current
+results are in [the silver DCS report](reports/dcs-silver-v3/SUMMARY.md).
 
 ## 1. Install and Test
 
@@ -25,9 +25,9 @@ Without PyTorch, that test is explicitly skipped; other tests still run.
 .venv/bin/python scripts/validate_rules.py data/rules/development_sandhi.jsonl
 ```
 
-Start with [REVIEW_PACKET.md](data/reviews/REVIEW_PACKET.md). It covers six vowel,
+Start with [REVIEW_PACKET.md](data/reviews/REVIEW_PACKET.md). It covers twelve vowel,
 two consonant, two nasal, one visarga and one non-application encoding. These
-are 12 operational cases, not 12 complete sutras or coverage of all sandhi.
+are 18 operational cases, not 18 complete sutras or coverage of all sandhi.
 Copy the JSONL review template to a separate working file before recording
 decisions; rebuilding replaces generated templates, never scholarly reviews.
 
@@ -86,7 +86,7 @@ coverage is retained as a failure, not silently removed. Freeze the reviewed
 rule snapshot with `--rules` for both preparation and inference.
 
 Preparation saves candidates, proof traces, file hashes, counts and overlap
-audits for source-random, pair and strict-lemma splits. The strict split also
+audits for source-random, pair, strict-lemma and right-word splits. The strict split also
 checks annotated context lemmas; cross-partition source groups go to `mixed`.
 Synthetic lemma identifiers denote nonce stems, not real Sanskrit lemmas.
 
@@ -140,10 +140,24 @@ Independently replay the candidates and regenerate every reported metric:
 ```
 
 Inspect the candidate words and their reconstructed surface, not just the
-score. Open inversion can produce nonwords: there is no hidden test-derived
-dictionary filter or morphological analyzer. `--tags` supplies grammatical prerequisites explicitly. An unsupported
+score. Open inversion can produce nonwords: there is no test-derived
+dictionary filter or morphological analyzer. Checkpoints trained with
+`--external-lexicon` look candidates up in the kosha given by `--kosha`. `--tags` supplies grammatical prerequisites explicitly. An unsupported
 surface yields no candidates; a checkpoint may also abstain at its saved
 development-selected threshold. No missing forms are silently concatenated.
+
+## 7. Verify
+
+Before a release, check every gate in protocol section 18 from a clean
+checkout. The DCS archive audit needs the extracted archive:
+
+```sh
+unzip -q datasets/DCS_pick.zip -d datasets/
+.venv/bin/python scripts/audit_dcs_archive.py --sample 1000
+.venv/bin/python scripts/validate_rules.py --expected-count 25 --publication-ready
+```
+
+The publication gate fails until 25 reviewed rules exist.
 
 ## What Counts as Success?
 

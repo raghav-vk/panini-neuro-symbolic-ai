@@ -65,9 +65,8 @@ The filename alone is not sufficient provenance. This repository now records:
 4. The creators and citation.
 5. The CC BY 4.0 license and attribution conditions.
 
-For a different source archive, copy the generic template:
-
-    datasets/source_manifest.example.json
+For a different source archive, record the same fields in a new manifest,
+using `datasets/dcs_source_manifest.json` as the model.
 
 Archive identity and licensing are now resolved for this exact DCS_pick ZIP.
 Safety, annotation quality, conversion correctness, and suitability for a
@@ -171,11 +170,8 @@ Partition lemmas before examples. Keep an example in train, dev, or test only
 when both lemmas map to that partition. Preserve cross-partition examples as
 mixed and report them.
 
-Build:
-
-    python3 scripts/build_lexical_holdout.py \
-      data/processed/examples.jsonl \
-      data/processed/strict-lexical
+`scripts/prepare_experiment.py` builds it as the `strict_lemma` split, next
+to the right-word holdout `strict_right_lemma`.
 
 Required manifest checks:
 
@@ -195,13 +191,6 @@ randomly split later, the strict lexical claim is invalid.
 
 Label every generated record controlled. Do not present generated examples as
 corpus attestations.
-
-## Toy Dataset
-
-datasets/toy_dataset.jsonl contains 53 manually entered
-English-to-transliterated-Sanskrit demonstration pairs from the original broad
-project. It has no role in the external vowel-sandhi study, is not an
-evaluation set, and must not be used as evidence of grammatical quality.
 
 ## Release Layout
 

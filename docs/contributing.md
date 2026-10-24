@@ -11,8 +11,9 @@ experiment.
 
 ## Start Here
 
-    python3 -m pip install -r requirements.txt
-    ./test_quick.sh
+    python3 -m pip install -r requirements.txt -r requirements-train.txt
+    python3 scripts/validate_rules.py data/rules/development_sandhi.jsonl
+    python3 -m pytest tests -q
 
 Then read:
 

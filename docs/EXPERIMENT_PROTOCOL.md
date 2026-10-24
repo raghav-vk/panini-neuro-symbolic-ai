@@ -291,13 +291,8 @@ improves the expected 80/10/10 example balance under independent endpoints.
 Real lexical graphs are not independent, so actual counts must be reported and
 must never be hand-adjusted after seeing test outcomes.
 
-Build the split with:
-
-    python3 scripts/build_lexical_holdout.py \
-      data/processed/examples.jsonl \
-      data/processed/strict-lexical
-
-The generated manifest includes the input SHA-256 digest, split seed, requested
+`scripts/prepare_experiment.py` builds the split as `strict_lemma`. The
+generated manifest includes the input SHA-256 digest, split seed, requested
 ratios, lemma bucket ratios, record counts, rule counts, and lexical-overlap
 assertions.
 
