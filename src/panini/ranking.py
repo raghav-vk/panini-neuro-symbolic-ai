@@ -140,11 +140,14 @@ def build_lexicon(train):
 LEXICAL_FEATURES = 5
 
 
-def lexical_features(lexicon, row, candidate, exclude_self=False):
-    """Counts for one candidate; exclude_self drops a training row's own occurrence (leave-one-out)."""
+def lexical_features(lexicon, row, candidate, exclude_self=False, use_rules=True):
+    """Counts for one candidate; exclude_self drops a training row's own occurrence (leave-one-out).
+
+    Without use_rules the rule-frequency feature is zero, so the no-rules ablation sees no rule identity.
+    """
     left = lexicon["left"].get(candidate["left"], 0)
     right = lexicon["right"].get(candidate["right"], 0)
-    rule = max((lexicon["rules"].get(p["rule_id"], 0) for p in candidate["proofs"]), default=0)
+    rule = max((lexicon["rules"].get(p["rule_id"], 0) for p in candidate["proofs"]), default=0) if use_rules else 0
     if exclude_self:
         # Otherwise "seen in training" would mark every training gold and nothing at evaluation time.
         left -= candidate["left"] == row["left"]
@@ -202,7 +205,7 @@ def score_neural(model, rows, use_rules=True, use_context=True, gradients=False,
         tokens[i, :len(text)] = torch.tensor([x + 1 for x in text])
     features = None
     if model.lexicon is not None:
-        features = torch.tensor([lexical_features(model.lexicon, r, c, exclude_self) for r in rows for c in r["candidates"]])
+        features = torch.tensor([lexical_features(model.lexicon, r, c, exclude_self, use_rules) for r in rows for c in r["candidates"]])
     with torch.set_grad_enabled(gradients):
         scores = model(tokens, features)
     return list(scores.split([len(r["candidates"]) for r in rows]))

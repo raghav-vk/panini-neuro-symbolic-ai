@@ -250,3 +250,4 @@ def test_lexical_features_leave_the_training_row_out():
     gold = row["candidates"][row["gold_indices"][0]]
     seen, held_out = lexical_features(lexicon, row, gold), lexical_features(lexicon, row, gold, exclude_self=True)
     assert seen[2] == 1.0 and held_out[0] < seen[0]
+    assert seen[4] > 0 and lexical_features(lexicon, row, gold, use_rules=False)[4] == 0
