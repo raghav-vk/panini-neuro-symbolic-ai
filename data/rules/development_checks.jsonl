@@ -30,3 +30,21 @@
 {"expected": null, "left": "ī", "reason": "missing pada boundary", "right": "a", "rule_id": "SDH-012", "tags": ["left_pragrhya"]}
 {"expected": null, "left": "ī", "reason": "unknown prerequisite", "right": "a", "rule_id": "SDH-012", "tags": ["pada_boundary"]}
 {"expected": null, "left": "x", "reason": "nonmatching boundary", "right": "a", "rule_id": "SDH-012", "tags": ["pada_boundary", "left_pragrhya"]}
+{"expected": null, "left": "a", "reason": "missing pada boundary", "right": "e", "rule_id": "SDH-013", "tags": []}
+{"expected": null, "left": "a", "reason": "blocked prerequisite", "right": "e", "rule_id": "SDH-013", "tags": ["pada_boundary", "left_pragrhya"]}
+{"expected": null, "left": "x", "reason": "nonmatching boundary", "right": "e", "rule_id": "SDH-013", "tags": ["pada_boundary"]}
+{"expected": null, "left": "a", "reason": "missing pada boundary", "right": "o", "rule_id": "SDH-014", "tags": []}
+{"expected": null, "left": "a", "reason": "blocked prerequisite", "right": "o", "rule_id": "SDH-014", "tags": ["pada_boundary", "left_pragrhya"]}
+{"expected": null, "left": "x", "reason": "nonmatching boundary", "right": "o", "rule_id": "SDH-014", "tags": ["pada_boundary"]}
+{"expected": null, "left": "u", "reason": "missing pada boundary", "right": "u", "rule_id": "SDH-015", "tags": []}
+{"expected": null, "left": "u", "reason": "blocked prerequisite", "right": "u", "rule_id": "SDH-015", "tags": ["pada_boundary", "left_pragrhya"]}
+{"expected": null, "left": "x", "reason": "nonmatching boundary", "right": "u", "rule_id": "SDH-015", "tags": ["pada_boundary"]}
+{"expected": null, "left": "a", "reason": "missing pada boundary", "right": "ṛ", "rule_id": "SDH-016", "tags": []}
+{"expected": null, "left": "a", "reason": "blocked prerequisite", "right": "ṛ", "rule_id": "SDH-016", "tags": ["pada_boundary", "left_pragrhya"]}
+{"expected": null, "left": "x", "reason": "nonmatching boundary", "right": "ṛ", "rule_id": "SDH-016", "tags": ["pada_boundary"]}
+{"expected": null, "left": "i", "reason": "missing pada boundary", "right": "e", "rule_id": "SDH-017", "tags": []}
+{"expected": null, "left": "i", "reason": "blocked prerequisite", "right": "e", "rule_id": "SDH-017", "tags": ["pada_boundary", "left_pragrhya"]}
+{"expected": null, "left": "x", "reason": "nonmatching boundary", "right": "e", "rule_id": "SDH-017", "tags": ["pada_boundary"]}
+{"expected": null, "left": "u", "reason": "missing pada boundary", "right": "e", "rule_id": "SDH-018", "tags": []}
+{"expected": null, "left": "u", "reason": "blocked prerequisite", "right": "e", "rule_id": "SDH-018", "tags": ["pada_boundary", "left_pragrhya"]}
+{"expected": null, "left": "x", "reason": "nonmatching boundary", "right": "e", "rule_id": "SDH-018", "tags": ["pada_boundary"]}

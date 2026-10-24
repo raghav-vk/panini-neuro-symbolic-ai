@@ -6,7 +6,7 @@ See [Quick Start](../QUICKSTART.md) for commands in execution order.
 
 | Utility | Purpose |
 | --- | --- |
-| `build_development_rules.py` | Generate 12 narrow draft rules, negative checks and the expert review packet |
+| `build_development_rules.py` | Generate 18 narrow draft rules, negative checks and the expert review packet |
 | `convert_dcs.py` | Verify archive identity, decode primitive data without pickle execution, quarantine failures |
 | `extract_dcs_boundaries.py` | Align DCS lemmas to attested surfaces as silver external vowel-sandhi examples, without consulting rules |
 | `build_review_page.py` | Create a local browser worksheet for boundary annotation and JSONL export |

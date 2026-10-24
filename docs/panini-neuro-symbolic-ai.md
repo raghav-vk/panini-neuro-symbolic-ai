@@ -32,7 +32,7 @@ sūtra candidates across two pedagogical classifications, including 108
 operative candidates and 40 supporting records; these are an expert review
 queue, not automatically executable rules. This manuscript specifies the
 system and planned evaluation. An accompanying development implementation
-executes 12 narrow draft encodings across five families, converts the DCS
+executes 18 narrow draft encodings across five families, converts the DCS
 archive without executing pickle objects, and runs a small CPU Transformer
 on synthetic nonce-string probes. Those measurements establish engineering
 reproducibility, not Sanskrit accuracy; independent-corpus results remain

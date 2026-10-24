@@ -28,7 +28,7 @@ from Git history if needed but are intentionally absent from the current
 documentation tree.
 
 The current source corpus spans sandhi families. The executable development
-experiment uses 12 draft encodings across five families; the independent
+experiment uses 18 draft encodings across five families; the independent
 scholarly benchmark still awaits reviewed rules and corpus examples.
 No document in this directory should
 describe source candidates as automatically executable rules or subset

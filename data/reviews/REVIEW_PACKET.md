@@ -1,6 +1,6 @@
 # First Sandhi Review Packet
 
-All 12 records are drafts. Passing tests are not expert approval.
+All 18 records are drafts. Passing tests are not expert approval.
 
 Record decisions in a copy of rule_queue.template.jsonl, not the generated template.
 Review scope, prerequisites, exceptions, variants, derivation order, and positive/negative cases.
@@ -134,5 +134,71 @@ Draft single-step subset: ī + a -> īa. Only enumerated boundary strings and su
 
 Required tags: pada_boundary, left_pragrhya.
 Blocked tags: none encoded.
+
+Decision: pending. Reviewer/date: pending. Corrections and missing exceptions: __________
+
+## SDH-013: a-e-vrddhi
+
+Sutra 6.1.88: वृद्धिरेचि
+
+Draft single-step subset: a + e -> ai. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
+
+Required tags: pada_boundary.
+Blocked tags: left_pragrhya.
+
+Decision: pending. Reviewer/date: pending. Corrections and missing exceptions: __________
+
+## SDH-014: a-o-vrddhi
+
+Sutra 6.1.88: वृद्धिरेचि
+
+Draft single-step subset: a + o -> au. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
+
+Required tags: pada_boundary.
+Blocked tags: left_pragrhya.
+
+Decision: pending. Reviewer/date: pending. Corrections and missing exceptions: __________
+
+## SDH-015: u-dirgha
+
+Sutra 6.1.101: अकः सवर्णे दीर्घः
+
+Draft single-step subset: u + u -> ū. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
+
+Required tags: pada_boundary.
+Blocked tags: left_pragrhya.
+
+Decision: pending. Reviewer/date: pending. Corrections and missing exceptions: __________
+
+## SDH-016: a-r-guna
+
+Sutra 6.1.87: आद्गुणः
+
+Draft single-step subset: a + ṛ -> ar. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
+
+Required tags: pada_boundary.
+Blocked tags: left_pragrhya.
+
+Decision: pending. Reviewer/date: pending. Corrections and missing exceptions: __________
+
+## SDH-017: i-yan-other
+
+Sutra 6.1.77: इको यणचि
+
+Draft single-step subset: i + e -> ye. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
+
+Required tags: pada_boundary.
+Blocked tags: left_pragrhya.
+
+Decision: pending. Reviewer/date: pending. Corrections and missing exceptions: __________
+
+## SDH-018: u-yan-other
+
+Sutra 6.1.77: इको यणचि
+
+Draft single-step subset: u + e -> ve. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
+
+Required tags: pada_boundary.
+Blocked tags: left_pragrhya.
 
 Decision: pending. Reviewer/date: pending. Corrections and missing exceptions: __________

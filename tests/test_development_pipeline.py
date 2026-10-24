@@ -187,14 +187,14 @@ def test_tiny_ranker_trains_and_roundtrips(tmp_path):
     from panini.ranking import train_neural, predict_neural, make_transformer
     rows = enriched(5)
     model, info = train_neural(rows[:40], rows[40:50], epochs=1, width=16, layers=1)
-    scores = predict_neural(model, rows[50:])
+    scores = predict_neural(model, rows[50:60])
     assert info["parameters"] < 100_000
     assert len(scores) == 10
     path = tmp_path / "model.pt"
     torch.save(model.state_dict(), path)
     restored = make_transformer(width=16, layers=1)
     restored.load_state_dict(torch.load(path, weights_only=True))
-    assert predict_neural(restored, rows[50:]) == scores
+    assert predict_neural(restored, rows[50:60]) == scores
 
 
 def test_cli_prepares_and_runs_baselines(tmp_path):

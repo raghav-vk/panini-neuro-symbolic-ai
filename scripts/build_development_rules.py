@@ -23,6 +23,13 @@ SPECS = [
     ("m-t-anusvara", "nasal", "8.3.23", "mo 'nusvāraḥ", ["m"], ["t"], "ṃ", "keep_match", [], [], "m", "t", "ṃt"),
     ("visarga-t", "visarga", "8.3.34", "visarjanīyasya saḥ", ["ḥ"], ["t"], "s", "keep_match", ["right_second_not_sibilant"], [], "ḥ", "ta", "sta"),
     ("pragrhya-i-a", "non_application", "6.1.125", "plutapragṛhyā aci nityam", ["ī"], ["a"], "ī", "keep_match", ["left_pragrhya"], [], "ī", "a", "īa"),
+    # Added after the DCS silver coverage audit; appended so earlier rule IDs stay stable.
+    ("a-e-vrddhi", "vowel", "6.1.88", "vṛddhir eci", ["a", "ā"], ["e", "ai"], "ai", "drop_match", [], ["left_pragrhya"], "a", "e", "ai"),
+    ("a-o-vrddhi", "vowel", "6.1.88", "vṛddhir eci", ["a", "ā"], ["o", "au"], "au", "drop_match", [], ["left_pragrhya"], "a", "o", "au"),
+    ("u-dirgha", "vowel", "6.1.101", "akaḥ savarṇe dīrghaḥ", ["u", "ū"], ["u", "ū"], "ū", "drop_match", [], ["left_pragrhya"], "u", "u", "ū"),
+    ("a-r-guna", "vowel", "6.1.87", "ādguṇaḥ", ["a", "ā"], ["ṛ"], "ar", "drop_match", [], ["left_pragrhya"], "a", "ṛ", "ar"),
+    ("i-yan-other", "vowel", "6.1.77", "iko yaṇaci", ["i", "ī"], ["ā", "u", "ū", "e", "o", "ṛ"], "y", "keep_match", [], ["left_pragrhya"], "i", "e", "ye"),
+    ("u-yan-other", "vowel", "6.1.77", "iko yaṇaci", ["u", "ū"], ["ā", "i", "ī", "e", "o", "ṛ"], "v", "keep_match", [], ["left_pragrhya"], "u", "e", "ve"),
 ]
 
 
@@ -64,7 +71,7 @@ def build():
         path = ROOT / name
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text("".join(json.dumps(r, ensure_ascii=False, sort_keys=True) + "\n" for r in rows), encoding="utf-8")
-    lines = ["# First Sandhi Review Packet", "", "All 12 records are drafts. Passing tests are not expert approval.", "",
+    lines = ["# First Sandhi Review Packet", "", f"All {len(rules)} records are drafts. Passing tests are not expert approval.", "",
              "Record decisions in a copy of rule_queue.template.jsonl, not the generated template.", "Review scope, prerequisites, exceptions, variants, derivation order, and positive/negative cases.", ""]
     for rule in rules:
         lines += [f"## {rule['rule_id']}: {rule['name']}", "", f"Sutra {rule['source']['sutra_ids'][0]}: {rule['source']['text_devanagari']}", "",

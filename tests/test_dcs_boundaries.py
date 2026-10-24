@@ -52,9 +52,15 @@ def test_right_word_spans_its_compound_to_the_chunk_end():
     assert label(example, RULES)["rule_id"] == "SDH-004"
 
 
-def test_uncovered_junction_is_kept_and_labelled_unsupported():
+def test_vrddhi_junction_is_labelled_by_the_added_rule():
     [(example, _)] = extract("cEva", [["ca", "eva"]], [["2", "2"]])
     assert example["observed_junction"] == "ai"
+    assert label(example, RULES)["rule_id"] == "SDH-013"
+
+
+def test_uncovered_junction_is_labelled_unsupported():
+    # Purvarupa (6.1.109) is not encoded yet.
+    example = {"left": "atho", "right": "api", "surface": "atho'pi", "tags": ["pada_boundary"]}
     assert label(example, RULES)["rule_id"] == "UNSUPPORTED"
 
 

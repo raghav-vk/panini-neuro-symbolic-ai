@@ -3,7 +3,7 @@
 This repository is developing a small, reproducible neuro-symbolic research
 system for Sanskrit sandhi. The source layer now covers candidate sūtras across
 vowel, consonant, visarga, nasal/anusvāra, non-application, and supporting
-material. A runnable development pipeline now exercises 12 narrow draft
+material. A runnable development pipeline now exercises 18 narrow draft
 encodings across five families. The planned scholarly benchmark remains
 external vowel-sandhi splitting under independently reviewed rules and data.
 

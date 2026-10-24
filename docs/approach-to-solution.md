@@ -106,7 +106,7 @@ Current inventory:
     data/rules/external_vowel_sandhi.jsonl
 
 The legacy file contains one draft example. The new development inventory at
-`data/rules/development_sandhi.jsonl` contains 12 narrow cross-family encodings,
+`data/rules/development_sandhi.jsonl` contains 18 narrow cross-family encodings,
 with a reviewer packet and executable negative checks. None is expert approved.
 
 All-sandhi source inventory:
