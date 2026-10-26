@@ -10,6 +10,7 @@ collaboration guides for the current neuro-symbolic sandhi experiment.
 | [Silver DCS results](../reports/dcs-silver-v3/SUMMARY.md) | Current results: right-word holdout with the external lexicon |
 | [Earlier silver results](../reports/dcs-silver-v2/SUMMARY.md) | Results without the external lexicon |
 | [Development results](../reports/development-v1/SUMMARY.md) | September synthetic CPU smoke experiment |
+| [Reviewer guide](../data/reviews/README.md) | Instructions and worksheets for the expert reviewers (issues #65 to #68) |
 | [Review packet](../data/reviews/REVIEW_PACKET.md) | 18 draft rule encodings awaiting expert judgement |
 | [Working paper](panini-neuro-symbolic-ai.md) | Manuscript being developed for archival submission |
 | [Experiment protocol](EXPERIMENT_PROTOCOL.md) | Research questions, frozen-study design, amendments, metrics, and release gates |

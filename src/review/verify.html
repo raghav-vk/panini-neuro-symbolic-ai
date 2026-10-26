@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'">
+<title>Project Panini | Verify Splits</title>
+<style>
+:root{--ink:#24362e;--paper:#fcf8ed;--accent:#b54c20;--line:#d8ddce}*{box-sizing:border-box}body{margin:0;color:var(--ink);background:var(--paper);font:17px/1.5 Georgia,serif}main{max-width:900px;margin:auto;padding:32px 24px}h1{font-size:clamp(28px,5vw,44px);font-weight:normal;line-height:1.1;margin:8px 0}.eyebrow{font:12px monospace;letter-spacing:2px;text-transform:uppercase;color:var(--accent)}nav{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:20px 0}button{background:var(--ink);color:var(--paper);border:0;border-radius:3px;padding:10px 16px;font:14px Georgia,serif;cursor:pointer}button.secondary{background:transparent;color:var(--ink);border:1px solid var(--line)}button:focus,input:focus,textarea:focus{outline:3px solid var(--accent);outline-offset:2px}.panel{border:1px solid var(--line);padding:20px;background:#fffdf7;margin:16px 0}.sentence{font-size:24px;overflow-wrap:anywhere}mark{background:#f3d9a4;padding:0 2px}.proposal{font-size:22px}label{display:block;font-size:15px;margin:8px 0}input[type=text],input[type=date],textarea{display:block;width:100%;padding:9px;border:1px solid var(--line);background:white;font:17px Georgia,serif;margin-top:4px}.choice{display:flex;gap:8px;align-items:baseline}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.help{font-size:14px;color:#526555}#message{min-height:24px;color:var(--accent)}@media(max-width:650px){.grid{grid-template-columns:1fr}main{padding:20px 14px}}
+</style>
+<main>
+<div class="eyebrow">Project Panini / Expert Review</div>
+<h1 id="title"></h1>
+<p>Each item shows a sentence with a fused form highlighted, and a proposed split of it into two words, each with its final and initial sound restored. Judge whether the split is right <em>in this sentence</em>. Your answers are saved in this browser as you go; use <strong>Export answers</strong> to produce the file you hand in.</p>
+<div class="grid"><label>Your name<input type="text" id="reviewer"></label><label>Review date<input type="date" id="reviewed_at"></label></div>
+<nav><button id="previous">Previous</button><strong id="progress"></strong><button id="next">Next</button><button class="secondary" id="unanswered">Next unanswered</button><button class="secondary" id="export">Export answers</button></nav>
+<section class="panel"><div id="identity" class="eyebrow"></div><div class="sentence" id="sentence"></div>
+<p class="proposal">Proposed: <strong id="proposal"></strong></p><p class="help" id="lemmas"></p></section>
+<form id="form" class="panel">
+<label class="choice"><input type="radio" name="decision" value="correct"> 1. Correct: the two words are right as written.</label>
+<label class="choice"><input type="radio" name="decision" value="wrong"> 2. Wrong: the correct split is (edit both words, sandhi undone):</label>
+<div class="grid"><label>Left word<input type="text" id="left"></label><label>Right word<input type="text" id="right"></label></div>
+<label class="choice"><input type="radio" name="decision" value="not_boundary"> 3. Not a sandhi junction between two separate words (for example inside a compound, or the highlight is misplaced).</label>
+<label class="choice"><input type="radio" name="decision" value="unsure"> 4. Unsure (say why in the note).</label>
+<label>Note (required for “unsure”)<textarea id="notes" rows="2"></textarea></label>
+</form>
+<p role="status" id="message"></p>
+<label class="help">Resume from an exported answers file<input type="file" id="import" accept=".jsonl"></label>
+<p class="help">Keys 1 to 4 choose an answer, and the arrow keys move between items, when you are not typing in a box.</p>
+</main>
+<script>
+const items=__REVIEW_DATA__, config=__REVIEW_CONFIG__;
+const $=id=>document.getElementById(id), key='panini-review:'+config.answers_name;
+let answers={}, index=0;
+try{answers=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){answers={}}
+const meta=JSON.parse(localStorage.getItem(key+':meta')||'{}');
+$('reviewer').value=meta.reviewer||'';$('reviewed_at').value=meta.reviewed_at||'';
+$('title').textContent=config.title;
+function persist(){try{localStorage.setItem(key,JSON.stringify(answers));localStorage.setItem(key+':meta',JSON.stringify({reviewer:$('reviewer').value,reviewed_at:$('reviewed_at').value}))}catch(e){$('message').textContent='This browser cannot save locally; export your answers often.'}}
+function choice(){const c=document.querySelector('input[name=decision]:checked');return c?c.value:''}
+function keep(){const it=items[index],d=choice();if(!d&&!$('notes').value){delete answers[it.item_id];persist();return}
+answers[it.item_id]={item_id:it.item_id,decision:d,left:d==='wrong'?$('left').value.trim():'',right:d==='wrong'?$('right').value.trim():'',notes:$('notes').value.trim()};persist()}
+function answered(){return items.filter(it=>answers[it.item_id]?.decision).length}
+function show(){const it=items[index],a=answers[it.item_id]||{};const chars=Array.from(it.sentence),[s,e]=it.span;
+$('progress').textContent=`${index+1} / ${items.length} (${answered()} answered)`;$('identity').textContent=it.item_id;
+$('sentence').replaceChildren(chars.slice(0,s).join(''),Object.assign(document.createElement('mark'),{textContent:chars.slice(s,e).join('')}),chars.slice(e).join(''));
+$('proposal').textContent=`${it.surface} = ${it.proposed_left} + ${it.proposed_right}`;$('lemmas').textContent=`Dictionary forms: ${it.left_lemma} + ${it.right_lemma}`;
+document.querySelectorAll('input[name=decision]').forEach(r=>r.checked=r.value===a.decision);$('left').value=a.left||'';$('right').value=a.right||'';$('notes').value=a.notes||'';$('message').textContent=''}
+function go(i){keep();index=Math.max(0,Math.min(items.length-1,i));show()}
+function problems(){const out=[];if(!$('reviewer').value.trim())out.push('your name');if(!$('reviewed_at').value)out.push('the review date');
+for(const it of items){const a=answers[it.item_id];if(!a?.decision){out.push(`an answer for ${it.item_id}`);continue}
+if(a.decision==='wrong'&&(!a.left||!a.right))out.push(`both words for ${it.item_id}`);if(a.decision==='unsure'&&!a.notes)out.push(`a note for ${it.item_id}`)}return out}
+$('export').onclick=()=>{keep();const missing=problems();if(missing.length&&!confirm(`Still missing: ${missing.slice(0,5).join('; ')}${missing.length>5?` and ${missing.length-5} more`:''}.\n\nExport an unfinished file anyway?`))return;
+const who=$('reviewer').value.trim(),when=$('reviewed_at').value;const rows=items.filter(it=>answers[it.item_id]).map(it=>({...answers[it.item_id],reviewer:who,reviewed_at:when}));
+const url=URL.createObjectURL(new Blob([rows.map(r=>JSON.stringify(r)).join('\n')+'\n'],{type:'application/x-ndjson'}));const a=document.createElement('a');a.href=url;a.download=config.answers_name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);$('message').textContent=`Exported ${rows.length} answers as ${config.answers_name}.`};
+$('import').onchange=async e=>{try{const rows=(await e.target.files[0].text()).trim().split('\n').filter(Boolean).map(JSON.parse);const ids=new Set(items.map(it=>it.item_id));
+if(rows.some(r=>!ids.has(r.item_id)))throw Error('This file has items that are not in this worksheet.');answers={};for(const r of rows){const{reviewer,reviewed_at,...rest}=r;answers[r.item_id]=rest;if(reviewer)$('reviewer').value=reviewer;if(reviewed_at)$('reviewed_at').value=reviewed_at}persist();index=0;show();$('message').textContent=`Loaded ${rows.length} answers.`}catch(error){$('message').textContent=error.message}};
+function prefill(){const it=items[index];if(choice()==='wrong'&&!$('left').value&&!$('right').value){$('left').value=it.proposed_left;$('right').value=it.proposed_right}}
+$('form').onchange=e=>{if(e.target.name==='decision'){prefill();keep();show()}};$('notes').oninput=keep;$('left').oninput=$('right').oninput=()=>{document.querySelector('input[value=wrong]').checked=true;keep()};
+$('reviewer').oninput=$('reviewed_at').onchange=persist;$('form').onsubmit=e=>e.preventDefault();
+$('previous').onclick=()=>go(index-1);$('next').onclick=()=>go(index+1);
+$('unanswered').onclick=()=>{keep();for(let k=1;k<=items.length;k++){const i=(index+k)%items.length;if(!answers[items[i].item_id]?.decision){index=i;show();return}}$('message').textContent='Every item has an answer.'};
+document.addEventListener('keydown',e=>{if(['INPUT','TEXTAREA'].includes(e.target.tagName)&&e.target.type!=='radio')return;
+if(e.key>='1'&&e.key<='4'){document.querySelectorAll('input[name=decision]')[Number(e.key)-1].checked=true;prefill();keep();show();if(e.key==='2')$('left').focus()}
+else if(e.key==='ArrowRight')go(index+1);else if(e.key==='ArrowLeft')go(index-1)});
+show();
+</script>
+</html>

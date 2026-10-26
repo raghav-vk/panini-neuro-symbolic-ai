@@ -16,6 +16,11 @@ International (CC BY 4.0). The local archive matches Zenodo's filename, size,
 and MD5. See `datasets/dcs_source_manifest.json` for the complete checksums and
 attribution record.
 
+The review files in `data/reviews/` (`silver_sample.jsonl`,
+`uncovered_examples.jsonl`, `GRAMMARIAN_CHECKS.md` and the worksheets) contain
+sentences from DCS_pick with automatically derived word splits, shared under
+the same CC BY 4.0 terms.
+
 License: https://creativecommons.org/licenses/by/4.0/
 
 ## ashtadhyayi-com/data

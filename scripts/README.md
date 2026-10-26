@@ -9,7 +9,9 @@ See [Quick Start](../QUICKSTART.md) for commands in execution order.
 | `build_development_rules.py` | Generate 18 narrow draft rules, negative checks and the expert review packet |
 | `convert_dcs.py` | Verify archive identity, decode primitive data without pickle execution, quarantine failures |
 | `extract_dcs_boundaries.py` | Align DCS lemmas to attested surfaces as silver external vowel-sandhi examples, without consulting rules |
-| `build_review_page.py` | Create a local browser worksheet for boundary annotation and JSONL export |
+| `prepare_expert_review.py` | Write the committed silver-sample review items, overlap IDs, uncovered examples and grammarian checks to `data/reviews/` |
+| `build_review_page.py` | Create a local browser worksheet: boundary annotation, or `--mode verify` for checking proposed splits |
+| `validate_review.py` | Check a reviewer's answers file or rule decision file before it is committed |
 | `prepare_experiment.py` | Admit synthetic, silver DCS or reviewed examples, build four holdouts and forward-certified candidates |
 | `run_experiment.py` | CPU baselines, five-seed ranker training, ablations, checkpoint and metric artifacts |
 | `compare_paired.py` | Paired bootstrap and per-seed McNemar comparison of saved test predictions against a baseline |

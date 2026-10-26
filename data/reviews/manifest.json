@@ -1,0 +1,17 @@
+{
+  "source": "DCS_pick (Krishna et al. 2017, CC BY 4.0), silver extraction by scripts/extract_dcs_boundaries.py",
+  "inputs": {
+    "review_sample.jsonl": "648480f0a847e4301e8d57ddc9607855d1e5c35303ca9c2d86ac7a065e921e1b",
+    "examples.jsonl": "a4c0b5a81639f223478020cf03af0a4691cc0179993ece7abc37fe99a28a20e2"
+  },
+  "overlap": {
+    "size": 50,
+    "seed": 2026
+  },
+  "outputs": {
+    "silver_sample.jsonl": "1c3411841b619807dfe0a6237ed06d4dce422004afe4bb4cd08aa776dfaa2666",
+    "silver_overlap_ids.json": "f75a3dfc2ef5d1a59f112bc5d6b6f3f5902745203b577d0b9dab9e4de770a3d3",
+    "uncovered_examples.jsonl": "ef4206ed9e459ae704eac0fcef2245c9d1463cf8cab799cd84247aa16243f405",
+    "GRAMMARIAN_CHECKS.md": "6751e06fb36e5787b8abd90dae6a0cbc13246fd89cd950b9591d67673040b73f"
+  }
+}
