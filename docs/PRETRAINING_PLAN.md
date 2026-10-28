@@ -3,6 +3,77 @@
 **Status:** Adopted as amendment 0.5 of `docs/EXPERIMENT_PROTOCOL.md`
 (section 11.3) on 2026-10-24. Nothing here has been run yet.
 
+## In Plain Terms
+
+**The problem.** Splitting a fused form takes two steps:
+
+1. **The rules list the possible splits.** For *tathāgata* they give both
+   *tathā + agata* and *tathā + āgata*. This step is essentially solved: the
+   correct split is in the list 99.9 percent of the time.
+2. **Something picks the right one.** This is where the neural part should
+   help, and so far it doesn't.
+
+The hard cases look like that example. The sandhi works either way, so the
+only question is whether *agata* or *āgata* is a real word. The best picker
+today is a simple formula, not the neural network. Its strongest signal is a
+dictionary lookup (the Vidyut kosha), and it scores 0.909 on dev.
+
+The network loses because the test words never appear in its 9,066 labelled
+training examples, so it cannot know which forms are real. The dictionary
+does. The dictionary also carries non-commercial licence terms, which
+conflicts with the long-term plans.
+
+**The idea.** Before the network learns to pick splits, let it read lots of
+plain Sanskrit text with no labels: all of about 440,000 corpus sentences,
+not just the 9,000 labelled examples. This is pretraining, the way large
+language models learn a language before being taught a task. From that
+reading it can learn what real Sanskrit words look like, with no dictionary.
+
+It learns from two exercises:
+
+1. **Fill in the blanks.** Hide some letters in a sentence and guess them.
+2. **Spot the fake.** Take a real word and change its first or last vowel
+   the way sandhi confusions do (*āgata* to *agata*). The model learns to tell
+   the real form from the fake. Our rules decide which changes to make, so
+   the rules teach the network. This is the neuro-symbolic contribution.
+
+**What we then test**, each against today's 0.909:
+
+| | Question | If yes |
+| --- | --- | --- |
+| 1 | Can the network's "is this a real word" score **replace** the dictionary? | The neural part does the dictionary's job, with no licence problem |
+| 2 | Does that score **plus** the dictionary beat the dictionary alone? | The network fills the dictionary's gaps (it misses about 10 percent of the words needed) |
+| 3 | Does the pretrained network, trained further as the picker itself, beat the formula? | The neural part is the best picker |
+
+**Keeping it honest.** The network must not read the test sentences during
+pretraining. There are two versions of the text:
+
+- **P-A (main):** the dev and test sentences are removed, with their copies
+  and near-copies. Test words can still appear in other sentences, just as
+  they appear in the dictionary.
+- **P-B (strict):** every sentence containing any test word is also removed.
+  Any gain must then come from how Sanskrit words are built, not from having
+  seen the word.
+
+**Order and stopping point.**
+
+1. Build P-A and P-B (issue #61, the next step).
+2. Time a short trial run on the laptop.
+3. Pretrain the small model (about 5M parameters).
+4. Test questions 1 to 3 on dev.
+5. Only if it clearly beats 0.909: train the larger model, run the strict P-B
+   version, then make a single test-set run.
+
+If nothing beats 0.909, the paper says so: at this scale, pretraining does
+not replace a dictionary. That is still publishable, because no one has
+measured it.
+
+ByT5-Sanskrit, a much larger published model, is scored only for comparison.
+It has very likely seen our test sentences already, so it is labelled as a
+contaminated reference and is never part of our system.
+
+The sections below give the details.
+
 ## 1. Why
 
 On the silver DCS right-word holdout (protocol sections 11.1 and 11.2), the
@@ -66,6 +137,35 @@ condition on 2026-10-24.
 The build script must write an audit report with removed counts, hashes and
 the duplicate checks. The paper reports both conditions.
 
+### Other data considered
+
+**Hellwig and Nehrdich 2018 (EMNLP) sandhi data**
+(`OliverHellwig/sanskrit`, `papers/2018emnlp/data`), checked 2026-10-28.
+
+| Property | Finding |
+| --- | --- |
+| Content | DCS text lines with each character's pre-sandhi form: about 26,700 lines each in the validation and test files. The training file is on Google Drive |
+| License | **GNU AGPLv3**, for code and data alike |
+| Source | DCS, the same corpus as DCS_pick. About 31 percent of its validation and test lines exactly match a DCS_pick sentence; the rest are DCS text that DCS_pick lacks |
+| Overlap with our holdout | At least 60 of our 1,801 dev and test sentences appear exactly in its validation and test files. The training file was not checked and very likely holds more |
+
+**Decision: not used for pretraining or training.**
+
+- **Licence.** AGPLv3 copyleft conflicts with releasing our code and
+  weights under Apache 2.0, and with commercial use. How it applies to model
+  weights is unsettled, which is reason enough to stay clear.
+- **No new text.** It is DCS text. The full DCS in CoNLL-U format is the same
+  text under CC BY 4.0, so if more pretraining text is wanted, that is the
+  source to use.
+- **Contamination.** It would need the same decontamination as P-A. It also
+  overlaps the held-out DCS chapters planned for the gold set
+  (`docs/GOLD_SET_PLAN.md`), which must stay out of every pretraining corpus.
+
+Its pretrained rcNN model may still be run locally as a **prior-work
+reference** on our items, cited as Hellwig and Nehrdich 2018. Like
+ByT5-Sanskrit, it was trained on DCS and may have seen our test sentences, so
+its score is labelled as contaminated.
+
 ## 4. Model
 
 A bidirectional byte-level Transformer encoder, the same family as the
@@ -121,6 +221,7 @@ All on the right-word holdout, dev only until the final run:
 | Fine-tuned ranker without pretraining (existing) | labels only |
 | Objective ablation: masked LM only, or discrimination only | |
 | Reference only: ByT5-Sanskrit candidate scores (`buddhist-nlp/byt5-sanskrit`) | 5.4B characters of pretraining |
+| Reference only: rcNN (Hellwig and Nehrdich 2018), run locally | DCS-trained segmenter |
 
 **ByT5-Sanskrit** (582M parameters) is a cited reference point, never a
 component of our system. Its pretraining text very likely contains DCS texts,
