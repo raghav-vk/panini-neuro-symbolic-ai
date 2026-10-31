@@ -32,6 +32,8 @@ def test_iast_slp1_roundtrip():
     for word in ["cāpi", "caiva", "ṛṣi", "mahārṣi", "uparatnacatuṣṭayam", "kṛṣṇaḥ"]:
         assert slp1_to_iast(iast_to_slp1(word)) == word
     assert iast_to_slp1("caiva") == "cEva"
+    assert slp1_to_iast("a~") == "am\u0310"  # anunāsika
+    assert iast_to_slp1("am\u0310") == iast_to_slp1("a~") == "a~" and is_slp1_word("a~")
     assert iast_hiatus_ambiguous("caiva") and not iast_hiatus_ambiguous("cāpi")
     assert slp1_to_iast("kąp", strict=False) == "kąp"
     with pytest.raises(ValueError):

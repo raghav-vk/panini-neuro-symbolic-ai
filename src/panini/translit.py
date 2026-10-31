@@ -12,12 +12,14 @@ SLP1 = dict(zip("aAiIuUfFxXeEoOMHkKgGNcCjJYwWqQRtTdDnpPbBmyrlvSzsh",
                 ["a", "ā", "i", "ī", "u", "ū", "ṛ", "ṝ", "ḷ", "ḹ", "e", "ai", "o", "au", "ṃ", "ḥ",
                  "k", "kh", "g", "gh", "ṅ", "c", "ch", "j", "jh", "ñ", "ṭ", "ṭh", "ḍ", "ḍh", "ṇ",
                  "t", "th", "d", "dh", "n", "p", "ph", "b", "bh", "m", "y", "r", "l", "v", "ś", "ṣ", "s", "h"]))
+# Anunāsika (nasalised vowel, written after the vowel): IAST m̐, with "~" also accepted.
+SLP1["~"] = "m\u0310"
 SLP1_VOWELS = frozenset("aAiIuUfFxXeEoO")
 # Avagraha is part of a word's spelling; everything else here is punctuation.
 SLP1_LETTERS = frozenset(SLP1) | {"'"}
 PUNCTUATION = frozenset(" \t\r\n0123456789.,;:!?|-()[]/")
 
-_IAST_TO_SLP1 = sorted(((v, k) for k, v in SLP1.items()), key=lambda item: -len(item[0]))
+_IAST_TO_SLP1 = sorted([*((v, k) for k, v in SLP1.items()), ("~", "~")], key=lambda item: -len(item[0]))
 
 
 def is_slp1_word(text):
