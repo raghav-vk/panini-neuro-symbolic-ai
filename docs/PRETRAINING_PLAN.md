@@ -1,7 +1,8 @@
 # Plan: Self-Supervised Pretraining for the Neural Ranker
 
 **Status:** Adopted as amendment 0.5 of `docs/EXPERIMENT_PROTOCOL.md`
-(section 11.3) on 2026-10-24. Nothing here has been run yet.
+(section 11.3) on 2026-10-24. Nothing here has been run yet. Since amendment
+0.6 (2026-10-30), all corpora and model input are SLP1.
 
 ## In Plain Terms
 
@@ -110,7 +111,7 @@ They are left out of the core plan. At most they are one later ablation.
 ## 3. Corpus and Decontamination
 
 The source is DCS_pick (CC BY 4.0): 441,722 sentences, 21.5M characters,
-converted to IAST to match the ranker's input. No other corpus is used in the
+in SLP1, the ranker's input scheme (protocol amendment 0.6). No other corpus is used in the
 first round, so licensing stays simple. GRETIL and Sangraha are possible
 later; their licences vary and need checking first.
 
@@ -242,7 +243,7 @@ must stand on their own comparisons.
 5. Fine-tune for H-P3 on dev with 3 seeds.
 6. Only if step 4 or 5 beats 0.909 by more than the seed spread: pretrain M,
    and run P-B for the strict condition.
-7. Freeze the settings in amendment 0.6. Then make one test run with paired
+7. Freeze the settings in a further amendment. Then make one test run with paired
    comparisons.
 
 If no condition beats 0.909 on dev, the paper reports that pretraining at

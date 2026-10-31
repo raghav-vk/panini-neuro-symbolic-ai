@@ -8,8 +8,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from panini.rules import SandhiRule
+from panini.translit import iast_to_slp1, slp1_to_iast
 
-# Unicode is essential for the Sanskrit source texts and IAST string probes.
+# Written in IAST for readability; rule files store SLP1 (protocol amendment 0.6).
 SPECS = [
     ("a-dirgha", "vowel", "6.1.101", "akaḥ savarṇe dīrghaḥ", ["a", "ā"], ["a", "ā"], "ā", "drop_match", [], ["left_pragrhya"], "a", "a", "ā"),
     ("i-dirgha", "vowel", "6.1.101", "akaḥ savarṇe dīrghaḥ", ["i", "ī"], ["i", "ī"], "ī", "drop_match", [], ["left_pragrhya"], "i", "i", "ī"),
@@ -28,16 +29,24 @@ SPECS = [
     ("a-o-vrddhi", "vowel", "6.1.88", "vṛddhir eci", ["a", "ā"], ["o", "au"], "au", "drop_match", [], ["left_pragrhya"], "a", "o", "au"),
     ("u-dirgha", "vowel", "6.1.101", "akaḥ savarṇe dīrghaḥ", ["u", "ū"], ["u", "ū"], "ū", "drop_match", [], ["left_pragrhya"], "u", "u", "ū"),
     ("a-r-guna", "vowel", "6.1.87", "ādguṇaḥ", ["a", "ā"], ["ṛ"], "ar", "drop_match", [], ["left_pragrhya"], "a", "ṛ", "ar"),
-    ("i-yan-other", "vowel", "6.1.77", "iko yaṇaci", ["i", "ī"], ["ā", "u", "ū", "e", "o", "ṛ"], "y", "keep_match", [], ["left_pragrhya"], "i", "e", "ye"),
-    ("u-yan-other", "vowel", "6.1.77", "iko yaṇaci", ["u", "ū"], ["ā", "i", "ī", "e", "o", "ṛ"], "v", "keep_match", [], ["left_pragrhya"], "u", "e", "ve"),
+    ("i-yan-other", "vowel", "6.1.77", "iko yaṇaci", ["i", "ī"], ["ā", "u", "ū", "e", "ai", "o", "au", "ṛ"], "y", "keep_match", [], ["left_pragrhya"], "i", "e", "ye"),
+    ("u-yan-other", "vowel", "6.1.77", "iko yaṇaci", ["u", "ū"], ["ā", "i", "ī", "e", "ai", "o", "au", "ṛ"], "v", "keep_match", [], ["left_pragrhya"], "u", "e", "ve"),
 ]
+
+
+def _shown(values):
+    return " or ".join(slp1_to_iast(v) for v in values)
 
 
 def build():
     sources = {r["sutra_id"]: r for r in map(json.loads, (ROOT / "data/sources/ashtadhyayi_sandhi_sutras.jsonl").read_text().splitlines())}
     rules, checks, queue = [], [], []
-    for i, (name, family, sutra, iast, lefts, rights, emit, right_action, required, forbidden, left, right, surface) in enumerate(SPECS, 1):
+    for i, spec in enumerate(SPECS, 1):
+        name, family, sutra, iast, lefts, rights, emit, right_action, required, forbidden, left, right, surface = spec
         source = sources[sutra]
+        shown = f"{left} + {right} -> {surface}"
+        lefts, rights = [iast_to_slp1(x) for x in lefts], [iast_to_slp1(x) for x in rights]
+        emit, left, right, surface = (iast_to_slp1(x) for x in (emit, left, right, surface))
         rid = f"SDH-{i:03}"
         tags = ["pada_boundary", *required]
         rule = {
@@ -45,7 +54,7 @@ def build():
             "scope": "non_application" if family == "non_application" else f"external_{family}_sandhi",
             "status": "draft",
             "source": {"sutra_ids": [sutra], "text_iast": iast, "text_devanagari": source["text_devanagari"],
-                       "interpretation": f"Draft single-step subset: {left} + {right} -> {surface}. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.",
+                       "interpretation": f"Draft single-step subset: {shown}. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.",
                        "url": source["source"]["url"], "commit": source["source"]["commit"], "license": "TO_VERIFY"},
             "match": {"left_suffixes": lefts, "right_prefixes": rights, "required_tags": tags, "forbidden_tags": forbidden},
             "operation": {"kind": "rewrite", "left": "drop_match", "emit": emit, "right": right_action},
@@ -72,10 +81,15 @@ def build():
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text("".join(json.dumps(r, ensure_ascii=False, sort_keys=True) + "\n" for r in rows), encoding="utf-8")
     lines = ["# First Sandhi Review Packet", "", f"All {len(rules)} records are drafts. Passing tests are not expert approval.", "",
-             "Record decisions in a copy of rule_queue.template.jsonl, not the generated template.", "Review scope, prerequisites, exceptions, variants, derivation order, and positive/negative cases.", ""]
+             "Record decisions in a copy of rule_queue.template.jsonl, not the generated template.",
+             "Sanskrit here is IAST. The rule files themselves store SLP1.", "Review scope, prerequisites, exceptions, variants, derivation order, and positive/negative cases.", ""]
     for rule in rules:
         lines += [f"## {rule['rule_id']}: {rule['name']}", "", f"Sutra {rule['source']['sutra_ids'][0]}: {rule['source']['text_devanagari']}", "",
-                  rule["source"]["interpretation"], "", f"Required tags: {', '.join(rule['match']['required_tags'])}.",
+                  rule["source"]["interpretation"], "",
+                  "Encoded: left word ending in " + _shown(rule["match"]["left_suffixes"]) + ", right word beginning with "
+                  + _shown(rule["match"]["right_prefixes"]) + ", rewritten as " + _shown([rule["operation"]["emit"]])
+                  + (" followed by the right word's vowel" if rule["operation"]["right"] == "keep_match" else "") + ".", "",
+                  f"Required tags: {', '.join(rule['match']['required_tags'])}.",
                   f"Blocked tags: {', '.join(rule['match']['forbidden_tags']) or 'none encoded'}.", "",
                   "Decision: pending. Reviewer/date: pending. Corrections and missing exceptions: __________", ""]
     (ROOT / "data/reviews/REVIEW_PACKET.md").write_text("\n".join(lines), encoding="utf-8")

@@ -58,7 +58,7 @@ def test_precedence_is_pair_local_and_optional_retains_alternative():
     assert len(forward([rule, replace(high, optional=True)], "a", "a", ["pada_boundary"])) == 2
     # Other underlying pairs are not suppressed merely because a priority is high.
     high = replace(RULES[1], precedence=999)
-    assert any(c["left"] == "a" for c in enumerate_candidates("ā", [rule, high], ["pada_boundary"]))
+    assert any(c["left"] == "a" for c in enumerate_candidates("A", [rule, high], ["pada_boundary"]))
 
 
 def state():
@@ -148,6 +148,7 @@ def test_reviewed_surface_alignment_and_unsupported_coverage():
                left="x", right="y", surface="ābhīrā", source_span=[0, 6], rule_id="unsupported",
                external_boundary_confirmed=True, tags=["pada_boundary"])
     assert validate_reviewed(row, RULES)["family"] == "unsupported"
+    assert validate_reviewed(row, RULES)["surface"] == "ABIrA"
     row["source_span"] = [1, 6]
     with pytest.raises(ValueError, match="source span"):
         validate_reviewed(row, RULES)
@@ -212,8 +213,8 @@ def test_cli_prepares_and_runs_baselines(tmp_path):
 
 
 def test_tie_averaged_top1_removes_index_tie_break():
-    row = {"example_id": "x", "rule_id": "SDH-001", "surface": "ā", "gold_indices": [0],
-           "candidates": [{"left": "a", "right": "a", "proofs": []}, {"left": "ā", "right": "a", "proofs": []}]}
+    row = {"example_id": "x", "rule_id": "SDH-001", "surface": "A", "gold_indices": [0],
+           "candidates": [{"left": "a", "right": "a", "proofs": []}, {"left": "A", "right": "a", "proofs": []}]}
     result, _ = metrics([row], [[0.0, 0.0]])
     assert result["top1"] == 1.0 and result["top1_tie_averaged"] == 0.5 and result["tied_top_rows"] == 1
     result, _ = metrics([row], [[1.0, 0.0]])
@@ -222,7 +223,7 @@ def test_tie_averaged_top1_removes_index_tie_break():
 
 def test_frequency_short_vowel_breaks_frequency_ties_toward_short_vowels():
     from panini.ranking import Baseline
-    row = {"candidates": [{"left": "ca", "right": "āpi", "proofs": []}, {"left": "ca", "right": "api", "proofs": []}]}
+    row = {"candidates": [{"left": "ca", "right": "Api", "proofs": []}, {"left": "ca", "right": "api", "proofs": []}]}
     scores = Baseline("frequency_short_vowel", []).score(row)
     assert scores[1] > scores[0]
 
@@ -251,3 +252,11 @@ def test_lexical_features_leave_the_training_row_out():
     seen, held_out = lexical_features(lexicon, row, gold), lexical_features(lexicon, row, gold, exclude_self=True)
     assert seen[2] == 1.0 and held_out[0] < seen[0]
     assert seen[4] > 0 and lexical_features(lexicon, row, gold, use_rules=False)[4] == 0
+
+
+def test_split_keys_hash_the_iast_lemma_so_partitions_survive_the_slp1_switch():
+    from panini.experiment_data import split_key
+    from panini.splits import DEFAULT_RATIOS, _assign_bucket
+    for iast, slp1 in [("ṛṣi", "fzi"), ("āgata", "Agata"), ("caiva", "cEva"), ("kąp", "kąp")]:
+        assert split_key(slp1) == iast
+        assert _assign_bucket(1729, split_key(slp1), DEFAULT_RATIOS) == _assign_bucket(1729, iast, DEFAULT_RATIOS)

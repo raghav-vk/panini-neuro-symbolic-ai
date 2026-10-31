@@ -13,7 +13,8 @@ Each task has its own GitHub issue:
 The gold-test-set tasks (#69 to #71) come later and will get their own
 worksheets.
 
-Transliteration throughout is IAST.
+Everything you see and type is IAST. Internally the project stores Sanskrit
+in SLP1, an ASCII scheme, and converts your answers automatically.
 
 ## Two ground rules
 
@@ -88,8 +89,9 @@ exported file with "Resume from an exported answers file".
 ## Task #65: the 18 draft rules
 
 1. Read `REVIEW_PACKET.md`. It gives each rule's sūtra, the subset of it we
-   encode, and the conditions. The rules themselves, with their test
-   examples, are in `data/rules/development_sandhi.jsonl`.
+   encode, and the conditions, in IAST. The machine-readable rules are in
+   `data/rules/development_sandhi.jsonl`, in SLP1 (*A* = ā, *E* = ai,
+   *O* = au, *f* = ṛ); you don't need to read that file.
 2. Copy `rule_queue.template.jsonl` to `rule_queue.grammarian.jsonl`. It has
    one line per rule. Fill in each line:
 
@@ -126,16 +128,16 @@ A rule is marked expert-reviewed only after this record exists.
 Fill in the last column of each table in `GRAMMARIAN_CHECKS.md`. You can edit
 it on GitHub directly, on the branch `review/grammarian-checks`, or paste your
 answers into issue #66. The 12 boundaries in section 3 are also in
-`uncovered_examples.jsonl`, with full details.
+`uncovered_examples.jsonl`, in SLP1 and the same format as the silver sample.
 
 ## The files here
 
 | File | What it is |
 | --- | --- |
-| `silver_sample.jsonl` | The 200 review items: sentence, highlight span, proposed split, lemmas |
+| `silver_sample.jsonl` | The 200 review items in SLP1: sentence, highlight span, proposed split, lemmas. The worksheets show them in IAST |
 | `silver_overlap_ids.json` | The 50 items both reviewers check, chosen with a fixed seed |
 | `silver_text_reader.html`, `silver_grammarian.html` | The worksheets, with the items built in |
-| `uncovered_examples.jsonl` | The 12 extracted boundaries no rule generates |
+| `uncovered_examples.jsonl` | The 12 extracted boundaries no rule generates, in SLP1 |
 | `GRAMMARIAN_CHECKS.md` | The worksheet for issue #66 |
 | `REVIEW_PACKET.md`, `rule_queue.template.jsonl` | The rule review packet and blank decision file |
 | `manifest.json` | Hashes of the inputs and outputs, and the seed |

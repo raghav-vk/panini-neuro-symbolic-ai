@@ -7,6 +7,10 @@ writes, into data/reviews/:
 - silver_sample.jsonl: the 200 review items, with only what a reviewer needs;
 - silver_overlap_ids.json: the seeded subset the grammarian checks blind;
 - uncovered_examples.jsonl: extracted boundaries that no rule generates;
+
+Data files are SLP1, like everything internal (protocol amendment 0.6). Only
+what people read is IAST: GRAMMARIAN_CHECKS.md here, and the worksheets, which
+scripts/build_review_page.py converts when it builds them.
 - GRAMMARIAN_CHECKS.md: the three short checks of issue #66;
 - manifest.json: input hashes, the seed and output hashes.
 """
@@ -20,8 +24,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from panini.dcs import COMPOUND_PREFIXES, slp1_to_iast
+sys.path.insert(0, str(ROOT / "scripts"))
+from panini.dcs import COMPOUND_PREFIXES
 from panini.lexicon import FINAL_VARIANTS
+from panini.translit import slp1_to_iast
+from build_review_page import iast_item
 
 
 def sha256(path):
@@ -37,13 +44,13 @@ def write_jsonl(path, rows):
 
 
 def review_item(row):
-    """Only what the reviewer judges: the sentence, the span and the proposed split."""
-    start, end = row["source_span"]
-    if "".join(list(row["source_sentence_iast"])[start:end]) != row["source_surface"]:
+    """Only what the reviewer judges: the sentence, the span and the proposed split (SLP1)."""
+    sentence, (start, end) = row["source_sentence"], row["source_span"]
+    if sentence[start:end] != row["source_surface"]:
         raise ValueError(f"{row['example_id']}: source_span does not match source_surface")
     return {
         "item_id": row["example_id"],
-        "sentence": row["source_sentence_iast"].rstrip(),
+        "sentence": sentence.rstrip(),
         "span": [start, end],
         "surface": row["source_surface"],
         "proposed_left": row["left"],
@@ -59,11 +66,12 @@ def overlap_ids(items, size, seed):
 
 
 def grammarian_checks(uncovered):
+    uncovered = [iast_item(r) for r in uncovered]
     variants = "\n".join(f"| -{slp1_to_iast(k)} | {', '.join('-' + slp1_to_iast(v) for v in vs)} | |"
                          for k, vs in FINAL_VARIANTS.items())
-    prefixes = "\n".join(f"| {p} | |" for p in sorted(COMPOUND_PREFIXES))
+    prefixes = "\n".join(f"| {p} | |" for p in sorted(slp1_to_iast(p) for p in COMPOUND_PREFIXES))
     examples = "\n".join(
-        f"| {i} | {r['example_id']} | {r['source_surface']} | {r['left']} + {r['right']} | {r['source_sentence_iast'].strip()} | |"
+        f"| {i} | {r['item_id']} | {r['surface']} | {r['proposed_left']} + {r['proposed_right']} | {r['sentence']} | |"
         for i, r in enumerate(uncovered, 1))
     return f"""# Grammarian Checks (issue #66)
 
@@ -124,7 +132,7 @@ def main():
 
     sample_path, examples_path = args.silver / "review_sample.jsonl", args.silver / "examples.jsonl"
     items = [review_item(r) for r in read_jsonl(sample_path)]
-    uncovered = [r for r in read_jsonl(examples_path) if r["rule_id"] == "UNSUPPORTED"]
+    uncovered = [review_item(r) for r in read_jsonl(examples_path) if r["rule_id"] == "UNSUPPORTED"]
     if args.overlap > len(items):
         p.error("overlap is larger than the sample")
 

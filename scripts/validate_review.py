@@ -5,6 +5,7 @@
     validate_review.py rules RULES QUEUE
 
 Exits 1 and lists every problem if the file is incomplete or malformed.
+Items are SLP1; answers come from the worksheet in IAST and are compared in SLP1.
 """
 
 import argparse
@@ -12,6 +13,10 @@ import datetime
 import json
 import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
+from panini.translit import iast_to_slp1
 
 DECISIONS = {"correct", "wrong", "not_boundary", "unsure"}
 RULE_DECISIONS = {"approve", "revise", "reject"}
@@ -61,7 +66,7 @@ def check_answers(items, answers, ids=None):
             item = by_id[item_id]
             if not left or not right:
                 errors.append(f"{where}: 'wrong' needs both corrected words")
-            elif (left, right) == (item["proposed_left"], item["proposed_right"]):
+            elif (iast_to_slp1(left), iast_to_slp1(right)) == (item["proposed_left"], item["proposed_right"]):
                 errors.append(f"{where}: the correction is the same as the proposal")
         if decision == "unsure" and not str(row.get("notes", "")).strip():
             errors.append(f"{where}: 'unsure' needs a note")

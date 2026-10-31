@@ -10,7 +10,8 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "scripts"))
-from panini.dcs import external_vowel_boundaries, iast_to_slp1, slp1_to_iast
+from panini.dcs import external_vowel_boundaries
+from panini.translit import iast_hiatus_ambiguous, iast_to_slp1, is_slp1_word, slp1_to_iast
 from panini.experiment_data import validate_reviewed, validate_silver
 from panini.rules import load_rules
 from extract_dcs_boundaries import label
@@ -31,30 +32,35 @@ def test_iast_slp1_roundtrip():
     for word in ["cāpi", "caiva", "ṛṣi", "mahārṣi", "uparatnacatuṣṭayam", "kṛṣṇaḥ"]:
         assert slp1_to_iast(iast_to_slp1(word)) == word
     assert iast_to_slp1("caiva") == "cEva"
+    assert iast_hiatus_ambiguous("caiva") and not iast_hiatus_ambiguous("cāpi")
+    assert slp1_to_iast("kąp", strict=False) == "kąp"
+    with pytest.raises(ValueError):
+        slp1_to_iast("kąp")
+    assert is_slp1_word("cEva") and is_slp1_word("atho'pi") and not is_slp1_word("cāpi")
 
 
 def test_indeclinable_left_aligns_with_observed_junction():
     [(example, reason)] = extract("rAmaH cApi gacCati", [["rāma"], ["ca", "api"], ["gam"]], [["29"], ["2", "2"], ["-190"]])
     assert reason is None
-    assert (example["left"], example["right"], example["surface"]) == ("ca", "api", "cāpi")
-    assert example["observed_junction"] == "ā" and example["vowel_pair"] == ["a", "a"]
-    assert example["source_sentence_iast"][slice(*example["source_span"])] == "cāpi"
-    assert example["context"] == "rāmaḥ _ gacchati"
-    assert set(example["context_lemmas"]) == {"rāma", "gam"}
+    assert (example["left"], example["right"], example["surface"]) == ("ca", "api", "cApi")
+    assert example["observed_junction"] == "A" and example["vowel_pair"] == ["a", "a"]
+    assert example["source_sentence"][slice(*example["source_span"])] == "cApi"
+    assert example["context"] == "rAmaH _ gacCati"
+    assert set(example["context_lemmas"]) == {"rAma", "gam"}
     assert label(example, RULES)["rule_id"] == "SDH-001"
 
 
 def test_right_word_spans_its_compound_to_the_chunk_end():
     [(example, _)] = extract("coparatnacatuzwayam", [["ca", "uparatna", "catuṣṭaya"]], [["2", "3", "31"]])
-    assert (example["left"], example["right"]) == ("ca", "uparatnacatuṣṭayam")
+    assert (example["left"], example["right"]) == ("ca", "uparatnacatuzwayam")
     assert example["observed_junction"] == "o" and example["context"] == ""
-    assert example["context_lemmas"] == ["catuṣṭaya"]
+    assert example["context_lemmas"] == ["catuzwaya"]
     assert label(example, RULES)["rule_id"] == "SDH-004"
 
 
 def test_vrddhi_junction_is_labelled_by_the_added_rule():
     [(example, _)] = extract("cEva", [["ca", "eva"]], [["2", "2"]])
-    assert example["observed_junction"] == "ai"
+    assert example["observed_junction"] == "E"
     assert label(example, RULES)["rule_id"] == "SDH-013"
 
 

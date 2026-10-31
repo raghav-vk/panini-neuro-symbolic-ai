@@ -37,20 +37,20 @@ def test_seed_rule_loads_and_emits_proof_trace():
     trace = apply_rule(
         rules[0],
         "deva",
-        "ālaya",
+        "Alaya",
         {"pada_boundary"},
     )
 
     assert trace is not None
     assert trace.rule_id == "EVS-001"
     assert trace.sutra_ids == ("6.1.101",)
-    assert trace.output == "devālaya"
+    assert trace.output == "devAlaya"
 
 
 def test_rule_does_not_apply_without_required_tag():
     rule = load_rules(RULE_PATH)[0]
 
-    assert apply_rule(rule, "deva", "ālaya") is None
+    assert apply_rule(rule, "deva", "Alaya") is None
 
 
 def test_rule_does_not_apply_with_forbidden_tag():
@@ -59,7 +59,7 @@ def test_rule_does_not_apply_with_forbidden_tag():
     trace = apply_rule(
         rule,
         "deva",
-        "ālaya",
+        "Alaya",
         {"pada_boundary", "left_pragrhya"},
     )
     assert trace is None
@@ -107,3 +107,10 @@ def test_publication_gate_rejects_draft(tmp_path):
             publication_ready=True,
             expected_count=1,
         )
+
+
+def test_rule_strings_must_be_slp1():
+    raw = _raw_rule()
+    raw["match"]["left_suffixes"] = ["a", "ā"]
+    with pytest.raises(RuleValidationError, match="must be SLP1"):
+        SandhiRule.from_mapping(raw)

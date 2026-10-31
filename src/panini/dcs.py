@@ -2,7 +2,8 @@
 
 import pickletools
 import re
-import unicodedata
+
+from .translit import SLP1_VOWELS, iast_to_slp1, slp1_to_iast
 
 
 class DCSDecodeError(ValueError):
@@ -121,19 +122,6 @@ def validate_state(state):
             raise DCSDecodeError("invalid analysis strings")
 
 
-SLP1 = dict(zip("aAiIuUfFxXeEoOMHkKgGNcCjJYwWqQRtTdDnpPbBmyrlvSzsh",
-                ["a", "ā", "i", "ī", "u", "ū", "ṛ", "ṝ", "ḷ", "ḹ", "e", "ai", "o", "au", "ṃ", "ḥ",
-                 "k", "kh", "g", "gh", "ṅ", "c", "ch", "j", "jh", "ñ", "ṭ", "ṭh", "ḍ", "ḍh", "ṇ",
-                 "t", "th", "d", "dh", "n", "p", "ph", "b", "bh", "m", "y", "r", "l", "v", "ś", "ṣ", "s", "h"]))
-
-
-def slp1_to_iast(text):
-    unknown = sorted(set(text) - set(SLP1) - set(" \t\r\n0123456789.,;:!?|'-()[]/"))
-    if unknown:
-        raise ValueError(f"unsupported surface characters: {unknown}")
-    return unicodedata.normalize("NFC", "".join(SLP1.get(c, c) for c in text))
-
-
 def boundary_proposals(record):
     """Adjacent lemma slots are REVIEW proposals, never inferred inflected forms."""
     slots = [(i, j, lemma, record["cng"][i][j])
@@ -150,29 +138,13 @@ def boundary_proposals(record):
                "notes": "Supply inflected forms, source span, boundary type, contextual lemmas and applicable tags; lemmas are not pre-sandhi forms."}
 
 
-_IAST_TO_SLP1 = sorted(((v, k) for k, v in SLP1.items()), key=lambda item: -len(item[0]))
-SLP1_VOWELS = frozenset("aAiIuUfFxXeEoO")
 # Observed junction material for vowel sandhi: vowels, glides, r (ṛ-guṇa) and avagraha.
 JUNCTION_CHARACTERS = SLP1_VOWELS | set("yvr'")
 INDECLINABLE, COMPOUND_MEMBER = "2", "3"
 # Indeclinables that DCS codes as "2" but that mainly form compounds (mahā-ṛṣi, sa-indra):
 # their boundary is compound-internal, not external. Expert review should confirm this list.
-COMPOUND_PREFIXES = frozenset({"mahā", "sa", "su", "ati", "prati", "nānā", "go", "dus", "ku"})
-
-
-def iast_to_slp1(text):
-    """Greedy inverse of slp1_to_iast; IAST 'ai'/'au' are read as diphthongs."""
-    text, out, i = unicodedata.normalize("NFC", text), [], 0
-    while i < len(text):
-        for iast, slp1 in _IAST_TO_SLP1:
-            if text.startswith(iast, i):
-                out.append(slp1)
-                i += len(iast)
-                break
-        else:
-            out.append(text[i])
-            i += 1
-    return "".join(out)
+# SLP1 spellings: mahA, nAnA = mahā, nānā.
+COMPOUND_PREFIXES = frozenset({"mahA", "sa", "su", "ati", "prati", "nAnA", "go", "dus", "ku"})
 
 
 def external_vowel_boundaries(record, context_window=1):
@@ -191,38 +163,37 @@ def external_vowel_boundaries(record, context_window=1):
         yield None, "chunk_group_mismatch"
         return
     try:
-        sentence_iast = slp1_to_iast(sentence)
+        slp1_to_iast(sentence)  # rejects characters outside SLP1 and punctuation
     except ValueError:
         yield None, "surface_unsupported"
         return
-    for c, ((offset, chunk), lemmas, codes) in enumerate(zip(chunks, record["lemmas"], record["cng"])):
+    # DCS_pick lemmas are IAST; every field below is SLP1 (protocol amendment 0.6).
+    all_lemmas = [[iast_to_slp1(lemma) for lemma in group] for group in record["lemmas"]]
+    for c, ((offset, chunk), lemmas, codes) in enumerate(zip(chunks, all_lemmas, record["cng"])):
         for j in range(len(lemmas) - 1):
-            left, right = iast_to_slp1(lemmas[j]), iast_to_slp1(lemmas[j + 1])
+            left, right = lemmas[j], lemmas[j + 1]
             if not (left and right and left[-1] in SLP1_VOWELS and right[0] in SLP1_VOWELS):
                 continue
-            reason = _boundary_rejection(chunk, left, right, codes, j, lemmas[j])
+            reason = _boundary_rejection(chunk, left, right, codes, j, left)
             if isinstance(reason, str):
                 yield None, reason
                 continue
             junction_end = reason
-            start_iast = len(slp1_to_iast(sentence[:offset]))
-            surface = slp1_to_iast(chunk)
-            assert sentence_iast[start_iast:start_iast + len(surface)] == surface
             window = range(max(0, c - context_window), min(len(chunks), c + context_window + 1))
             neighbours = [k for k in window if k != c]
-            context = " ".join(slp1_to_iast(chunks[k][1]) if k != c else "_" for k in window)
+            context = " ".join(chunks[k][1] if k != c else "_" for k in window)
             yield {
                 "example_id": f"DCS-{record['sent_id']}-{c}-{j}", "source_group": f"DCS-{record['sent_id']}",
-                "left": lemmas[j], "right": slp1_to_iast(right[0] + chunk[junction_end:]),
-                "left_lemma": lemmas[j], "right_lemma": lemmas[j + 1], "right_word_lemmas": lemmas[j + 1:],
-                "surface": surface, "source_surface": surface,
-                "source_sentence_iast": sentence_iast, "source_span": [start_iast, start_iast + len(surface)],
-                "observed_junction": slp1_to_iast(chunk[len(left) - 1:junction_end]),
-                "vowel_pair": [slp1_to_iast(left[-1]), slp1_to_iast(right[0])],
+                "left": left, "right": right[0] + chunk[junction_end:],
+                "left_lemma": left, "right_lemma": right, "right_word_lemmas": lemmas[j + 1:],
+                "surface": chunk, "source_surface": chunk,
+                "source_sentence": sentence, "source_span": [offset, offset + len(chunk)],
+                "observed_junction": chunk[len(left) - 1:junction_end],
+                "vowel_pair": [left[-1], right[0]],
                 "left_morphology": codes[j], "right_morphology": codes[j + 1:],
                 "tags": ["pada_boundary"], "boundary_type": "indeclinable_left_external",
                 "context": context if neighbours else "",
-                "context_lemmas": [*lemmas[j + 2:], *(l for k in neighbours for l in record["lemmas"][k])],
+                "context_lemmas": [*lemmas[j + 2:], *(l for k in neighbours for l in all_lemmas[k])],
                 "review_status": "silver_unreviewed", "data_kind": "dcs_silver_alignment",
                 "external_boundary_confirmed": False,
             }, None

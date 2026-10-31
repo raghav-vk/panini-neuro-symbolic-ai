@@ -1,6 +1,6 @@
 # Experimental Protocol: Proof-Carrying External Vowel-Sandhi Splitting
 
-**Protocol version:** 0.5 (amendments of 2026-10-23/24: right-word holdout, section 9.5; silver-data rules and ranker settings, sections 11.1 and 11.2; pretraining plan, section 11.3)
+**Protocol version:** 0.6 (amendments of 2026-10-23/24: right-word holdout, section 9.5; silver-data rules and ranker settings, sections 11.1 and 11.2; pretraining plan, section 11.3. Amendment of 2026-10-30: SLP1 as the internal transliteration, section 11.4)
 **Status:** Planned independent-corpus study; development smoke run separately frozen
 **Primary task:** Rank rule-licensed analyses of one external vowel-sandhi boundary
 **Compute target:** CPU or one modest consumer GPU
@@ -468,6 +468,65 @@ corpora P-A (main) and P-B (strict), objectives, comparisons, order of work
 and stopping rules. All decisions are made on dev. Before the final test run,
 the settings are frozen in a further amendment, and the fourth use of the
 right-word holdout test set is disclosed.
+
+### 11.4 SLP1 as the Internal Transliteration (Amendment 0.6)
+
+Adopted on 2026-10-30, before any pretraining run. No test set was used.
+
+**Decision.** Every internal representation is SLP1: rules, extracted
+examples, splits, candidates, lexicon lookups, pretraining corpora and model
+input. This includes the review data files, such as
+`data/reviews/silver_sample.jsonl`. IAST is used only where people read or
+type Sanskrit: the browser worksheets (converted when built), reviewer guides
+and checklists, the rule review packet, reports and the paper. Answers that
+reviewers export from a worksheet are IAST and are converted when checked and
+merged. The one conversion pair is `src/panini/translit.py`.
+
+- DCS_pick sentences are already SLP1 and the Vidyut kosha is keyed in SLP1;
+  DCS_pick lemmas are IAST and are converted on extraction.
+- Reviewed records typed in IAST are converted on ingest
+  (`reviewed_from_iast`). The gold set is stored in SLP1. Because IAST *ai*
+  and *au* can be a diphthong or two vowels, converted words containing them
+  are flagged for a second look.
+- The rule loader rejects rule strings that are not SLP1.
+
+**Why.** SLP1 has one ASCII character per sound. Vowel length, the
+distinction the hard cases turn on, becomes a one-byte difference (*a*/*A*)
+for the byte-level model instead of one byte against two, and the text is
+1.27 times shorter in bytes. IAST also hid a rule-matching error: a right word
+beginning with the diphthong *ai* or *au* "starts with" *a*, so the i + a and
+u + a yaṇ rules (SDH-005, SDH-006) matched 26 junctions such as
+*hi + auṣadhī* → *hyauṣadhī*.
+
+**Rule change.** 6.1.77 applies before any vowel, so *ai* and *au* were added
+to the right-word vowels of SDH-017 and SDH-018. The 26 junctions now carry
+those rules. The 12 uncovered junctions are unchanged.
+
+**Split membership is unchanged.** Lemmas are hashed in their IAST spelling
+(`split_key`), so every partition of all four holdouts keeps exactly the same
+example IDs. The 200-item review sample, the overlap and the worksheets
+rebuild byte for byte. About 0.04 percent of candidates disappear; they were
+splits that existed only because of the IAST ambiguity. Candidate coverage is
+unchanged.
+
+**Dev reference** (right-word holdout, 988 examples; old code on IAST data
+against new code on SLP1 data):
+
+| Ranker | IAST top-1 / tie-averaged | SLP1 top-1 / tie-averaged |
+| --- | --- | --- |
+| Frequency, short-vowel tie-break | 0.773 / 0.800 | 0.773 / 0.800 |
+| `linear_features_short_vowel` with the kosha | 0.903 / 0.909 | 0.903 / 0.909 |
+
+The 0.909 reference of section 11.2 and `docs/PRETRAINING_PLAN.md` is the
+tie-averaged figure, and it stands.
+
+The Transformer with the kosha and boundary-vowel features (width 64, 2
+layers, maximum length 300, 3 epochs, seeds 7, 11 and 19) scores a dev top-1
+of 0.882 at epoch 3 under SLP1 (per seed 0.858, 0.902, 0.886), against 0.876
+recorded under IAST in section 11.2. The difference is within the seed spread,
+so the switch neither helps nor hurts the existing neural ranker measurably.
+It still trails the linear model. Checkpoints trained before this amendment
+read IAST bytes and are not comparable with later ones.
 
 ## 12. Baselines
 

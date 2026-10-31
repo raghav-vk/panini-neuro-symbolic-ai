@@ -100,7 +100,8 @@ external vowel-sandhi examples. A valid conversion pipeline must:
 
 - Preserve the source sentence and sent_id.
 - Parse without executing arbitrary pickle constructors.
-- Freeze one internal transliteration.
+- Store everything in SLP1, the internal transliteration (protocol
+  amendment 0.6); convert to IAST only for display.
 - Identify a specific two-lexeme external vowel boundary.
 - Align left form, right form, and fused surface.
 - Attach one or more candidate EVS rules.

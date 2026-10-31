@@ -20,13 +20,14 @@ def model_text(record, candidate, use_rules=True, use_context=True, mark_boundar
     return "\x1f".join(fields)
 
 
-LONG_VOWELS = ("ai", "au", "ā", "ī", "ū", "ṝ", "ḹ", "e", "o")
+# SLP1: ā ī ū ṝ ḹ e ai o au.
+LONG_VOWELS = frozenset("AIUFXeEoO")
 
 
 def boundary_long_vowels(candidate):
     """Long vowels at the restored boundary: left word's final, right word's initial."""
     left, right = candidate["left"], candidate["right"]
-    return any(left.endswith(v) for v in LONG_VOWELS) + any(right.startswith(v) for v in LONG_VOWELS)
+    return (left[-1:] in LONG_VOWELS) + (right[:1] in LONG_VOWELS)
 
 
 class Baseline:

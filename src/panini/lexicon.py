@@ -3,10 +3,9 @@
 Candidate words keep the word-final sandhi of their sentence (asurāḥ, udakaṃ,
 ādityo, etaj); the kosha stores pausal forms (asurās, udakam). A form counts as
 known if any pausal variant is in the kosha. Variants are generous on purpose:
-the feature is "could be a real word", not a morphological analysis.
+the feature is "could be a real word", not a morphological analysis. Words are
+SLP1, the scheme the kosha is keyed in.
 """
-
-from .dcs import iast_to_slp1
 
 # SLP1 word-final letter -> possible pausal letters.
 FINAL_VARIANTS = {
@@ -32,10 +31,10 @@ class KoshaLexicon:
         from vidyut.kosha import Kosha
         self.kosha, self.cache = Kosha(str(path)), {}
 
-    def known(self, iast):
-        if iast not in self.cache:
-            self.cache[iast] = any(self.kosha.get(v) for v in pausal_variants(iast_to_slp1(iast)))
-        return self.cache[iast]
+    def known(self, slp1):
+        if slp1 not in self.cache:
+            self.cache[slp1] = any(self.kosha.get(v) for v in pausal_variants(slp1))
+        return self.cache[slp1]
 
 
 def annotate(rows, lexicon):

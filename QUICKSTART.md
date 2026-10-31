@@ -50,9 +50,11 @@ lemmas and morphology codes. `dcs_chunks` is the flattened lemma sequence,
 not a second list of inflected surface words. Reviewers must supply the actual
 left/right inflected forms, exact observed span, tags, and external-boundary
 confirmation. The initial 200-item queue is a convenience sample, not a gold test set.
-Source offsets refer to the original IAST sentence. The worksheet preserves
-the exact span as `source_surface` and removes only whitespace for the model's
-`surface`; punctuation is not silently discarded.
+Source offsets in this worksheet refer to the IAST sentence. On ingest the
+record is converted to SLP1, the internal scheme (protocol amendment 0.6), and
+the offsets with it. The exact span is kept as `source_surface`, and only
+whitespace is removed for the model's `surface`; punctuation is not silently
+discarded.
 
 ### Silver DCS Examples
 

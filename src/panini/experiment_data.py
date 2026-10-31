@@ -10,6 +10,7 @@ from collections import Counter
 from itertools import combinations
 
 from .rules import apply_rule
+from .translit import iast_hiatus_ambiguous, iast_to_slp1, is_slp1_word, slp1_to_iast
 from .splits import _assign_bucket, _lemma_ratios, DEFAULT_RATIOS
 
 NAMES = ("train", "dev", "test")
@@ -42,8 +43,38 @@ def synthetic_examples(rules, per_rule=200, seed=1729):
     return records
 
 
+def reviewed_from_iast(record):
+    """Reviewers work in IAST; convert a reviewed record to SLP1 (protocol amendment 0.6).
+
+    Records that already carry an SLP1 source_sentence pass through unchanged. IAST
+    ai/au is read as a diphthong; such words are flagged for a second look.
+    """
+    if "source_sentence" in record or not isinstance(record.get("source_sentence_iast"), str):
+        return record
+    iast = unicodedata.normalize("NFC", record["source_sentence_iast"])
+    out = {**record, "source_sentence": record.get("source_sentence_slp1") or iast_to_slp1(iast)}
+    if slp1_to_iast(out["source_sentence"], strict=False) != iast:
+        raise ValueError("source_sentence_iast does not match its SLP1 sentence")
+    for key in ("left", "right", "surface", "source_surface", "left_lemma", "right_lemma", "context"):
+        if isinstance(out.get(key), str):
+            out[key] = iast_to_slp1(out[key])
+    for key in ("context_lemmas", "right_word_lemmas"):
+        if isinstance(out.get(key), list):
+            out[key] = [iast_to_slp1(x) if isinstance(x, str) else x for x in out[key]]
+    for key in ("accepted_pairs", "accepted_pair_lemmas"):
+        if isinstance(out.get(key), list):
+            out[key] = [[iast_to_slp1(x) if isinstance(x, str) else x for x in pair] if isinstance(pair, list) else pair
+                        for pair in out[key]]
+    span = out.get("source_span")
+    if isinstance(span, list) and len(span) == 2 and all(type(x) is int for x in span):
+        out["source_span"] = [len(iast_to_slp1(iast[:x])) for x in span]
+    out["iast_hiatus_flag"] = any(iast_hiatus_ambiguous(record.get(k) or "") for k in ("left", "right"))
+    return out
+
+
 def validate_reviewed(record, rules):
     """Only explicitly reviewed, surface-aligned examples enter corpus evaluation."""
+    record = reviewed_from_iast(record)
     if record.get("review_status") != "expert_reviewed" or not record.get("reviewer", "").strip():
         raise ValueError("boundary requires independent review")
     if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", record.get("reviewed_at", "")):
@@ -68,9 +99,9 @@ def _validate_alignment(record, rules):
         if not isinstance(record.get(key), str) or not record[key].strip():
             raise ValueError(f"missing {key}")
     span = record.get("source_span")
-    sentence = record.get("source_sentence_iast", "")
+    sentence = record.get("source_sentence", "")
     if not isinstance(span, list) or len(span) != 2 or any(type(x) is not int for x in span):
-        raise ValueError("source_span must be [start, end] IAST character offsets")
+        raise ValueError("source_span must be [start, end] SLP1 character offsets")
     if not 0 <= span[0] < span[1] <= len(sentence):
         raise ValueError("invalid source span")
     observed = sentence[span[0]:span[1]]
@@ -81,6 +112,8 @@ def _validate_alignment(record, rules):
     record["source_surface"] = observed
     if any(any(c.isspace() for c in record[key]) for key in ("left", "right")):
         raise ValueError("each inflected word must be a single form")
+    if not all(is_slp1_word(record[key]) for key in ("left", "right", "surface")):
+        raise ValueError("left, right and surface must be SLP1")
     if not isinstance(record.get("tags"), list) or not isinstance(record.get("context_lemmas"), list):
         raise ValueError("tags and context_lemmas must be arrays")
     if "pada_boundary" not in record["tags"]:
@@ -122,6 +155,11 @@ def _normalize(record):
     if "accepted_pair_lemmas" in result:
         result["accepted_pair_lemmas"] = [[x.strip() for x in pair] for pair in result["accepted_pair_lemmas"]]
     return result
+
+
+def split_key(lemma):
+    """Lemmas are hashed in IAST spelling, so partitions are unchanged by the switch to SLP1."""
+    return slp1_to_iast(lemma, strict=False)
 
 
 def lemma_set(record):
@@ -184,11 +222,11 @@ def split_examples(records, method, seed=1729):
     lemma_ratios = _lemma_ratios(DEFAULT_RATIOS)
     for records_in_group in groups.values():
         if method == "strict_lemma":
-            buckets = {_assign_bucket(seed, lemma, lemma_ratios) for r in records_in_group for lemma in lemma_set(r)}
+            buckets = {_assign_bucket(seed, split_key(lemma), lemma_ratios) for r in records_in_group for lemma in lemma_set(r)}
             bucket = next(iter(buckets)) if len(buckets) == 1 else "mixed"
         elif method == "strict_right_lemma":
             # One word, not two endpoints: example ratios apply without the square-root correction.
-            buckets = {_assign_bucket(seed, lemma, DEFAULT_RATIOS) for r in records_in_group for lemma in right_word_lemmas(r)}
+            buckets = {_assign_bucket(seed, split_key(lemma), DEFAULT_RATIOS) for r in records_in_group for lemma in right_word_lemmas(r)}
             bucket = next(iter(buckets)) if len(buckets) == 1 else "mixed"
         else:
             key = min(r["example_id"] for r in records_in_group)

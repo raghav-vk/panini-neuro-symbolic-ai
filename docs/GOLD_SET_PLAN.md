@@ -67,7 +67,15 @@ An item is one external vowel-sandhi junction, taken from either:
   (yaṇ, as in *namāmy asama-*) or the right word's initial vowel is fused.
 
 The left pre-sandhi form must end in a vowel and the right one must start
-with a vowel. Both come from `Unsandhied`. Each item records:
+with a vowel. Both come from `Unsandhied`.
+
+The CoNLL-U files are IAST. Items are converted to SLP1 when extracted and
+stored in SLP1, like everything else internally (protocol amendment 0.6).
+Reviewers still see and type IAST. Their answers are converted back to SLP1
+when merged. A word whose IAST contains *ai* or *au*, which could be a
+diphthong or two vowels, is flagged for the grammarian to confirm.
+
+Each item records:
 
 - the sentence;
 - the fused surface span with its offsets;

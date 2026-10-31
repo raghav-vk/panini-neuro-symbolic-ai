@@ -3,6 +3,7 @@
 All 18 records are drafts. Passing tests are not expert approval.
 
 Record decisions in a copy of rule_queue.template.jsonl, not the generated template.
+Sanskrit here is IAST. The rule files themselves store SLP1.
 Review scope, prerequisites, exceptions, variants, derivation order, and positive/negative cases.
 
 ## SDH-001: a-dirgha
@@ -10,6 +11,8 @@ Review scope, prerequisites, exceptions, variants, derivation order, and positiv
 Sutra 6.1.101: अकः सवर्णे दीर्घः
 
 Draft single-step subset: a + a -> ā. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
+
+Encoded: left word ending in a or ā, right word beginning with a or ā, rewritten as ā.
 
 Required tags: pada_boundary.
 Blocked tags: left_pragrhya.
@@ -22,6 +25,8 @@ Sutra 6.1.101: अकः सवर्णे दीर्घः
 
 Draft single-step subset: i + i -> ī. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
 
+Encoded: left word ending in i or ī, right word beginning with i or ī, rewritten as ī.
+
 Required tags: pada_boundary.
 Blocked tags: left_pragrhya.
 
@@ -32,6 +37,8 @@ Decision: pending. Reviewer/date: pending. Corrections and missing exceptions: _
 Sutra 6.1.87: आद्गुणः
 
 Draft single-step subset: a + i -> e. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
+
+Encoded: left word ending in a or ā, right word beginning with i or ī, rewritten as e.
 
 Required tags: pada_boundary.
 Blocked tags: left_pragrhya.
@@ -44,6 +51,8 @@ Sutra 6.1.87: आद्गुणः
 
 Draft single-step subset: a + u -> o. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
 
+Encoded: left word ending in a or ā, right word beginning with u or ū, rewritten as o.
+
 Required tags: pada_boundary.
 Blocked tags: left_pragrhya.
 
@@ -54,6 +63,8 @@ Decision: pending. Reviewer/date: pending. Corrections and missing exceptions: _
 Sutra 6.1.77: इको यणचि
 
 Draft single-step subset: i + a -> ya. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
+
+Encoded: left word ending in i or ī, right word beginning with a, rewritten as y followed by the right word's vowel.
 
 Required tags: pada_boundary.
 Blocked tags: left_pragrhya.
@@ -66,6 +77,8 @@ Sutra 6.1.77: इको यणचि
 
 Draft single-step subset: u + a -> va. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
 
+Encoded: left word ending in u or ū, right word beginning with a, rewritten as v followed by the right word's vowel.
+
 Required tags: pada_boundary.
 Blocked tags: left_pragrhya.
 
@@ -76,6 +89,8 @@ Decision: pending. Reviewer/date: pending. Corrections and missing exceptions: _
 Sutra 8.4.40: स्तोः श्चुना श्चुः
 
 Draft single-step subset: t + c -> cc. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
+
+Encoded: left word ending in t, right word beginning with c, rewritten as c followed by the right word's vowel.
 
 Required tags: pada_boundary.
 Blocked tags: none encoded.
@@ -88,6 +103,8 @@ Sutra 8.4.60: तोर्लि
 
 Draft single-step subset: t + l -> ll. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
 
+Encoded: left word ending in t, right word beginning with l, rewritten as l followed by the right word's vowel.
+
 Required tags: pada_boundary.
 Blocked tags: none encoded.
 
@@ -98,6 +115,8 @@ Decision: pending. Reviewer/date: pending. Corrections and missing exceptions: _
 Sutra 8.3.23: मोऽनुस्वारः
 
 Draft single-step subset: m + k -> ṃk. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
+
+Encoded: left word ending in m, right word beginning with k, rewritten as ṃ followed by the right word's vowel.
 
 Required tags: pada_boundary.
 Blocked tags: none encoded.
@@ -110,6 +129,8 @@ Sutra 8.3.23: मोऽनुस्वारः
 
 Draft single-step subset: m + t -> ṃt. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
 
+Encoded: left word ending in m, right word beginning with t, rewritten as ṃ followed by the right word's vowel.
+
 Required tags: pada_boundary.
 Blocked tags: none encoded.
 
@@ -120,6 +141,8 @@ Decision: pending. Reviewer/date: pending. Corrections and missing exceptions: _
 Sutra 8.3.34: विसर्जनीयस्य सः
 
 Draft single-step subset: ḥ + ta -> sta. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
+
+Encoded: left word ending in ḥ, right word beginning with t, rewritten as s followed by the right word's vowel.
 
 Required tags: pada_boundary, right_second_not_sibilant.
 Blocked tags: none encoded.
@@ -132,6 +155,8 @@ Sutra 6.1.125: प्लुतप्रगृह्या अचि नित्
 
 Draft single-step subset: ī + a -> īa. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
 
+Encoded: left word ending in ī, right word beginning with a, rewritten as ī followed by the right word's vowel.
+
 Required tags: pada_boundary, left_pragrhya.
 Blocked tags: none encoded.
 
@@ -142,6 +167,8 @@ Decision: pending. Reviewer/date: pending. Corrections and missing exceptions: _
 Sutra 6.1.88: वृद्धिरेचि
 
 Draft single-step subset: a + e -> ai. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
+
+Encoded: left word ending in a or ā, right word beginning with e or ai, rewritten as ai.
 
 Required tags: pada_boundary.
 Blocked tags: left_pragrhya.
@@ -154,6 +181,8 @@ Sutra 6.1.88: वृद्धिरेचि
 
 Draft single-step subset: a + o -> au. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
 
+Encoded: left word ending in a or ā, right word beginning with o or au, rewritten as au.
+
 Required tags: pada_boundary.
 Blocked tags: left_pragrhya.
 
@@ -164,6 +193,8 @@ Decision: pending. Reviewer/date: pending. Corrections and missing exceptions: _
 Sutra 6.1.101: अकः सवर्णे दीर्घः
 
 Draft single-step subset: u + u -> ū. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
+
+Encoded: left word ending in u or ū, right word beginning with u or ū, rewritten as ū.
 
 Required tags: pada_boundary.
 Blocked tags: left_pragrhya.
@@ -176,6 +207,8 @@ Sutra 6.1.87: आद्गुणः
 
 Draft single-step subset: a + ṛ -> ar. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
 
+Encoded: left word ending in a or ā, right word beginning with ṛ, rewritten as ar.
+
 Required tags: pada_boundary.
 Blocked tags: left_pragrhya.
 
@@ -187,6 +220,8 @@ Sutra 6.1.77: इको यणचि
 
 Draft single-step subset: i + e -> ye. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
 
+Encoded: left word ending in i or ī, right word beginning with ā or u or ū or e or ai or o or au or ṛ, rewritten as y followed by the right word's vowel.
+
 Required tags: pada_boundary.
 Blocked tags: left_pragrhya.
 
@@ -197,6 +232,8 @@ Decision: pending. Reviewer/date: pending. Corrections and missing exceptions: _
 Sutra 6.1.77: इको यणचि
 
 Draft single-step subset: u + e -> ve. Only enumerated boundary strings and supplied tags are covered; exceptions and interactions require review.
+
+Encoded: left word ending in u or ū, right word beginning with ā or i or ī or e or ai or o or au or ṛ, rewritten as v followed by the right word's vowel.
 
 Required tags: pada_boundary.
 Blocked tags: left_pragrhya.

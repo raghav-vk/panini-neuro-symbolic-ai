@@ -13,11 +13,14 @@ from panini.rules import load_rules
 from panini.candidates import enumerate_candidates
 from panini.experiment_data import digest
 from panini.ranking import make_transformer, predict_neural
+from panini.translit import iast_to_slp1, slp1_to_iast
 
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("surface")
+    p.add_argument("--scheme", choices=["iast", "slp1"], default="iast",
+                   help="transliteration of the surface and context; output uses the same scheme")
     p.add_argument("--rules", type=Path, default=ROOT / "data/rules/development_sandhi.jsonl")
     p.add_argument("--tags", nargs="*", default=["pada_boundary"])
     p.add_argument("--context", default="")
@@ -26,7 +29,10 @@ def main():
     p.add_argument("--kosha", type=Path, default=ROOT / "data/external/vidyut-0.4.0/kosha",
                    help="needed for checkpoints trained with --external-lexicon")
     args = p.parse_args()
-    candidates = enumerate_candidates(args.surface, load_rules(args.rules), args.tags)
+    surface, context = args.surface, args.context
+    if args.scheme == "iast":
+        surface, context = iast_to_slp1(surface), iast_to_slp1(context)
+    candidates = enumerate_candidates(surface, load_rules(args.rules), args.tags)
     threshold, values = 0.0, [0.0] * len(candidates)
     if args.checkpoint:
         import torch
@@ -41,11 +47,17 @@ def main():
         if (state.get("lexicon") or {}).get("external"):
             from panini.lexicon import KoshaLexicon, annotate
             annotate([{"candidates": candidates}], KoshaLexicon(args.kosha))
-        values = predict_neural(model, [{"surface": args.surface, "context": args.context, "candidates": candidates}], state["use_rules"], state["use_context"])[0]
+        values = predict_neural(model, [{"surface": surface, "context": context, "candidates": candidates}], state["use_rules"], state["use_context"])[0]
         threshold = state["threshold"]
+    shown = slp1_to_iast if args.scheme == "iast" else str
+    for c in candidates:
+        c["left"], c["right"] = shown(c["left"]), shown(c["right"])
+        for proof in c["proofs"]:
+            for key in ("left", "right", "matched_left", "matched_right", "output"):
+                proof[key] = shown(proof[key])
     ranked = sorted(range(len(values)), key=lambda i: (-values[i], i))
     confidence = 1 / sum(math.exp(v - max(values)) for v in values) if values else 0
-    print(json.dumps({"surface": args.surface, "tags_supplied_not_inferred": args.tags, "candidate_count": len(candidates),
+    print(json.dumps({"surface": args.surface, "scheme": args.scheme, "tags_supplied_not_inferred": args.tags, "candidate_count": len(candidates),
                       "abstained": not ranked or confidence < threshold, "threshold": threshold,
                       "warning": "Draft subset consistency, not expert grammatical validation.",
                       "analyses": [{**candidates[i], "score": values[i]} for i in ranked[:args.top_k]]}, ensure_ascii=False, indent=2))

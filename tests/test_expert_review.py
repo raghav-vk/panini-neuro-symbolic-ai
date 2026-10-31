@@ -7,6 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
+from build_review_page import iast_item
 from prepare_expert_review import overlap_ids, review_item
 from validate_review import check_answers, check_rules
 
@@ -20,11 +21,13 @@ def read_jsonl(path):
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
-def test_review_item_checks_span_in_code_points():
-    row = {"example_id": "X", "source_sentence_iast": "sa cāpi śakrasya  ", "source_span": [3, 7],
-           "source_surface": "cāpi", "left": "ca", "right": "api", "left_lemma": "ca", "right_lemma": "api"}
+def test_review_items_are_slp1_and_shown_in_iast_with_iast_offsets():
+    row = {"example_id": "X", "source_sentence": "kfzRaH cApi Sakrasya  ", "source_span": [7, 11],
+           "source_surface": "cApi", "left": "ca", "right": "api", "left_lemma": "ca", "right_lemma": "api"}
     item = review_item(row)
-    assert item["sentence"] == "sa cāpi śakrasya" and item["span"] == [3, 7]
+    assert item["sentence"] == "kfzRaH cApi Sakrasya" and item["span"] == [7, 11] and item["surface"] == "cApi"
+    shown = iast_item({**item, "sentence": "Bavati kfzRaH cApi", "span": [14, 18]})
+    assert shown["sentence"] == "bhavati kṛṣṇaḥ cāpi" and shown["sentence"][slice(*shown["span"])] == "cāpi"
     try:
         review_item({**row, "source_span": [2, 6]})
     except ValueError:
@@ -42,6 +45,9 @@ def test_overlap_is_seeded_and_sorted():
 def test_answers_validator_accepts_complete_file():
     answers = [{"item_id": "A", "decision": "correct", **SIGNED},
                {"item_id": "B", "decision": "wrong", "left": "tu", "right": "ihā", **SIGNED}]
+    # Answers are IAST from the worksheet; items are SLP1.
+    same = [{"item_id": "A", "decision": "wrong", "left": "ca", "right": "api", **SIGNED}]
+    assert "same as the proposal" in "\n".join(check_answers(ITEMS, same, ids=["A"]))
     assert check_answers(ITEMS, answers) == []
     assert check_answers(ITEMS, answers[1:], ids=["B"]) == []
 

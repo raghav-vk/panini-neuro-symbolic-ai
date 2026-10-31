@@ -10,6 +10,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from .translit import SLP1_LETTERS
+
 
 RULE_ID_RE = re.compile(r"^(EVS|SDH)-[0-9]{3}$")
 SCOPES = {"external_vowel_sandhi", "external_consonant_sandhi",
@@ -39,6 +41,13 @@ def _string(value: Any, path: str, *, allow_empty: bool = False) -> str:
         raise RuleValidationError(f"{path} must be a string")
     if not allow_empty and not value.strip():
         raise RuleValidationError(f"{path} must not be empty")
+    return value
+
+
+def _slp1(value: str, path: str) -> str:
+    """Rule strings are SLP1 (protocol amendment 0.6); IAST belongs only in source and notes."""
+    if set(value) - SLP1_LETTERS:
+        raise RuleValidationError(f"{path} must be SLP1, found {sorted(set(value) - SLP1_LETTERS)}")
     return value
 
 
@@ -347,11 +356,13 @@ class SandhiRule:
                 + ", ".join(sorted(overlap))
             )
         return BoundaryMatch(
-            left_suffixes=_string_list(
-                raw["left_suffixes"], "rule.match.left_suffixes"
+            left_suffixes=tuple(
+                _slp1(s, "rule.match.left_suffixes")
+                for s in _string_list(raw["left_suffixes"], "rule.match.left_suffixes")
             ),
-            right_prefixes=_string_list(
-                raw["right_prefixes"], "rule.match.right_prefixes"
+            right_prefixes=tuple(
+                _slp1(s, "rule.match.right_prefixes")
+                for s in _string_list(raw["right_prefixes"], "rule.match.right_prefixes")
             ),
             required_tags=required,
             forbidden_tags=forbidden,
@@ -377,9 +388,9 @@ class SandhiRule:
         return RewriteOperation(
             kind=kind,
             left=left,
-            emit=_string(
+            emit=_slp1(_string(
                 raw["emit"], "rule.operation.emit", allow_empty=True
-            ),
+            ), "rule.operation.emit"),
             right=right,
         )
 
@@ -393,9 +404,9 @@ class SandhiRule:
             required={"left", "right", "surface", "tags", "source", "notes"},
         )
         return RuleExample(
-            left=_string(raw["left"], f"{path}.left"),
-            right=_string(raw["right"], f"{path}.right"),
-            surface=_string(raw["surface"], f"{path}.surface"),
+            left=_slp1(_string(raw["left"], f"{path}.left"), f"{path}.left"),
+            right=_slp1(_string(raw["right"], f"{path}.right"), f"{path}.right"),
+            surface=_slp1(_string(raw["surface"], f"{path}.surface"), f"{path}.surface"),
             tags=frozenset(
                 _string_list(
                     raw["tags"], f"{path}.tags", allow_empty=True
@@ -415,8 +426,8 @@ class SandhiRule:
         raw = _mapping(raw_value, path)
         _check_keys(raw, path, required={"left", "right", "reason"})
         return Counterexample(
-            left=_string(raw["left"], f"{path}.left"),
-            right=_string(raw["right"], f"{path}.right"),
+            left=_slp1(_string(raw["left"], f"{path}.left"), f"{path}.left"),
+            right=_slp1(_string(raw["right"], f"{path}.right"), f"{path}.right"),
             reason=_string(raw["reason"], f"{path}.reason"),
         )
 

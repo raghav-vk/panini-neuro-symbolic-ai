@@ -88,14 +88,14 @@ proof that this project's interpretation is correct:
 | scope | external_vowel_sandhi, external_consonant_sandhi, external_nasal_sandhi, external_visarga_sandhi, or non_application |
 | status | draft, self_checked, or expert_reviewed |
 | source.sutra_ids | Every directly used sūtra identifier |
-| source.text_iast | Source text in the chosen transliteration |
+| source.text_iast | Source text in IAST, for readers |
 | source.text_devanagari | Source text when verified; may be empty during draft |
 | source.interpretation | Exact operational reading and scope |
 | source.url | Direct source location |
 | source.commit | Immutable source revision |
 | source.license | Verified license or rights statement |
-| match.left_suffixes | All left boundary strings consumed or retained |
-| match.right_prefixes | All right boundary strings consumed or retained |
+| match.left_suffixes | All left boundary strings consumed or retained, in SLP1 |
+| match.right_prefixes | All right boundary strings consumed or retained, in SLP1 |
 | match.required_tags | Conditions that must be present |
 | match.forbidden_tags | Exceptions that block this record |
 | operation.left | Keep or drop the matched left suffix |
@@ -197,7 +197,7 @@ their stated surface.
 
 Add at least two examples with different lexical items. Every example needs:
 
-- Left and right forms in the frozen internal transliteration.
+- Left and right forms in SLP1, the internal transliteration.
 - Expected fused surface.
 - All tags required for the rule to apply.
 - Source classified as attested or constructed.

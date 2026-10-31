@@ -92,6 +92,9 @@ prediction. In short:
 - **Vidyut kosha** is an optional external lexicon. It contains
   CC BY-NC-SA 3.0 Monier-Williams data and is never committed.
 
+All Sanskrit is stored and processed in SLP1. IAST is used only for display,
+review worksheets and the paper (protocol amendment 0.6).
+
 See `THIRD_PARTY_NOTICES.md`. Raw corpora, generated splits and runs are
 ignored by Git. Reported results are kept in `reports/`.
 

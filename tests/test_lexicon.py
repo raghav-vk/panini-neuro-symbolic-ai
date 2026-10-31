@@ -27,10 +27,10 @@ def test_pausal_variants_undo_word_final_sandhi(surface, pausal):
 
 
 def test_annotation_and_features_use_candidate_strings_only():
-    row = {"left": "ca", "right": "āgata", "rule_id": "SDH-001",
-           "candidates": [{"left": "ca", "right": "āgata", "proofs": [{"rule_id": "SDH-001"}]},
+    row = {"left": "ca", "right": "Agata", "rule_id": "SDH-001",
+           "candidates": [{"left": "ca", "right": "Agata", "proofs": [{"rule_id": "SDH-001"}]},
                           {"left": "ca", "right": "agata", "proofs": [{"rule_id": "SDH-001"}]}]}
-    annotate([row], FakeLexicon({"ca", "āgata"}))
+    annotate([row], FakeLexicon({"ca", "Agata"}))
     assert [(c["kosha_left"], c["kosha_right"]) for c in row["candidates"]] == [(True, True), (True, False)]
     lexicon = build_lexicon([row], external=True)
     assert feature_count(lexicon) == 7 == len(lexical_features(lexicon, row, row["candidates"][0]))
