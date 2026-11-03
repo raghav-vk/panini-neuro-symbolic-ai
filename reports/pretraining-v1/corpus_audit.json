@@ -1,0 +1,2807 @@
+{
+  "plan": "docs/PRETRAINING_PLAN.md section 3; protocol section 11.3",
+  "inputs": {
+    "sentences": "data/processed/dcs/sentences.jsonl",
+    "sentences_sha256": "e08cb126bde05448780e098ea45ae7a0ea14529e2423fa16fb593f9421552b03",
+    "split": "data/processed/dcs-silver-slp1-splits/strict_right_lemma",
+    "split_sha256": {
+      "dev": "e292fe1d34e716798bcbdab75bf9ee624e7aefaaa1a63319bfb800e2df818dda",
+      "test": "019bda71d0183bd8aab2a4842a3b575e4524de5ae0424e22f7ff763132a04cc9"
+    },
+    "corpus_sentences": 441722,
+    "corpus_characters": 21484460
+  },
+  "sources_read": [
+    "DCS_pick sentences (CC BY 4.0)",
+    "right-word holdout dev and test files (sentence IDs and right-word lemmas only)"
+  ],
+  "kosha_used": false,
+  "definitions": {
+    "normalisation": "DCS_pick's three non-SLP1 vowel characters mapped (ṝ to F, ± to x, ² to X); whitespace runs collapsed to one space, ends stripped",
+    "not_slp1": "any character other than SLP1 letters, avagraha and space remains: editorial markers, digits, unknown signs; removed from both corpora",
+    "exact_duplicate": "normalised text equal to a held-out sentence",
+    "near_duplicate": "shares at least 2 distinct 30-character substrings with any held-out sentence",
+    "held_lemma": "DCS lemma annotation (IAST, converted to SLP1) includes a held-out right-word lemma; P-B only"
+  },
+  "held_out": {
+    "dev_sentences": 984,
+    "test_sentences": 817,
+    "sentences": 1801,
+    "right_word_lemmas": 652,
+    "right_word_lemmas_sha256": "4a924c3fa54af59b73743d08693ea5c4ea0d4b1bd034210c701bba30e9b256a7"
+  },
+  "removed": {
+    "held_out": 1801,
+    "exact_duplicate": 44,
+    "near_duplicate": 487,
+    "not_slp1": 116,
+    "held_lemma_P-B": 89946,
+    "empty_after_normalisation": 0
+  },
+  "plan_figures_2026-10-24": {
+    "held_out": 1801,
+    "exact_duplicate": 44,
+    "near_duplicate": 425,
+    "P-B_before_duplicate_removal": 349450,
+    "note": "The near-duplicate method of 2026-10-24 was not recorded. Its 425 could not be reproduced on SLP1 or IAST text; the stated definition gives the count above, which removes more."
+  },
+  "corpora": {
+    "P-A": {
+      "sentences": 439274,
+      "characters": 19731508,
+      "distinct_sentences": 419159,
+      "sha256": "526dc24d16d11bc72ccf350a9c136390350aee732ee636fe747e35ccee787e14"
+    },
+    "P-B": {
+      "sentences": 349328,
+      "characters": 15095566,
+      "distinct_sentences": 331338,
+      "sha256": "83400fd46f8dd2b8987cda6e4c5e25ab142320e2f4cd50ce8a952d82ce889f5e"
+    },
+    "dev_sentences": {
+      "sentences": 984,
+      "sha256": "4478849ffa71bb6d41b0c1e26ad364fd56416511a23b0ce745c1320c3aa0a191"
+    }
+  },
+  "checks": {
+    "held_out_in_P-A": 0,
+    "held_out_in_P-B": 0,
+    "P-B_subset_of_P-A": true
+  },
+  "removed_ids": {
+    "exact_duplicate": [
+      {
+        "sent_id": 149185,
+        "copy_of": 149176
+      },
+      {
+        "sent_id": 15168,
+        "copy_of": 241549
+      },
+      {
+        "sent_id": 155981,
+        "copy_of": 149176
+      },
+      {
+        "sent_id": 215392,
+        "copy_of": 215376
+      },
+      {
+        "sent_id": 215425,
+        "copy_of": 215376
+      },
+      {
+        "sent_id": 229769,
+        "copy_of": 225358
+      },
+      {
+        "sent_id": 235327,
+        "copy_of": 171060
+      },
+      {
+        "sent_id": 239687,
+        "copy_of": 225358
+      },
+      {
+        "sent_id": 244384,
+        "copy_of": 192994
+      },
+      {
+        "sent_id": 24521,
+        "copy_of": 200932
+      },
+      {
+        "sent_id": 273134,
+        "copy_of": 217194
+      },
+      {
+        "sent_id": 274923,
+        "copy_of": 21274
+      },
+      {
+        "sent_id": 275940,
+        "copy_of": 25611
+      },
+      {
+        "sent_id": 276819,
+        "copy_of": 19583
+      },
+      {
+        "sent_id": 278211,
+        "copy_of": 17598
+      },
+      {
+        "sent_id": 281933,
+        "copy_of": 281891
+      },
+      {
+        "sent_id": 314542,
+        "copy_of": 314517
+      },
+      {
+        "sent_id": 324529,
+        "copy_of": 29279
+      },
+      {
+        "sent_id": 328331,
+        "copy_of": 324273
+      },
+      {
+        "sent_id": 366188,
+        "copy_of": 350305
+      },
+      {
+        "sent_id": 366194,
+        "copy_of": 350305
+      },
+      {
+        "sent_id": 385475,
+        "copy_of": 380912
+      },
+      {
+        "sent_id": 397735,
+        "copy_of": 368476
+      },
+      {
+        "sent_id": 403325,
+        "copy_of": 389224
+      },
+      {
+        "sent_id": 410540,
+        "copy_of": 406632
+      },
+      {
+        "sent_id": 410694,
+        "copy_of": 301831
+      },
+      {
+        "sent_id": 420899,
+        "copy_of": 374548
+      },
+      {
+        "sent_id": 421745,
+        "copy_of": 19708
+      },
+      {
+        "sent_id": 426215,
+        "copy_of": 346046
+      },
+      {
+        "sent_id": 427192,
+        "copy_of": 146889
+      },
+      {
+        "sent_id": 430012,
+        "copy_of": 220019
+      },
+      {
+        "sent_id": 434487,
+        "copy_of": 434700
+      },
+      {
+        "sent_id": 436344,
+        "copy_of": 436342
+      },
+      {
+        "sent_id": 436346,
+        "copy_of": 436342
+      },
+      {
+        "sent_id": 436348,
+        "copy_of": 436342
+      },
+      {
+        "sent_id": 45222,
+        "copy_of": 45081
+      },
+      {
+        "sent_id": 54979,
+        "copy_of": 225358
+      },
+      {
+        "sent_id": 59872,
+        "copy_of": 228934
+      },
+      {
+        "sent_id": 62837,
+        "copy_of": 238639
+      },
+      {
+        "sent_id": 63087,
+        "copy_of": 224943
+      },
+      {
+        "sent_id": 76273,
+        "copy_of": 38185
+      },
+      {
+        "sent_id": 84195,
+        "copy_of": 422942
+      },
+      {
+        "sent_id": 88875,
+        "copy_of": 208407
+      },
+      {
+        "sent_id": 98302,
+        "copy_of": 374548
+      }
+    ],
+    "near_duplicate": [
+      {
+        "sent_id": 129416,
+        "shared_spans": 2,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129430,
+        "shared_spans": 2,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129436,
+        "shared_spans": 3,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129438,
+        "shared_spans": 2,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129442,
+        "shared_spans": 2,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129446,
+        "shared_spans": 3,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129448,
+        "shared_spans": 3,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129454,
+        "shared_spans": 3,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129458,
+        "shared_spans": 2,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129460,
+        "shared_spans": 3,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129482,
+        "shared_spans": 3,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129484,
+        "shared_spans": 3,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129490,
+        "shared_spans": 3,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129506,
+        "shared_spans": 4,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129514,
+        "shared_spans": 3,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129522,
+        "shared_spans": 3,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129528,
+        "shared_spans": 3,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129530,
+        "shared_spans": 3,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129536,
+        "shared_spans": 3,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129538,
+        "shared_spans": 3,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129540,
+        "shared_spans": 2,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129548,
+        "shared_spans": 3,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129550,
+        "shared_spans": 3,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129552,
+        "shared_spans": 3,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129554,
+        "shared_spans": 3,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129562,
+        "shared_spans": 3,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129564,
+        "shared_spans": 3,
+        "closest": 129542
+      },
+      {
+        "sent_id": 129566,
+        "shared_spans": 2,
+        "closest": 129542
+      },
+      {
+        "sent_id": 14557,
+        "shared_spans": 5,
+        "closest": 19221
+      },
+      {
+        "sent_id": 14559,
+        "shared_spans": 5,
+        "closest": 19221
+      },
+      {
+        "sent_id": 14562,
+        "shared_spans": 4,
+        "closest": 19221
+      },
+      {
+        "sent_id": 165864,
+        "shared_spans": 7,
+        "closest": 104953
+      },
+      {
+        "sent_id": 173302,
+        "shared_spans": 2,
+        "closest": 173387
+      },
+      {
+        "sent_id": 17527,
+        "shared_spans": 10,
+        "closest": 278111
+      },
+      {
+        "sent_id": 181396,
+        "shared_spans": 25,
+        "closest": 181388
+      },
+      {
+        "sent_id": 187384,
+        "shared_spans": 6,
+        "closest": 187381
+      },
+      {
+        "sent_id": 187385,
+        "shared_spans": 10,
+        "closest": 187381
+      },
+      {
+        "sent_id": 19223,
+        "shared_spans": 8,
+        "closest": 19221
+      },
+      {
+        "sent_id": 19225,
+        "shared_spans": 16,
+        "closest": 19221
+      },
+      {
+        "sent_id": 19229,
+        "shared_spans": 22,
+        "closest": 19221
+      },
+      {
+        "sent_id": 19231,
+        "shared_spans": 22,
+        "closest": 19221
+      },
+      {
+        "sent_id": 197099,
+        "shared_spans": 12,
+        "closest": 83458
+      },
+      {
+        "sent_id": 198200,
+        "shared_spans": 2,
+        "closest": 155190
+      },
+      {
+        "sent_id": 198711,
+        "shared_spans": 16,
+        "closest": 117314
+      },
+      {
+        "sent_id": 206438,
+        "shared_spans": 6,
+        "closest": 206379
+      },
+      {
+        "sent_id": 210016,
+        "shared_spans": 57,
+        "closest": 245474
+      },
+      {
+        "sent_id": 210135,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 210221,
+        "shared_spans": 71,
+        "closest": 210706
+      },
+      {
+        "sent_id": 210335,
+        "shared_spans": 62,
+        "closest": 210706
+      },
+      {
+        "sent_id": 210442,
+        "shared_spans": 56,
+        "closest": 245474
+      },
+      {
+        "sent_id": 210536,
+        "shared_spans": 71,
+        "closest": 210706
+      },
+      {
+        "sent_id": 210592,
+        "shared_spans": 71,
+        "closest": 210706
+      },
+      {
+        "sent_id": 210817,
+        "shared_spans": 71,
+        "closest": 210706
+      },
+      {
+        "sent_id": 210965,
+        "shared_spans": 71,
+        "closest": 210706
+      },
+      {
+        "sent_id": 211158,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 211196,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 211290,
+        "shared_spans": 69,
+        "closest": 210706
+      },
+      {
+        "sent_id": 211424,
+        "shared_spans": 71,
+        "closest": 210706
+      },
+      {
+        "sent_id": 211508,
+        "shared_spans": 35,
+        "closest": 210706
+      },
+      {
+        "sent_id": 211558,
+        "shared_spans": 72,
+        "closest": 210706
+      },
+      {
+        "sent_id": 211634,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 211662,
+        "shared_spans": 69,
+        "closest": 210706
+      },
+      {
+        "sent_id": 211785,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 211956,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 212115,
+        "shared_spans": 71,
+        "closest": 210706
+      },
+      {
+        "sent_id": 212191,
+        "shared_spans": 71,
+        "closest": 210706
+      },
+      {
+        "sent_id": 212222,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 212229,
+        "shared_spans": 71,
+        "closest": 210706
+      },
+      {
+        "sent_id": 212237,
+        "shared_spans": 71,
+        "closest": 210706
+      },
+      {
+        "sent_id": 212586,
+        "shared_spans": 71,
+        "closest": 210706
+      },
+      {
+        "sent_id": 212614,
+        "shared_spans": 71,
+        "closest": 210706
+      },
+      {
+        "sent_id": 212912,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 213012,
+        "shared_spans": 71,
+        "closest": 210706
+      },
+      {
+        "sent_id": 213035,
+        "shared_spans": 56,
+        "closest": 246505
+      },
+      {
+        "sent_id": 213056,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 213114,
+        "shared_spans": 56,
+        "closest": 245474
+      },
+      {
+        "sent_id": 213214,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 213266,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 213332,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 213374,
+        "shared_spans": 56,
+        "closest": 246505
+      },
+      {
+        "sent_id": 213422,
+        "shared_spans": 56,
+        "closest": 246505
+      },
+      {
+        "sent_id": 213584,
+        "shared_spans": 72,
+        "closest": 210706
+      },
+      {
+        "sent_id": 213667,
+        "shared_spans": 56,
+        "closest": 245474
+      },
+      {
+        "sent_id": 213723,
+        "shared_spans": 71,
+        "closest": 210706
+      },
+      {
+        "sent_id": 213785,
+        "shared_spans": 71,
+        "closest": 210706
+      },
+      {
+        "sent_id": 213945,
+        "shared_spans": 71,
+        "closest": 210706
+      },
+      {
+        "sent_id": 214015,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 214087,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 214177,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 214258,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 214309,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 214508,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 214608,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 214709,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 214839,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 214877,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 23064,
+        "shared_spans": 4,
+        "closest": 415258
+      },
+      {
+        "sent_id": 235578,
+        "shared_spans": 15,
+        "closest": 134165
+      },
+      {
+        "sent_id": 236173,
+        "shared_spans": 5,
+        "closest": 171060
+      },
+      {
+        "sent_id": 23880,
+        "shared_spans": 2,
+        "closest": 23778
+      },
+      {
+        "sent_id": 239594,
+        "shared_spans": 2,
+        "closest": 155190
+      },
+      {
+        "sent_id": 239831,
+        "shared_spans": 7,
+        "closest": 206379
+      },
+      {
+        "sent_id": 24358,
+        "shared_spans": 7,
+        "closest": 241549
+      },
+      {
+        "sent_id": 244594,
+        "shared_spans": 14,
+        "closest": 228697
+      },
+      {
+        "sent_id": 244598,
+        "shared_spans": 5,
+        "closest": 228701
+      },
+      {
+        "sent_id": 244602,
+        "shared_spans": 8,
+        "closest": 228705
+      },
+      {
+        "sent_id": 244779,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 244937,
+        "shared_spans": 30,
+        "closest": 210706
+      },
+      {
+        "sent_id": 245028,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 245322,
+        "shared_spans": 45,
+        "closest": 210706
+      },
+      {
+        "sent_id": 245391,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 245442,
+        "shared_spans": 57,
+        "closest": 246068
+      },
+      {
+        "sent_id": 245651,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 245673,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 245722,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 245741,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 245751,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 245778,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 245799,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 246044,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 246101,
+        "shared_spans": 57,
+        "closest": 245474
+      },
+      {
+        "sent_id": 246112,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 246121,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 246266,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 246323,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 246336,
+        "shared_spans": 30,
+        "closest": 210706
+      },
+      {
+        "sent_id": 246349,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 246398,
+        "shared_spans": 56,
+        "closest": 245474
+      },
+      {
+        "sent_id": 246414,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 246489,
+        "shared_spans": 57,
+        "closest": 210706
+      },
+      {
+        "sent_id": 246531,
+        "shared_spans": 57,
+        "closest": 210706
+      },
+      {
+        "sent_id": 246549,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 246582,
+        "shared_spans": 64,
+        "closest": 246505
+      },
+      {
+        "sent_id": 246848,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 246958,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 247181,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 247220,
+        "shared_spans": 56,
+        "closest": 245474
+      },
+      {
+        "sent_id": 247232,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 247248,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 247261,
+        "shared_spans": 58,
+        "closest": 245474
+      },
+      {
+        "sent_id": 247507,
+        "shared_spans": 45,
+        "closest": 210706
+      },
+      {
+        "sent_id": 247593,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 247615,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 247625,
+        "shared_spans": 57,
+        "closest": 210706
+      },
+      {
+        "sent_id": 247681,
+        "shared_spans": 56,
+        "closest": 210706
+      },
+      {
+        "sent_id": 247696,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 248090,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 248223,
+        "shared_spans": 58,
+        "closest": 245474
+      },
+      {
+        "sent_id": 248243,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 248257,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 248282,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 248736,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 248754,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 248762,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 248802,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 248810,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 248857,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 248893,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 248905,
+        "shared_spans": 56,
+        "closest": 246068
+      },
+      {
+        "sent_id": 249002,
+        "shared_spans": 59,
+        "closest": 246505
+      },
+      {
+        "sent_id": 249026,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249034,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249042,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249068,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249076,
+        "shared_spans": 56,
+        "closest": 245474
+      },
+      {
+        "sent_id": 249084,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249170,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249198,
+        "shared_spans": 56,
+        "closest": 245474
+      },
+      {
+        "sent_id": 249253,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249309,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249389,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249397,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249403,
+        "shared_spans": 61,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249494,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249528,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249538,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249555,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249587,
+        "shared_spans": 57,
+        "closest": 245474
+      },
+      {
+        "sent_id": 249593,
+        "shared_spans": 56,
+        "closest": 246505
+      },
+      {
+        "sent_id": 249674,
+        "shared_spans": 56,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249702,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249804,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249810,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249822,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249873,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249891,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249913,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249940,
+        "shared_spans": 57,
+        "closest": 245474
+      },
+      {
+        "sent_id": 249964,
+        "shared_spans": 57,
+        "closest": 210706
+      },
+      {
+        "sent_id": 249990,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 250198,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 250234,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 250241,
+        "shared_spans": 56,
+        "closest": 246505
+      },
+      {
+        "sent_id": 250249,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 250488,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 250500,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 250554,
+        "shared_spans": 31,
+        "closest": 210706
+      },
+      {
+        "sent_id": 250600,
+        "shared_spans": 57,
+        "closest": 245474
+      },
+      {
+        "sent_id": 250706,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 250765,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 250773,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 250862,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 250882,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 251134,
+        "shared_spans": 56,
+        "closest": 247529
+      },
+      {
+        "sent_id": 251223,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 251255,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 251299,
+        "shared_spans": 56,
+        "closest": 246068
+      },
+      {
+        "sent_id": 251515,
+        "shared_spans": 51,
+        "closest": 245474
+      },
+      {
+        "sent_id": 251535,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 251560,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 251572,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 251581,
+        "shared_spans": 56,
+        "closest": 210706
+      },
+      {
+        "sent_id": 251608,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 251624,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 251641,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 251708,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 251800,
+        "shared_spans": 60,
+        "closest": 246068
+      },
+      {
+        "sent_id": 251879,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 251934,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 252066,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 252251,
+        "shared_spans": 71,
+        "closest": 210706
+      },
+      {
+        "sent_id": 252285,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 252309,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 252349,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 252428,
+        "shared_spans": 56,
+        "closest": 245474
+      },
+      {
+        "sent_id": 252469,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 252543,
+        "shared_spans": 56,
+        "closest": 246068
+      },
+      {
+        "sent_id": 252578,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 252751,
+        "shared_spans": 57,
+        "closest": 246505
+      },
+      {
+        "sent_id": 252893,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 253035,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 253078,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 253145,
+        "shared_spans": 56,
+        "closest": 246068
+      },
+      {
+        "sent_id": 253153,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 253245,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 253266,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 253294,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 253384,
+        "shared_spans": 73,
+        "closest": 210706
+      },
+      {
+        "sent_id": 253454,
+        "shared_spans": 57,
+        "closest": 247529
+      },
+      {
+        "sent_id": 253505,
+        "shared_spans": 66,
+        "closest": 247529
+      },
+      {
+        "sent_id": 253704,
+        "shared_spans": 71,
+        "closest": 210706
+      },
+      {
+        "sent_id": 253857,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 254039,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 254124,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 254137,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 254160,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 254408,
+        "shared_spans": 61,
+        "closest": 248173
+      },
+      {
+        "sent_id": 254441,
+        "shared_spans": 57,
+        "closest": 245474
+      },
+      {
+        "sent_id": 254499,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 254510,
+        "shared_spans": 56,
+        "closest": 246505
+      },
+      {
+        "sent_id": 254525,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 254539,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 254577,
+        "shared_spans": 56,
+        "closest": 245474
+      },
+      {
+        "sent_id": 254589,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 254612,
+        "shared_spans": 57,
+        "closest": 246505
+      },
+      {
+        "sent_id": 254632,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 254653,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 255043,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 255060,
+        "shared_spans": 57,
+        "closest": 245474
+      },
+      {
+        "sent_id": 255108,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 255130,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 255143,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 255183,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 255189,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 255197,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 255205,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 255330,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 255344,
+        "shared_spans": 56,
+        "closest": 245474
+      },
+      {
+        "sent_id": 255462,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 255524,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 255559,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 255584,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 255611,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 255661,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 255712,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 255854,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 255894,
+        "shared_spans": 56,
+        "closest": 245474
+      },
+      {
+        "sent_id": 255952,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 256207,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 256317,
+        "shared_spans": 55,
+        "closest": 210706
+      },
+      {
+        "sent_id": 269030,
+        "shared_spans": 7,
+        "closest": 238639
+      },
+      {
+        "sent_id": 269108,
+        "shared_spans": 4,
+        "closest": 269168
+      },
+      {
+        "sent_id": 269319,
+        "shared_spans": 11,
+        "closest": 173552
+      },
+      {
+        "sent_id": 269351,
+        "shared_spans": 3,
+        "closest": 176115
+      },
+      {
+        "sent_id": 277458,
+        "shared_spans": 8,
+        "closest": 106996
+      },
+      {
+        "sent_id": 280759,
+        "shared_spans": 3,
+        "closest": 280755
+      },
+      {
+        "sent_id": 281357,
+        "shared_spans": 4,
+        "closest": 246068
+      },
+      {
+        "sent_id": 293432,
+        "shared_spans": 6,
+        "closest": 18763
+      },
+      {
+        "sent_id": 295785,
+        "shared_spans": 7,
+        "closest": 282343
+      },
+      {
+        "sent_id": 298893,
+        "shared_spans": 9,
+        "closest": 103764
+      },
+      {
+        "sent_id": 311075,
+        "shared_spans": 6,
+        "closest": 241549
+      },
+      {
+        "sent_id": 316518,
+        "shared_spans": 9,
+        "closest": 301638
+      },
+      {
+        "sent_id": 325467,
+        "shared_spans": 12,
+        "closest": 276295
+      },
+      {
+        "sent_id": 326673,
+        "shared_spans": 6,
+        "closest": 330487
+      },
+      {
+        "sent_id": 329393,
+        "shared_spans": 10,
+        "closest": 17061
+      },
+      {
+        "sent_id": 330098,
+        "shared_spans": 8,
+        "closest": 287288
+      },
+      {
+        "sent_id": 347953,
+        "shared_spans": 5,
+        "closest": 347952
+      },
+      {
+        "sent_id": 355878,
+        "shared_spans": 13,
+        "closest": 146889
+      },
+      {
+        "sent_id": 366196,
+        "shared_spans": 9,
+        "closest": 366190
+      },
+      {
+        "sent_id": 371579,
+        "shared_spans": 6,
+        "closest": 17575
+      },
+      {
+        "sent_id": 376929,
+        "shared_spans": 24,
+        "closest": 376930
+      },
+      {
+        "sent_id": 378767,
+        "shared_spans": 4,
+        "closest": 355264
+      },
+      {
+        "sent_id": 38179,
+        "shared_spans": 3,
+        "closest": 39540
+      },
+      {
+        "sent_id": 382060,
+        "shared_spans": 9,
+        "closest": 103764
+      },
+      {
+        "sent_id": 38752,
+        "shared_spans": 5,
+        "closest": 206379
+      },
+      {
+        "sent_id": 410727,
+        "shared_spans": 9,
+        "closest": 406600
+      },
+      {
+        "sent_id": 411347,
+        "shared_spans": 6,
+        "closest": 408427
+      },
+      {
+        "sent_id": 415262,
+        "shared_spans": 21,
+        "closest": 416146
+      },
+      {
+        "sent_id": 415398,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 415418,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 415497,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 415611,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 415786,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 415906,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 415962,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 416042,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 416058,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 416239,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 416269,
+        "shared_spans": 9,
+        "closest": 416146
+      },
+      {
+        "sent_id": 416295,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 416618,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 416929,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 416999,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 417042,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 417146,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 417198,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 417258,
+        "shared_spans": 30,
+        "closest": 416146
+      },
+      {
+        "sent_id": 417293,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 417449,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 417521,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 417604,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 417636,
+        "shared_spans": 7,
+        "closest": 416146
+      },
+      {
+        "sent_id": 417692,
+        "shared_spans": 33,
+        "closest": 416146
+      },
+      {
+        "sent_id": 417721,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 417785,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 417887,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 418066,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 418237,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 418307,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 418438,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 418510,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 418565,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 418586,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 418721,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 418802,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 418920,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 419030,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 419082,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 419435,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 419468,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 419703,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 419843,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 420161,
+        "shared_spans": 16,
+        "closest": 416146
+      },
+      {
+        "sent_id": 420466,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 420550,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 420795,
+        "shared_spans": 26,
+        "closest": 416146
+      },
+      {
+        "sent_id": 420865,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 420921,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 420997,
+        "shared_spans": 36,
+        "closest": 416146
+      },
+      {
+        "sent_id": 421060,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 421102,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 421147,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 421168,
+        "shared_spans": 25,
+        "closest": 416146
+      },
+      {
+        "sent_id": 421233,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 421335,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 421456,
+        "shared_spans": 5,
+        "closest": 416146
+      },
+      {
+        "sent_id": 421494,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 422371,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 422499,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 422744,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 422792,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 422879,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 423682,
+        "shared_spans": 36,
+        "closest": 416146
+      },
+      {
+        "sent_id": 423774,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 424068,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 424128,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 424168,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 424207,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 424219,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 424235,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 424254,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 424264,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 424272,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 424280,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 424291,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 424357,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 424399,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 424559,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 424656,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 424705,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 424798,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 424933,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 425073,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 425993,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 426071,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 426102,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 426280,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 426348,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 426372,
+        "shared_spans": 6,
+        "closest": 346221
+      },
+      {
+        "sent_id": 426436,
+        "shared_spans": 2,
+        "closest": 346298
+      },
+      {
+        "sent_id": 426497,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 426520,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 426563,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 426653,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 426690,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 426718,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 426735,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 426747,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 426766,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 426912,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 426969,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 427050,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 427110,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 427221,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 427283,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 427351,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 427404,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 427533,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 427685,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 427854,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 427872,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 427906,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 427918,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 427959,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 427981,
+        "shared_spans": 33,
+        "closest": 428772
+      },
+      {
+        "sent_id": 427997,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 428030,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 428078,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 428096,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 428139,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 428181,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 428248,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 428267,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 428311,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 428355,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 428394,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 428411,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 428429,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 428456,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 428496,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 428616,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 428855,
+        "shared_spans": 59,
+        "closest": 428772
+      },
+      {
+        "sent_id": 428890,
+        "shared_spans": 37,
+        "closest": 428772
+      },
+      {
+        "sent_id": 428949,
+        "shared_spans": 36,
+        "closest": 428772
+      },
+      {
+        "sent_id": 429053,
+        "shared_spans": 36,
+        "closest": 428772
+      },
+      {
+        "sent_id": 429078,
+        "shared_spans": 34,
+        "closest": 428772
+      },
+      {
+        "sent_id": 429169,
+        "shared_spans": 37,
+        "closest": 428772
+      },
+      {
+        "sent_id": 429220,
+        "shared_spans": 36,
+        "closest": 428772
+      },
+      {
+        "sent_id": 429398,
+        "shared_spans": 37,
+        "closest": 428772
+      },
+      {
+        "sent_id": 429433,
+        "shared_spans": 37,
+        "closest": 428772
+      },
+      {
+        "sent_id": 429477,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 429515,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 429545,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 429601,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 429624,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 429666,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 429737,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 429858,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 429920,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 430002,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 430083,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 430206,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 430298,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 430380,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 430433,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 430517,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 430547,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 430656,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 430784,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 430898,
+        "shared_spans": 32,
+        "closest": 416146
+      },
+      {
+        "sent_id": 440824,
+        "shared_spans": 6,
+        "closest": 17575
+      },
+      {
+        "sent_id": 50681,
+        "shared_spans": 7,
+        "closest": 262792
+      },
+      {
+        "sent_id": 54902,
+        "shared_spans": 4,
+        "closest": 225263
+      },
+      {
+        "sent_id": 55511,
+        "shared_spans": 11,
+        "closest": 55505
+      },
+      {
+        "sent_id": 84173,
+        "shared_spans": 13,
+        "closest": 146889
+      },
+      {
+        "sent_id": 84993,
+        "shared_spans": 5,
+        "closest": 206379
+      },
+      {
+        "sent_id": 85066,
+        "shared_spans": 6,
+        "closest": 206379
+      },
+      {
+        "sent_id": 87117,
+        "shared_spans": 7,
+        "closest": 140722
+      },
+      {
+        "sent_id": 87593,
+        "shared_spans": 16,
+        "closest": 141253
+      },
+      {
+        "sent_id": 89857,
+        "shared_spans": 26,
+        "closest": 63034
+      },
+      {
+        "sent_id": 93264,
+        "shared_spans": 51,
+        "closest": 93263
+      },
+      {
+        "sent_id": 93265,
+        "shared_spans": 2,
+        "closest": 93263
+      },
+      {
+        "sent_id": 93304,
+        "shared_spans": 16,
+        "closest": 93303
+      },
+      {
+        "sent_id": 93305,
+        "shared_spans": 16,
+        "closest": 93303
+      },
+      {
+        "sent_id": 93306,
+        "shared_spans": 17,
+        "closest": 93303
+      },
+      {
+        "sent_id": 93307,
+        "shared_spans": 15,
+        "closest": 93303
+      },
+      {
+        "sent_id": 99130,
+        "shared_spans": 3,
+        "closest": 129179
+      }
+    ],
+    "not_slp1": [
+      10775,
+      11804,
+      11815,
+      120046,
+      121439,
+      129058,
+      132899,
+      133375,
+      133698,
+      133700,
+      14377,
+      14398,
+      14409,
+      14412,
+      14414,
+      144142,
+      14439,
+      14666,
+      14672,
+      14713,
+      14761,
+      150868,
+      151707,
+      155751,
+      156353,
+      158469,
+      158616,
+      159128,
+      159192,
+      159198,
+      159203,
+      159495,
+      160528,
+      160529,
+      160536,
+      160542,
+      160545,
+      160559,
+      160562,
+      160566,
+      16255,
+      16258,
+      16277,
+      16279,
+      171745,
+      173000,
+      173788,
+      18597,
+      19178,
+      19219,
+      19222,
+      19345,
+      19346,
+      19381,
+      194369,
+      216344,
+      216365,
+      216387,
+      217393,
+      258687,
+      266487,
+      2667,
+      270140,
+      270406,
+      271089,
+      307617,
+      31513,
+      31522,
+      31675,
+      347498,
+      347572,
+      347612,
+      347725,
+      35200,
+      352085,
+      352086,
+      361147,
+      361936,
+      362489,
+      365364,
+      365375,
+      365387,
+      366465,
+      367038,
+      367111,
+      367164,
+      367181,
+      367756,
+      367873,
+      370581,
+      372646,
+      372648,
+      372650,
+      37999,
+      38071,
+      38166,
+      41247,
+      418659,
+      418660,
+      418661,
+      423904,
+      438584,
+      46551,
+      62983,
+      74,
+      74393,
+      75394,
+      75936,
+      84589,
+      86943,
+      89914,
+      90222,
+      93109,
+      97853,
+      97918,
+      98034
+    ],
+    "held_lemma_sha256": "1b7416caca4dca6750e3707abec3eae747f6a446d19ecd614d79f39ac7190328"
+  }
+}
