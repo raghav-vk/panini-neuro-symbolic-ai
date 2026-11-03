@@ -1,8 +1,15 @@
 # Plan: Self-Supervised Pretraining for the Neural Ranker
 
 **Status:** Adopted as amendment 0.5 of `docs/EXPERIMENT_PROTOCOL.md`
-(section 11.3) on 2026-10-24. Nothing here has been run yet. Since amendment
-0.6 (2026-10-30), all corpora and model input are SLP1.
+(section 11.3) on 2026-10-24. Since amendment 0.6 (2026-10-30), all corpora
+and model input are SLP1.
+
+**Progress (2026-11-02):** step 1 (corpora, `reports/pretraining-v1/corpus_audit.json`)
+and step 2 (timing pilot, `reports/pretraining-v1/pilot_S_1000_steps.json`) are done.
+Step 3 (size S on P-A, 10 passes) is done, and step 4 has a first dev result
+with one pretraining seed: the neural word score alone scores 0.927 against the
+kosha's 0.909, and with the kosha 0.950 (`reports/pretraining-v1/DEV_RESULTS.md`).
+Further seeds, P-B and step 5 are next.
 
 ## In Plain Terms
 
@@ -125,6 +132,16 @@ Two pretraining corpora, both built from the right-word holdout split:
 Duplicates: 44 sentences elsewhere in the corpus are exact copies of a dev or
 test sentence. Another 425 share at least two 30-character spans with one
 (measured 2026-10-24). All are removed.
+
+As built (2026-11-02, `scripts/build_pretraining_corpus.py`): the 2026-10-24
+near-duplicate method was not recorded, and its 425 could not be reproduced.
+The stated definition (at least two distinct 30-character substrings shared
+with a held-out sentence, after whitespace normalisation, on SLP1) removes 487,
+the more conservative figure. DCS_pick writes ṝ, ḷ and ḹ as `ṝ`, `±` and `²`;
+these are mapped to SLP1 `F`, `x` and `X`. 116 sentences that still hold other
+characters (editorial markers such as `[... O6 ZeiCenJ]`, digits, unknown
+signs) are dropped. Final sizes: P-A 439,274 sentences (19.7M characters after
+whitespace normalisation), P-B 349,328 (15.1M).
 
 The author confirmed P-A as the main condition and P-B as the strict
 condition on 2026-10-24.

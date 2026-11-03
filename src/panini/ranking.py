@@ -128,10 +128,11 @@ def select_threshold(dev, scores, target=0.9):
     return max(eligible)[1] if eligible else 1.01
 
 
-def build_lexicon(train, external=False, boundary_vowels=False):
+def build_lexicon(train, external=False, boundary_vowels=False, neural=False):
     """Training-split word and rule counts for the optional lexical feature head.
 
     external adds the candidates' kosha_left/kosha_right flags (scripts/annotate_lexicon.py) as features;
+    neural adds the pretrained encoder's neural_left/neural_right scores (scripts/annotate_neural_lexicon.py);
     boundary_vowels adds the long-vowel count at the restored boundary.
     """
     left, right, rules = Counter(), Counter(), Counter()
@@ -140,7 +141,7 @@ def build_lexicon(train, external=False, boundary_vowels=False):
         right[row["right"]] += 1
         rules[row["rule_id"]] += 1
     return {"left": dict(left), "right": dict(right), "rules": dict(rules), "external": external,
-            "boundary_vowels": boundary_vowels}
+            "boundary_vowels": boundary_vowels, "neural": neural}
 
 
 LEXICAL_FEATURES = 5
@@ -161,13 +162,16 @@ def lexical_features(lexicon, row, candidate, exclude_self=False, use_rules=True
     features = [math.log1p(left), math.log1p(right), float(left > 0), float(right > 0), math.log1p(rule)]
     if lexicon.get("external"):
         features += [float(candidate["kosha_left"]), float(candidate["kosha_right"])]
-    if lexicon.get("boundary_vowels"):
+    if lexicon.get("neural"):
+        features += [float(candidate["neural_left"]), float(candidate["neural_right"])]
+    if lexicon.get("boundary_vowels"):  # keep last: init_residual relies on it
         features.append(float(boundary_long_vowels(candidate)))
     return features
 
 
 def feature_count(lexicon):
-    return LEXICAL_FEATURES + 2 * bool(lexicon.get("external")) + bool(lexicon.get("boundary_vowels"))
+    return (LEXICAL_FEATURES + 2 * bool(lexicon.get("external")) + 2 * bool(lexicon.get("neural"))
+            + bool(lexicon.get("boundary_vowels")))
 
 
 class LinearBaseline:
@@ -176,15 +180,15 @@ class LinearBaseline:
     The strongest non-neural comparison for the feature head: same inputs, no Transformer.
     """
 
-    def __init__(self, train, external=False, epochs=20, seed=7):
+    def __init__(self, train, external=False, epochs=20, seed=7, neural=False):
         import torch
         with torch.random.fork_rng():  # do not reset the caller's random state
             torch.manual_seed(seed)
-            self._fit(train, external, epochs, seed)
+            self._fit(train, external, epochs, seed, neural)
 
-    def _fit(self, train, external, epochs, seed):
+    def _fit(self, train, external, epochs, seed, neural=False):
         import torch
-        self.lexicon = build_lexicon(train, external)
+        self.lexicon = build_lexicon(train, external, neural=neural)
         self.linear = torch.nn.Linear(feature_count(self.lexicon), 1)
         optimizer = torch.optim.AdamW(self.linear.parameters(), lr=0.01)
         rows = [r for r in train if r["gold_indices"]]
@@ -232,9 +236,9 @@ def make_transformer(width=64, layers=2, heads=4, max_length=192, pooling="mean"
 
         def forward(self, tokens, features=None):
             if self.pooling == "cls":
-                tokens = torch.cat([torch.full((tokens.shape[0], 1), 257, dtype=tokens.dtype), tokens], 1)
+                tokens = torch.cat([torch.full((tokens.shape[0], 1), 257, dtype=tokens.dtype, device=tokens.device), tokens], 1)
             padding = tokens == 0
-            x = self.embedding(tokens) + self.position(torch.arange(tokens.shape[1]))
+            x = self.embedding(tokens) + self.position(torch.arange(tokens.shape[1], device=tokens.device))
             x = self.encoder(x, src_key_padding_mask=padding)
             if self.pooling == "cls":
                 x = x[:, 0]
@@ -281,30 +285,39 @@ def score_neural(model, rows, use_rules=True, use_context=True, gradients=False,
     features = None
     if model.lexicon is not None:
         features = torch.tensor([lexical_features(model.lexicon, r, c, exclude_self, use_rules) for r in rows for c in r["candidates"]])
+    device = next(model.parameters()).device
     with torch.set_grad_enabled(gradients):
-        scores = model(tokens, features)
+        scores = model(tokens.to(device), features.to(device) if features is not None else None)
     return list(scores.split([len(r["candidates"]) for r in rows]))
 
 
 def predict_neural(model, rows, use_rules=True, use_context=True):
     model.eval()
-    return [s.tolist() for start in range(0, len(rows), 16)
+    return [s.cpu().tolist() for start in range(0, len(rows), 16)
             for s in score_neural(model, rows[start:start+16], use_rules, use_context)]
 
 
 def train_neural(train, dev, seed=7, epochs=3, width=64, layers=2, use_rules=True, use_context=True, max_length=192,
                  pooling="mean", mark_boundary=False, lexical=False, external_lexicon=False, boundary_vowel_feature=False,
-                 residual=False):
-    import copy
+                 residual=False, neural_lexicon=False, heads=4, pretrained=None, device="cpu"):
+    """pretrained: a scripts/pretrain.py checkpoint path; its encoder initialises the ranker (plan section 6.2).
+
+    device "cpu" keeps deterministic algorithms; MPS is not bit-for-bit deterministic, so compare seeds.
+    """
     import torch
     torch.manual_seed(seed)
     torch.set_num_threads(2)
-    torch.use_deterministic_algorithms(True)
-    model = make_transformer(width, layers, max_length=max_length, pooling=pooling, mark_boundary=mark_boundary,
-                             lexicon=build_lexicon(train, external_lexicon, boundary_vowel_feature)
-                             if lexical or external_lexicon or boundary_vowel_feature or residual else None)
+    torch.use_deterministic_algorithms(device == "cpu")
+    features = lexical or external_lexicon or boundary_vowel_feature or residual or neural_lexicon
+    model = make_transformer(width, layers, heads, max_length=max_length, pooling=pooling, mark_boundary=mark_boundary,
+                             lexicon=build_lexicon(train, external_lexicon, boundary_vowel_feature, neural_lexicon)
+                             if features else None)
+    if pretrained:
+        from .pretraining import init_from_pretrained
+        init_from_pretrained(model, torch.load(pretrained, map_location="cpu", weights_only=True))
     if residual:
-        init_residual(model, LinearBaseline(train, external_lexicon))
+        init_residual(model, LinearBaseline(train, external_lexicon, neural=neural_lexicon))
+    model.to(device)
     optimizer = torch.optim.AdamW([p for p in model.parameters() if p.requires_grad], lr=0.001, weight_decay=0.01)
     eligible = [r for r in train if r["gold_indices"]]
     if not eligible or not dev:
@@ -327,7 +340,7 @@ def train_neural(train, dev, seed=7, epochs=3, width=64, layers=2, use_rules=Tru
         result, _ = metrics(dev, dev_scores)
         history.append({"epoch": epoch + 1, "loss": sum(losses)/len(losses), "dev_top1": result["top1"]})
         if result["top1"] > best:
-            best, best_state = result["top1"], copy.deepcopy(model.state_dict())
+            best, best_state = result["top1"], {k: v.detach().cpu().clone() for k, v in model.state_dict().items()}
     model.load_state_dict(best_state)
     return model, {"history": history, "best_dev_top1": best, "parameters": sum(p.numel() for p in model.parameters()),
                    "uncovered_training_examples_excluded_from_loss": len(train)-len(eligible)}

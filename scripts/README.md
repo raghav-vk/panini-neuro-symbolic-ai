@@ -13,8 +13,11 @@ See [Quick Start](../QUICKSTART.md) for commands in execution order.
 | `build_review_page.py` | Create a local browser worksheet: boundary annotation, or `--mode verify` for checking proposed splits |
 | `validate_review.py` | Check a reviewer's answers file or rule decision file before it is committed |
 | `prepare_experiment.py` | Admit synthetic, silver DCS or reviewed examples, build four holdouts and forward-certified candidates |
-| `run_experiment.py` | CPU baselines, five-seed ranker training, ablations, checkpoint and metric artifacts |
+| `run_experiment.py` | CPU baselines, five-seed ranker training, ablations, checkpoint and metric artifacts; `--dev-only` never reads test, `--pretrained` starts from a pretrained encoder |
 | `compare_paired.py` | Paired bootstrap and per-seed McNemar comparison of saved test predictions against a baseline |
+| `build_pretraining_corpus.py` | Build the decontaminated pretraining corpora P-A and P-B from DCS_pick, with an audit report (`docs/PRETRAINING_PLAN.md` section 3) |
+| `pretrain.py` | Pretrain the byte encoder with span masking and rule-guided near-miss discrimination; checks on dev sentences only, never test |
+| `annotate_neural_lexicon.py` | Copy train and dev (never test), adding the pretrained encoder's word scores for `--neural-lexicon` |
 | `fetch_vidyut_data.py` | Download and verify the pinned Vidyut data release (optional external lexicon; non-commercial terms) |
 | `annotate_lexicon.py` | Copy prepared splits and flag candidate words found in the Vidyut kosha, for `--external-lexicon` |
 | `predict_sandhi.py` | Inspect candidates/proofs and optional checkpoint-based selection or abstention; input and output in IAST by default, `--scheme slp1` otherwise |
