@@ -41,6 +41,7 @@ please correct them.
 | `AGREEMENT_PURUSHA` | Verb puruṣa = the agreeing participant's: *asmad* uttama, *yuṣmad* madhyama, otherwise prathama | 1.4.105, 1.4.107, 1.4.108 |
 | `AGREEMENT_VACANA` | Verb vacana = the agreeing participant's | 1.4.21, 1.4.22 |
 | `STEM_UNKNOWN`, `LINGA_MISMATCH` | Stem and gender must be in the stem table | — |
+| `ENGINE_DEFECT` | Bhāve luṅ is blocked: Vidyut 0.4.0 omits ciṇ there (`aBAvizwa` for *aBāvi*, `asTita` for *asthāyi*), though it applies ciṇ in karmaṇi (`agAmi`) | 3.1.66 *ciṇ bhāvakarmaṇoḥ*; please confirm the expected forms |
 
 Cases assigned by role, after the checks pass:
 
@@ -82,8 +83,8 @@ incomplete as well: it gives *jala* and *pustaka* as masculine only.
 
 ## How Results Are Checked
 
-`data/rlcd/clause_fixtures.jsonl` holds 29 hand-written cases: 12 licit
-clauses with their expected forms, and 17 illicit ones with the violation
+`data/rlcd/clause_fixtures.jsonl` holds 30 hand-written cases: 12 licit
+clauses with their expected forms, and 18 illicit ones with the violation
 each must raise. The tests run them through the pure layer and through
 Vidyut. Every derived form carries its sūtra steps. Of the 36 forms derived
 from the licit cases, the kosha confirms 35. The exception, *patram*, is not

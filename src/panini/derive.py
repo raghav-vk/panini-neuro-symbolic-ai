@@ -20,6 +20,13 @@ from panini.lexicon import pausal_variants
 ROOT = Path(__file__).resolve().parents[2]
 VIDYUT = ROOT / "data/external/vidyut-0.4.0"
 
+# Combinations Vidyut 0.4.0 derives wrongly, found in stage 3 by the kosha round trip.
+# Bhave luN omits ciR (3.1.66 ciR BAvakarmaRoH): BU gives aBAvizwa for aBAvi, zWA asTita for asTAyi.
+# Karmani luN applies it correctly (gam: agAmi).
+ENGINE_DEFECTS = [
+    (lambda c: c["prayoga"] == "Bhave" and c["lakara"] == "Lun", "bhave luN without ciR (3.1.66)"),
+]
+
 
 class Compiler:
     def __init__(self, data=VIDYUT, kosha=True):
@@ -69,6 +76,8 @@ class Compiler:
 
     def compile_clause(self, clause):
         violations = check(clause, self.dhatupatha, self.karmakatva, self.stems)
+        if not violations:
+            violations = [Violation("ENGINE_DEFECT", why) for test, why in ENGINE_DEFECTS if test(clause)]
         if violations:
             return {"valid": False, "violations": [v.to_json() for v in violations]}
         words, prayoga = [], clause["prayoga"]

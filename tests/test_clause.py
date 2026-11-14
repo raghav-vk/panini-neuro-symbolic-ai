@@ -60,10 +60,10 @@ def test_vibhakti_follows_prayoga():
     assert vibhakti("karman", "Karmani") == "Prathama" and vibhakti("aDikaraRa", "Kartari") == "Saptami"
 
 
-@pytest.mark.parametrize("fixture", [f for f in FIXTURES if "NO_DERIVATION" not in f["violations"]],
+@pytest.mark.parametrize("fixture", [f for f in FIXTURES if not {"NO_DERIVATION", "ENGINE_DEFECT"} & set(f["violations"])],
                          ids=lambda f: f["id"])
 def test_pure_layer_matches_fixtures(fixture):
-    """Every violation except NO_DERIVATION is decided without Vidyut."""
+    """Every violation except NO_DERIVATION and ENGINE_DEFECT is decided without Vidyut."""
     got = sorted(v.code for v in check(fixture["clause"], dhatupatha(), load_karmakatva(), load_stems()))
     assert got == fixture["violations"]
 
@@ -95,3 +95,19 @@ def test_dataset_structure_example_compiles(compiler):
     record = json.loads((ROOT / "docs/dataset-structure.json").read_text())
     result = compiler.compile_clause(record["rlcd_ast"])
     assert result["valid"] and result["text"] == record["target_sanskrit_slp1_pausal"]
+
+
+def test_tier1_generator_respects_frames(compiler):
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import generate_tier1
+    rows, rejected, _ = generate_tier1.generate(300, 7, compiler)
+    frames = {f["code"]: f["roles"] for f in generate_tier1.load_frames()}
+    classes = {r["stem"]: set(r["classes"].split(",")) for r in read_tsv(generate_tier1.CLASSES)}
+    assert len({r["id"] for r in rows}) == len({json.dumps(r["clause"], sort_keys=True) for r in rows}) == 300
+    assert set(rejected) <= {"ENGINE_DEFECT", "ROUND_TRIP_MISMATCH", "no_fitting_stem"}
+    for r in rows:
+        assert not r["attested"] and r["provenance"] == "tier1_synthetic"
+        assert compiler.compile_clause(r["clause"])["valid"]
+        roles = frames[r["clause"]["dhatu"]["code"]]
+        for p in r["clause"]["participants"]:
+            assert classes[p["stem"]] & roles[p["role"]], (r["id"], p)
