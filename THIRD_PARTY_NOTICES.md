@@ -23,6 +23,21 @@ the same CC BY 4.0 terms.
 
 License: https://creativecommons.org/licenses/by/4.0/
 
+## DCS CoNLL-U
+
+`scripts/fetch_dcs_conllu.py` checks out `dcs/data/conllu` from
+https://github.com/OliverHellwig/sanskrit at commit
+`8aeed5a1343d0e48b64eb32af8c00e8c6eb29359` into `data/external/dcs-conllu/`,
+which is never committed. `datasets/dcs_conllu_manifest.json` records the file
+count, bytes and a SHA-256 over every file.
+
+> Oliver Hellwig. 2010–2024. *The Digital Corpus of Sanskrit (DCS)*.
+
+The directory's readme states: "The data in this directory are licensed under
+the Creative Commons BY 4.0 (CC BY 4.0) license."
+
+License: https://creativecommons.org/licenses/by/4.0/
+
 ## ashtadhyayi-com/data
 
 The all-sandhi source-candidate corpus was generated from
