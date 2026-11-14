@@ -56,6 +56,15 @@ not match the CoNLL-U `sent_id` values, so overlap is checked on text.
    every future pretraining corpus. If GRETIL or other text is added later,
    it must be checked against this manifest too.
 
+**Reserve fixed (2026-11-14).** Of the full DCS at commit `8aeed5a`, eight
+classical kāvya texts have no exact or near overlap with DCS_pick in any
+chapter: Saundarānanda, Āryāsaptaśatī, Narmamālā, Kokilasaṃdeśa,
+Bhallaṭaśataka, Haṃsasaṃdeśa, Caurapañcaśikā and Mukundamālā. That is about
+5,200 sentences. They are reserved for this gold set
+(`reports/dcs-conllu/split_manifest.json`; `docs/RLCD_TRANSITION_PLAN.md`,
+stage 3). The RLCD stage 3 evaluation uses other chapters, so the two never
+share a chapter.
+
 ## 4. Item Extraction
 
 An item is one external vowel-sandhi junction, taken from either:

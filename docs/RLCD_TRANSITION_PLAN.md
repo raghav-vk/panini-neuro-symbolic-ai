@@ -591,6 +591,28 @@ Two findings came from the kosha round trip during generation:
   The gold set and the stage 3 evaluation must divide that pool, as recorded
   in `reports/dcs-conllu/PROFILE.md`. The division is to be decided before
   any of it is read for results.
+
+  **DCS division, approved 2026-11-14 (pre-registered).** No sentence was
+  read for results before this was recorded. The division is applied by
+  `scripts/split_dcs_conllu.py` and recorded in
+  `reports/dcs-conllu/split_manifest.json`.
+
+  - **Definitions.** A chapter is *classical* if it has no `<details>` block
+    and its DCS time slot is not 1. It is *clean* if no sentence in it is an
+    exact or near copy of DCS_pick text.
+  - **Gold-set reserve.** Every chapter of eight whole clean kāvya texts:
+    Saundarānanda, Āryāsaptaśatī, Narmamālā, Kokilasaṃdeśa, Bhallaṭaśataka,
+    Haṃsasaṃdeśa, Caurapañcaśikā and Mukundamālā. Only the gold set
+    (`docs/GOLD_SET_PLAN.md`) may use them. No stage 3 code reads them, and
+    they stay out of every future pretraining corpus.
+  - **Stage 3 evaluation.** Every other classical clean chapter. Each goes to
+    dev or test by SHA-256 of `rlcd-stage3:` plus the chapter ID. Results are
+    reported per text as well as pooled, because Kathāsaritsāgara supplies
+    most of them. The test part is not read until a frozen amendment.
+  - **Stage 3 training.** Every remaining sentence, except any that matches a
+    right-word holdout dev or test source sentence. Vedic and non-classical
+    sentences stay in the pool with their flags; the training
+    pre-registration decides whether to use them.
 - **Steps 4 to 6** (heads, baselines, RL fine-tuning) are pre-registered
   before they run, as stage 1 was.
 
