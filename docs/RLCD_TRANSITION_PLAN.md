@@ -578,8 +578,19 @@ Two findings came from the kosha round trip during generation:
   - Most treebank relations carry no annotator mark, so they are not gold
     roles.
 
-  Next is the mapping to schema fields, with the overlap audit against
-  DCS_pick and the gold-set held-out chapters.
+  **Mapping and audit done (2026-11-14).** `scripts/convert_dcs_conllu.py`
+  writes SLP1 rows with schema labels (`src/panini/dcs_conllu.py`). Merged
+  classes are labelled as such (`Lit|Lun`, `Lrt|Lut`), and no kāraka or
+  prayoga is claimed. It also audits every sentence against DCS_pick.
+  - 56% of DCS sentences are exact copies of DCS_pick text.
+  - Sentences matching held-out sandhi dev or test sentences occur in more
+    than 1,000 chapters each.
+  - Only 37,837 classical sentences (no Vedic block, time slot other than 1)
+    lie in chapters with no overlap at all.
+
+  The gold set and the stage 3 evaluation must divide that pool, as recorded
+  in `reports/dcs-conllu/PROFILE.md`. The division is to be decided before
+  any of it is read for results.
 - **Steps 4 to 6** (heads, baselines, RL fine-tuning) are pre-registered
   before they run, as stage 1 was.
 

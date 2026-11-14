@@ -1,0 +1,46 @@
+{
+ "rule": "exact normalised match, or at least 2 distinct 30-character substrings shared with DCS_pick",
+ "inputs": {
+  "dcs_conllu_manifest": "datasets/dcs_conllu_manifest.json",
+  "dcs_pick_sha256": "e08cb126bde05448780e098ea45ae7a0ea14529e2423fa16fb593f9421552b03",
+  "holdout_split_sha256": {
+   "dev": "e292fe1d34e716798bcbdab75bf9ee624e7aefaaa1a63319bfb800e2df818dda",
+   "test": "019bda71d0183bd8aab2a4842a3b575e4524de5ae0424e22f7ff763132a04cc9"
+  }
+ },
+ "dcs_pick": {
+  "distinct_texts": 421559,
+  "distinct_spans": 7193502,
+  "held_sentences": {
+   "dev": 984,
+   "test": 817
+  }
+ },
+ "totals": {
+  "sentences": 770945,
+  "words": 5801761,
+  "exact": 429766,
+  "near": 10755,
+  "held_dev": 1406,
+  "held_test": 1292,
+  "hiatus_ambiguous": 200917
+ },
+ "chapters": 16051,
+ "chapters_without_overlap": {
+  "all": 6792,
+  "non_vedic": 531,
+  "sentences_non_vedic": 40475,
+  "words_non_vedic": 330176
+ },
+ "chapters_without_metadata": [
+  "\u015aik\u1e63\u0101samuccaya/\u015aik\u1e63\u0101samuccaya-0000-\u015aiSam, 1-10815.conllu"
+ ],
+ "metadata_without_file": [
+  "Skandapur\u0101\u1e47a (Rev\u0101kha\u1e47\u1e0da)/Skandapur\u0101\u1e47a (Rev\u0101kha\u1e47\u1e0da)-0229-SkPur (Rkh), Rev\u0101kha\u1e47\u1e0da, Chapter 230: T\u012brth\u0101valikathana-4798.conllu"
+ ],
+ "chapters_with_held_overlap": {
+  "dev": 1166,
+  "test": 1039
+ },
+ "sentences_sha256": "7a29459957d37bfa87af286be7593064183cbdfefd75152655d229dd953e43eb"
+}
