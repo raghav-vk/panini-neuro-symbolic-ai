@@ -616,6 +616,113 @@ Two findings came from the kosha round trip during generation:
 - **Steps 4 to 6** (heads, baselines, RL fine-tuning) are pre-registered
   before they run, as stage 1 was.
 
+#### Stage 3 Training Pre-Registered Settings (steps 4 and 5)
+
+Recorded 2026-11-14 and committed before any model is trained. Dev only. The
+test part of the DCS division stays sealed.
+
+**Disclosure.** Before these settings were written, only the classical
+training pool was profiled: sentence and word counts, length percentiles, and
+the label distributions per field. No dev or test sentence was read.
+
+**Task.** Morphological tagging of real Sanskrit with the segmentation given.
+
+- **Input.** One DCS sentence as its pada-pāṭha: the word forms DCS gives
+  (`form`, mostly reconstructed), in SLP1, joined by single spaces.
+- **Output.** Five Choice heads per word. Each has a `NONE` option for
+  "not applicable":
+
+  | Head | Options |
+  | --- | --- |
+  | vibhakti | the 8 cases, `compound_member`, `NONE` |
+  | vacana | Eka, Dvi, Bahu, `NONE` |
+  | liṅga | Pum, Stri, Napumsaka, `NONE` |
+  | puruṣa | Prathama, Madhyama, Uttama, `NONE` |
+  | lakāra | Lat, Lan, VidhiLin, Lot, AshirLin, Lrn, `Lit|Lun`, `Lrt|Lut`, `other`, `NONE` |
+
+  Labels come from `src/panini/dcs_conllu.py`; every `other:…` lakāra
+  becomes `other`. Segmentation, kāraka and prayoga are not part of this
+  task.
+- **Length.** A sentence longer than 256 bytes is cut into consecutive
+  chunks of whole words of at most 256 bytes, in training and evaluation
+  alike. A single word longer than 256 bytes is truncated, and the number of
+  such words is reported.
+
+**Data.**
+
+- **Training.** The classical part of the stage 3 training pool: chapters
+  with no `<details>` block and time slot other than 1. That is 336,132
+  sentences and 2,642,506 words.
+- **Evaluation.** Stage 3 dev: 16,340 sentences in 197 chapters.
+- **Excluded.** Vedic and time-slot-1 sentences, the Tier 1 synthetic data
+  (its tables are unreviewed, issue #78) and the gold reserve. A later
+  pre-registration may add the first two as separate arms.
+
+**Systems.**
+
+| ID | System | Runs |
+| --- | --- | --- |
+| B0 | Majority value per head, from training | 1 |
+| B1 | Form lookup: the most frequent full tag of the exact form in training; otherwise B0 | 1 |
+| B2 | Kosha + prior: B1 if the form was seen in training; otherwise the kosha analyses of the form (pausal variants), choosing the tag most frequent in training; otherwise B0 | 1 |
+| N1 | S-PA encoder pretrained on P-A, fine-tuned with the five heads, cross-entropy | P-A encoder seeds 7, 11, 19 (each fine-tuned with the same seed) |
+| N2 | The same architecture from random initialisation, cross-entropy | seeds 7, 11, 19 |
+| N3 | As N1, with the sum of the five multi-class Brier scores as the loss | seeds 7, 11, 19 |
+
+**Neural settings, fixed for N1 to N3.**
+
+- **Model.** Encoder size S (width 256, 6 layers, 8 heads, 256 positions).
+  A word's vector is the mean of its bytes' final hidden states. Each head is
+  one linear layer over that vector, and the whole encoder is fine-tuned.
+- **Optimiser.** AdamW, learning rate 2e-4, weight decay 0.01, dropout 0.1.
+  Batches of 64 chunks in 64-byte length buckets. 500 warm-up steps, then
+  cosine decay.
+- **Length of training.** Two passes over the classical training pool. The
+  final checkpoint is used; no checkpoint or setting is chosen on dev.
+- **Device.** MPS on the project Mac.
+
+**Metrics (dev).**
+
+- **Primary.** Full-tag accuracy: the share of words with all five heads
+  correct, `NONE` included.
+- **Per head.**
+  - Accuracy on words whose gold value is not `NONE`.
+  - Accuracy of `NONE` predictions.
+  - Macro accuracy over values.
+- **Subsets.** Words whose form never occurs in training (unseen forms), and
+  each dev text separately.
+- **Calibration.**
+  - Each head gets a temperature, fitted on one half of the dev chapters and
+    applied to the other, both ways (2-fold, folds by SHA-256 of
+    `rlcd-stage3-cal:` plus the chapter ID).
+  - Word confidence is the product of the five calibrated top probabilities.
+  - Reported: ECE with 10 equal-mass bins, top-label Brier and NLL, raw and
+    calibrated, for N1 to N3.
+- **Abstention.** Risk–coverage area (AURC) and full-tag accuracy at 90% and
+  95% coverage, on calibrated word confidence.
+- **Compute.** Parameters; training time per run; wall-clock time to tag the
+  whole dev set on MPS and on CPU (3 runs each).
+- **Intervals.** 95% intervals from 1,000 bootstrap resamples of dev
+  chapters, seed 1729.
+
+**Hypotheses and decision rules (dev).**
+
+- **H-S3-1. N1 beats B2 on full-tag accuracy.** Supported if every N1 seed
+  is above B2, and the 95% chapter-bootstrap interval of the mean paired
+  difference over seeds excludes 0.
+- **H-S3-2. N1 beats N2** (pretraining helps), by the same rule.
+- **H-S3-3. N3 against N1 is descriptive.** Calibration and accuracy are
+  compared and no direction is claimed.
+- **All results are dev results.** A test run needs a later amendment that
+  freezes the system and its settings.
+
+**Outputs.**
+
+- **Code.** `scripts/train_tagger.py` and `scripts/eval_tagger.py`; runs in
+  `runs/tagger-<system>-seed<N>/`.
+- **Report.** `reports/rlcd-stage3/TAGGER_DEV_RESULTS.md`, with the
+  generated tables beside it.
+
 ### Stage 4: English interface (later work, separate paper)
 
 1. Decide how the model reads English (section 6).
