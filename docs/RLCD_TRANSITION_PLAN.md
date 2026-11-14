@@ -647,6 +647,11 @@ the label distributions per field. No dev or test sentence was read.
   chunks of whole words of at most 256 bytes, in training and evaluation
   alike. A single word longer than 256 bytes is truncated, and the number of
   such words is reported.
+- **Forms (added 2026-11-14, before any run).** Characters outside SLP1 are
+  removed from a form. A word left with no form is dropped from the input
+  and from scoring, and counted, in training and evaluation alike. These are
+  mostly DCS's `_`, meaning no surface form: 13,257 of the 2,642,506 training
+  words. Found when the first smoke test failed on a non-ASCII sign.
 
 **Data.**
 
