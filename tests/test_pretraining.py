@@ -128,6 +128,22 @@ def test_encoder_losses_and_ranker_compatible_names():
     assert shared <= set(model.state_dict())
 
 
+def test_discriminator_words_reproduce_evaluate():
+    torch = pytest.importorskip("torch")
+    from panini.pretraining import discriminator_words, evaluate, make_encoder
+    torch.manual_seed(0)
+    model = make_encoder(width=16, layers=1, heads=2, max_length=64, dropout=0.0)
+    texts = ["ca Agata", "Agata gam ca Agata", "Agata Agata"] * 3
+    summary = evaluate(model, texts, CONFUSIONS, set(), "cpu", batch_size=4)
+    words = discriminator_words(model, texts, CONFUSIONS, set(), "cpu", batch_size=4)
+    altered = [z > 0 for _, z, y in words if y == 1]
+    attested = [z <= 0 for _, z, y in words if y == 0]
+    assert (len(altered), len(attested)) == (summary["disc_altered_words"], summary["disc_attested_words"])
+    assert sum(altered) / len(altered) == summary["disc_altered_accuracy"]
+    assert sum(attested) / len(attested) == summary["disc_attested_accuracy"]
+    assert {i for i, _, _ in words} == set(range(len(texts)))
+
+
 def test_dcs_pick_vowel_characters_are_mapped_and_markers_dropped():
     assert normalize("BrAtṝn k±pta ²") == "BrAtFn kxpta X"
     pa, _, removed = corpora([sentence(2, "nABimUle sTitaM [... O6 ZeiCenJ]"), sentence(3, "BrAtṝn sarvAn")])

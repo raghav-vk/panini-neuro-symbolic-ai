@@ -375,8 +375,111 @@ Protocol section 14.2 already requires coverage and abstention to be reported
 with accuracy, so this extends the existing design rather than adding a new
 claim.
 
+**Result (dev, 2026-11-14):** `reports/rlcd-stage1/DEV_RESULTS.md`.
+- The ranker and the discriminator are already calibrated (ECE about 0.01 to
+  0.03 and 0.001 to 0.003), and temperature scaling adds nothing.
+- Abstaining on the least confident fifth of items gives more than 99%
+  accuracy on the rest.
+- Routing to the three-seed ensemble gains at most 0.007, inside the
+  intervals.
+
+#### Stage 1 Pre-Registered Settings
+
+Recorded 2026-11-14 and committed before any stage 1 analysis was run. Dev
+only; no test set is read. The settings below replace steps 1 to 7 where they
+are more specific.
+
+**Disclosure.** Before writing these settings, the saved dev predictions were
+checked for alignment. That check showed per-seed accuracy (already
+reported), error counts (49, 47, 43) and the mean raw confidence (0.935,
+0.943, 0.935). No calibration, binning or gate was computed.
+
+**Systems.**
+
+- **R, the sandhi ranker.** H-P2 linear ranker
+  (`linear_features_short_vowel`, kosha plus neural score, words scored
+  alone), one per P-A encoder seed. The inputs are the saved dev predictions:
+  - seed 7: `runs/final-nc-hp2/`
+  - seeds 11 and 19: `runs/eval-pretrain-S-PA-seed{11,19}-nc-hp2/`
+
+  All three runs score the same 988 examples, in the same order and with the
+  same candidates. The one example whose gold split is not among the
+  candidates counts as an error throughout.
+- **E, the slow path.** An ensemble of the three R rankers: the mean of their
+  temperature-scaled candidate probabilities. It costs three encoder passes
+  instead of one.
+- **N, the discriminator as a Noul** ("Is this word attested?"). P(attested)
+  is the sigmoid of minus the word logit. It is computed per word on the 984
+  dev sentences, with the fixed corruption that `pretraining.evaluate` uses
+  (seed 0, same random stream), for the final checkpoints
+  `runs/pretrain-S-PA-seed{7,11,19}/encoder.pt`.
+  - **Reproduction check:** per seed, the word counts (1,583 attested, 271
+    altered) and both accuracies must equal the final dev record in
+    `reports/pretraining-v1/pretrain_S_PA_seed*.json`. If they do not, the
+    evaluator is wrong and N is not reported.
+
+**Confidence.** For R and E, the probability of the top-ranked candidate under
+a softmax over the candidate scores. For N, the probability of the predicted
+label, max(p, 1 − p).
+
+**Calibration.** Temperature scaling only: one parameter per system and seed,
+fitted by minimising negative log-likelihood. The fitting uses **2-fold
+cross-fitting**:
+
+- Folds are assigned by SHA-256 of `rlcd-stage1:` plus the source group (R
+  and E) or the sentence index (N).
+- The temperature is fitted on one fold and applied to the other, in both
+  directions.
+- All results pool the out-of-fold predictions.
+
+**Calibration metrics.**
+
+- Top-label ECE, with 10 equal-mass bins as primary and 10 equal-width bins
+  as secondary.
+- Top-label Brier: the mean of (confidence − correct)².
+- NLL of correctness.
+- Reliability bins, with counts.
+- 95% intervals from 1,000 bootstrap resamples of source groups (R, E) or
+  sentences (N), seed 1729.
+
+Every metric is reported before and after temperature scaling.
+
+**Gates (R as the fast path).** Each gate is reported per seed and as the
+mean over seeds:
+
+1. **Abstention.**
+   - A risk–coverage curve and its area (AURC).
+   - Accuracy of the accepted items at 90% and 95% coverage.
+   - Coverage and accepted accuracy at τ = 0.85 and τ = 0.95, on calibrated
+     confidence.
+2. **Routing to E.** Final accuracy and the routed fraction at τ = 0.85 and
+   0.95. Two references: R on every item, and E on every item.
+3. **Cost-aware gate.** The reward per item is 1 if the final answer is
+   correct, minus c if the item was routed to E, for c ∈ {0.01, 0.02,
+   0.05}.
+   - The policy is a single threshold τ, chosen on one fold to maximise mean
+     reward and scored on the other, in both directions.
+   - It is compared with the fixed thresholds at the same routed fraction.
+   - Both outcomes are known for every logged item, so this is an offline
+     contextual bandit with full-information feedback. That is the honest
+     description, and it is what the paper will say.
+
+**Compute.** Parameters (4,937,220 per encoder) and passes per item (1 for R,
+3 for E). Wall-clock time to score all 988 dev rows with one encoder,
+measured on the project Mac with MPS and CPU, 3 repetitions.
+
+**Claims.** Stage 1 results are dev results. Using any of them on the test
+set needs a later amendment that freezes τ and c and discloses the next test
+use.
+
+**Outputs.** `scripts/eval_calibration.py` writes
+`reports/rlcd-stage1/calibration.json` and `SUMMARY.md`. Figures wait until
+matplotlib is added to the requirements.
+
 ### Stage 2: Vidyut wrapper and schema v0.3
 
+0. Write the AST and decision schema as a JSON Schema with shared fixtures
+   (section 7), so that a later Rust port is tested against the same contract.
 1. Add an AST module for one clause with one finite verb, kartṛ, karman and
    optionally karaṇa or adhikaraṇa. Use Vidyut's own enum names, and write
    roots as their Dhātupāṭha entries (`ga\mx~`).
@@ -452,3 +555,31 @@ parameters and compute. Option C can supply training data for either. Option
 D is a question of order; the project direction puts Indic languages before
 English, while the specifications start with English. That conflict should be
 settled before stage 4.
+
+## 7. Implementation Languages
+
+Recorded 2026-11-14.
+
+| Part | Language | Why |
+| --- | --- | --- |
+| Training: heads, Brier loss, RL fine-tuning | Python and PyTorch, permanently | The heads are small layers on the encoder and train with it; autograd, MPS and the pretraining code are Python |
+| Calibration fitting and evaluation (`scripts/eval_calibration.py`) | Python, permanently | Research tools over a few thousand items; reviewers must be able to rerun them |
+| Constraint layer, gate and branch search | Python in stage 2, then Rust | Deterministic code next to Vidyut, which is Rust; native crates avoid the Python bindings, and branch search is where the cost will be. Port once the rules are settled and reviewed |
+| Inference runtime (encoder, heads, gate, Vidyut) | Rust, when a product needs it | Where the low-parameter, low-compute claim becomes a deployment measurement; a 4.94M-parameter encoder can run through ONNX Runtime or candle |
+
+**Not yet.** Interfaces will change through stages 1 to 3, a second toolchain
+makes the paper harder to reproduce, and Python overhead is not yet a
+measured bottleneck. Profiling decides what is ported first.
+
+**Prepare now, so the port is cheap:**
+
+1. **A shared contract.** The AST and decision schema as a JSON Schema, with
+   fixtures that pair each AST with its expected derivation or rejection.
+   Both implementations must pass them. Stage 2 delivers it.
+2. **A pure constraint layer.** Plain functions with no PyTorch, so that it
+   translates almost line for line.
+3. **Calibration ships with the model.** The fitted temperature and gate
+   threshold are exported with the weights, so a Rust runtime reproduces the
+   same probabilities.
+4. **Parity tests when porting.** Rust and Python outputs on dev must agree
+   within a stated tolerance before the Rust path is used.

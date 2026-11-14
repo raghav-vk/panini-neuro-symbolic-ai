@@ -305,6 +305,28 @@ def evaluate(model, texts, confusions, vocabulary, device, seed=0, batch_size=12
             "disc_altered_words": counts["altered"], "disc_attested_words": counts["attested"]}
 
 
+def discriminator_words(model, texts, confusions, vocabulary, device, seed=0, batch_size=128):
+    """Per-word discriminator logits with evaluate's fixed corruption: [(sentence index, logit, label)].
+
+    Draws the same random stream as evaluate (masking, then corruption, per batch), so the
+    counts and accuracies it implies equal evaluate's. Label 1 is altered, 0 attested.
+    """
+    import torch
+    model.eval()
+    rng = random.Random(seed)
+    out = []
+    with torch.no_grad():
+        for start in range(0, len(texts), batch_size):
+            chunk = texts[start:start + batch_size]
+            batch_mlm(chunk, rng, device)
+            tokens, ids, labels = batch_disc(chunk, confusions, vocabulary, rng, device)
+            logits = model.word_logits(model(tokens), ids, labels.shape[1]).cpu().tolist()
+            for i, (row, label) in enumerate(zip(logits, labels.cpu().tolist())):
+                out += [(start + i, z, y) for z, y in zip(row, label) if y != -100]
+    model.train()
+    return out
+
+
 def learning_rate(step, steps, peak, warmup):
     if step < warmup:
         return peak * (step + 1) / warmup
