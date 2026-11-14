@@ -1,0 +1,13 @@
+{
+  "source_english": "The two horses are drinking water.",
+  "target_sanskrit_slp1": "aSvO jalaM pibataH",
+  "rlcd_ast": {
+    "dhatu": "pA",
+    "lakara": "lat",
+    "prayoga": "kartari",
+    "kartr": {"stem": "aSva", "vacana": "dvi"},
+    "karman": {"stem": "jala", "vacana": "eka"}
+  },
+  "provenance": "Tier1_Reverse_Synthetic",
+  "split": "silver"
+}
