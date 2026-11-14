@@ -1,0 +1,11 @@
+{
+ "source": "https://github.com/OliverHellwig/sanskrit.git",
+ "commit": "8aeed5a1343d0e48b64eb32af8c00e8c6eb29359",
+ "path": "dcs/data/conllu",
+ "license": "CC BY 4.0",
+ "citation": "Hellwig, The Digital Corpus of Sanskrit (DCS), 2010-2024",
+ "files": 23285,
+ "conllu_files": 16051,
+ "bytes": 1181573724,
+ "tree_sha256": "f031c7029d22288801cfa8788a482a0a3c88ff8a287ac1260f0fd56789ab89a4"
+}

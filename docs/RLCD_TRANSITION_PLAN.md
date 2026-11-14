@@ -567,11 +567,19 @@ Two findings came from the kosha round trip during generation:
   kept until the stem and root analysis does not depend on the kosha.
 
 **Next for stage 3.**
-- **Step 2 needs the full DCS CoNLL-U** (CC BY 4.0, pinned commit, sparse
-  checkout, as in `docs/GOLD_SET_PLAN.md` section 3). It gives real
-  sentences with case, number, gender, tense, mood and person. DCS_pick's
-  numeric `cng` codes cannot be decoded without a code table the repository
-  does not have.
+- **Step 2: the DCS CoNLL-U is fetched (2026-11-14).** It is at commit
+  `8aeed5a`, from `scripts/fetch_dcs_conllu.py`, and is verified against
+  `datasets/dcs_conllu_manifest.json`. It holds 271 texts, 770,945 sentences
+  and 5.8M words. `reports/dcs-conllu/PROFILE.md` records what it gives.
+  - Nominal case, number and gender map directly.
+  - `Past` (liṭ or luṅ) and `Fut` (lṛṭ or luṭ) do not map one-to-one onto a
+    lakāra.
+  - Voice is marked only when passive.
+  - Most treebank relations carry no annotator mark, so they are not gold
+    roles.
+
+  Next is the mapping to schema fields, with the overlap audit against
+  DCS_pick and the gold-set held-out chapters.
 - **Steps 4 to 6** (heads, baselines, RL fine-tuning) are pre-registered
   before they run, as stage 1 was.
 
