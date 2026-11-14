@@ -375,6 +375,14 @@ Protocol section 14.2 already requires coverage and abstention to be reported
 with accuracy, so this extends the existing design rather than adding a new
 claim.
 
+**Result (dev, 2026-11-14):** `reports/rlcd-stage1/DEV_RESULTS.md`.
+- The ranker and the discriminator are already calibrated (ECE about 0.01 to
+  0.03 and 0.001 to 0.003), and temperature scaling adds nothing.
+- Abstaining on the least confident fifth of items gives more than 99%
+  accuracy on the rest.
+- Routing to the three-seed ensemble gains at most 0.007, inside the
+  intervals.
+
 #### Stage 1 Pre-Registered Settings
 
 Recorded 2026-11-14 and committed before any stage 1 analysis was run. Dev
