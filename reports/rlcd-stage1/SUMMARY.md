@@ -68,7 +68,7 @@ Encoder parameters: 4,937,220. R uses 1 encoder pass per item, E uses 3.
 
 | Device | Dev rows | Candidates | Seconds per run (3 runs) |
 | --- | --- | --- | --- |
-| mps | 988 | 8484 | 1.22, 1.21, 1.21 |
-| cpu | 988 | 8484 | 5.90, 5.88, 5.87 |
+| mps | 988 | 8484 | 1.22, 1.23, 1.23 |
+| cpu | 988 | 8484 | 5.89, 5.90, 5.90 |
 
 Measured on macOS-26.6.2-arm64-arm-64bit, Python 3.12.14.

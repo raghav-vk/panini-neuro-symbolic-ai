@@ -2,8 +2,10 @@
 
 **Dev only.** The right-word holdout test set was not read. Settings were
 pre-registered in `docs/RLCD_TRANSITION_PLAN.md` (stage 1, commit 7d82b6b)
-before the analysis ran. Generated tables: `SUMMARY.md`. Full numbers:
-`calibration.json`. Code: `scripts/eval_calibration.py` and
+before the analysis ran, and adopted in protocol amendment 0.7 (section
+11.5). Generated tables: `SUMMARY.md`. Full numbers: `calibration.json`.
+Figure: `calibration_figure.pdf` (`scripts/plot_calibration.py`; the same
+figure is in `docs/paper/artifacts/rlcd_stage1_calibration.pdf`). Code: `scripts/eval_calibration.py` and
 `src/panini/calibration.py`. Run on 2026-11-14 on the project Mac.
 
 These are observed results from the real model outputs. They replace nothing
@@ -24,7 +26,10 @@ nothing.** The H-P2 linear ranker's raw top-candidate probability has an
 equal-mass ECE of 0.013 to 0.029 across the three seeds. It is slightly
 underconfident: mean confidence 0.935 to 0.943 against accuracy 0.950 to
 0.956. The cross-fitted temperatures are close to 1 (0.90 to 1.06), and ECE,
-Brier and NLL do not change beyond their intervals.
+Brier and NLL do not change beyond their intervals. The figure shows where
+the remaining error sits: the least confident tenth of items (confidence about
+0.58) is right 0.67 to 0.77 of the time. Below 0.9, the ranker is
+underconfident.
 
 **2. The discriminator, asked as a Noul, is calibrated too.** Its
 P(attested) has an equal-mass ECE of 0.001 to 0.003 raw (equal-width 0.004 to
@@ -56,8 +61,9 @@ offline contextual bandit with full-information feedback. It shows the
 mechanism works, not that RL improves accuracy here.
 
 **5. Compute.** One 4,937,220-parameter encoder scores all 988 dev examples
-(8,484 candidates) in 1.21 s on MPS, about 1.2 ms per example, and 5.9 s on
-CPU, about 6 ms per example. Each figure is the median of 3 runs.
+(8,484 candidates) in about 1.2 s on MPS (about 1.2 ms per example) and about
+5.9 s on CPU (about 6 ms per example). Each measurement is 3 runs; a second
+measurement gave 1.22 to 1.23 s and 5.89 to 5.90 s.
 
 ## Reading for the paper
 

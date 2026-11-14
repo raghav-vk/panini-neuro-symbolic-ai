@@ -103,6 +103,7 @@ def ranker(dev, resamples):
         conf, correct = block.pop("_confidence"), block.pop("_correct")
         block["abstention"] = {
             "aurc": cal.aurc(conf, correct),
+            "risk_coverage": cal.risk_coverage(conf, correct),
             "accuracy_at_coverage": {c: cal.accuracy_at_coverage(conf, correct, c) for c in (0.90, 0.95)},
             "thresholds": [cal.threshold(conf, correct, t) for t in TAUS],
         }
