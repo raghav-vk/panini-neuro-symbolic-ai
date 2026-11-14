@@ -66,3 +66,22 @@ def test_chapter_info_flags_vedic_and_gold_syntax(tmp_path):
     info = chapter_info(path)
     assert info[11]["vedic"] is False and info[11]["syntax_gold"] is True and info[11]["time_slot"] == "4"
     assert info[12]["vedic"] is True and info[12]["syntax_gold"] is False
+
+
+def test_split_assigns_reserve_evaluation_and_train():
+    import pytest
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from split_dcs_conllu import GOLD_RESERVE, assign, evaluation_part
+    base = {"vedic": False, "time_slot": "4", "exact": 0, "near": 0}
+    chapters = [{**base, "chapter_id": i, "text": t} for i, t in enumerate(GOLD_RESERVE)]
+    chapters += [{**base, "chapter_id": 100, "text": "Kathāsaritsāgara"},
+                 {**base, "chapter_id": 101, "text": "Kathāsaritsāgara", "exact": 3},
+                 {**base, "chapter_id": 102, "text": "Ṣaḍviṃśabrāhmaṇa", "time_slot": "1"},
+                 {**base, "chapter_id": 103, "text": "Ṛgveda", "vedic": True},
+                 {**base, "chapter_id": 104, "text": "Śikṣāsamuccaya", "vedic": None}]
+    part = assign(chapters)
+    assert {part[i] for i in range(len(GOLD_RESERVE))} == {"gold_reserve"}
+    assert part[100] == evaluation_part(100) in {"dev", "test"}
+    assert part[101] == part[102] == part[103] == part[104] == "train"
+    with pytest.raises(ValueError):
+        assign([{**c, "near": 1} if c["chapter_id"] == 0 else c for c in chapters])
