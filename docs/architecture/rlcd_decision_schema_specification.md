@@ -12,6 +12,12 @@
 > Zero-Shot Detector of AI Alignment Failures*, arXiv:2609.29429, 2026).
 > Jev's training is not published; the training described in section 4 is
 > this project's own design.
+>
+> **Schema v0.3** (stage 2) is the machine-checked contract:
+> `data/schemas/rlcd-clause.schema.json`, with fixtures and the constraint
+> layer described in `docs/RLCD_CONSTRAINTS.md`. Where this document and v0.3
+> differ, v0.3 holds. For example, v0.3 has no `upapada_nimitta` or
+> `sambanDa_zazWI` role.
 
 ---
 

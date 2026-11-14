@@ -1,17 +1,18 @@
 {
   "source_english": "The two horses are drinking water.",
   "target_sanskrit_slp1": "aSvO jalaM pibataH",
+  "target_sanskrit_slp1_pausal": "aSvO jalam pibataH",
   "rlcd_ast": {
-    "dhatu": "pA\\",
-    "dhatu_code": "01.1074",
-    "upasarga": "NONE",
-    "lakara": "laW",
-    "prayoga": "kartari",
-    "purusha": "praTama",
-    "vacana": "dvivacana",
-    "entities": [
-      {"karaka_role": "kartf", "stem": "aSva", "linga": "puMliNga", "vacana": "dvivacana"},
-      {"karaka_role": "karman", "stem": "jala", "linga": "napuMsakaliNga", "vacana": "ekavacana"}
+    "schema_version": "0.3.0",
+    "dhatu": {"aupadeshika": "pA\\", "gana": "Bhvadi", "code": "01.1074"},
+    "upasargas": [],
+    "prayoga": "Kartari",
+    "lakara": "Lat",
+    "purusha": "Prathama",
+    "vacana": "Dvi",
+    "participants": [
+      {"role": "kartf", "stem": "aSva", "linga": "Pum", "vacana": "Dvi"},
+      {"role": "karman", "stem": "jala", "linga": "Napumsaka", "vacana": "Eka"}
     ]
   },
   "provenance": "Tier1_Reverse_Synthetic",

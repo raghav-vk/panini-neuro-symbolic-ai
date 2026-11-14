@@ -16,6 +16,7 @@ collaboration guides for the current neuro-symbolic sandhi experiment.
 | [Experiment protocol](EXPERIMENT_PROTOCOL.md) | Research questions, frozen-study design, amendments, metrics, and release gates |
 | [Pretraining plan](PRETRAINING_PLAN.md) | Adopted plan for self-supervised pretraining of the neural ranker |
 | [RLCD stage 1 results](../reports/rlcd-stage1/DEV_RESULTS.md) | Dev calibration, abstention and routing of the sandhi ranker and discriminator |
+| [RLCD constraint review](RLCD_CONSTRAINTS.md) | Stage 2 constraint layer, root and stem tables awaiting the grammarian |
 | [RLCD transition plan](RLCD_TRANSITION_PLAN.md) | Draft amendment 0.7: review of the RLCD architecture and dataset pipeline, and a staged path |
 | [All-sandhi dataset](ALL_SANDHI_DATASET.md) | Reproducible 148-record source corpus and expert-screening workflow |
 | [Rule authoring guide](RULE_AUTHORING_GUIDE.md) | Convert reviewed interpretations into typed executable rules |

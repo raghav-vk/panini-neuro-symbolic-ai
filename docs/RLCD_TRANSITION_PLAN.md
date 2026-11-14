@@ -101,6 +101,7 @@ Checked on 2026-11-14 with `vidyut==0.4.0` in the project `.venv`:
 | Invented root `Darba~`, bhvādi, laṭ, prathama, dvi | `DarbataH` | No such root |
 | Invented root `kuwapa~` | `kuwapataH` | No such root |
 | `ga\mx~` declared as curādi | `gAmayete`, `gAmayataH` | Wrong gaṇa accepted |
+| `qula\Ba~\z` (ātmanepada) in parasmaipada | nothing | Rejected by Vidyut (checked in stage 2) |
 | `ga\mx~`, bhāve, dvivacana | `gamyete` | Bhāve takes only the singular |
 | `gamx~` (anudātta marker missing) | `gamataH` | Silent wrong form; only `ga\mx~` gives `gacCataH` |
 | Invented stem `xyzab`, puṃliṅga, tṛtīyā | a declined form | No such stem |
@@ -489,6 +490,32 @@ matplotlib is added to the requirements.
    - the invalid cases in the section 1.2 table must be rejected
 4. Ask the grammarian reviewer to check the constraint table (pada,
    transitivity, voice and number limits).
+
+**Progress (2026-11-14).** Items 0 to 3 are done. Item 4 is requested in
+`docs/RLCD_CONSTRAINTS.md`.
+
+- **Contract.** `data/schemas/rlcd-clause.schema.json` (v0.3), with 29
+  hand-written fixtures in `data/rlcd/clause_fixtures.jsonl` (12 licit, 17
+  illicit).
+- **Constraint layer.** `src/panini/clause.py`, which is pure. It reads two
+  draft tables: `data/rlcd/dhatu_constraints.tsv` (31 roots) and
+  `data/rlcd/stem_lexicon.tsv` (39 stems).
+- **Compiler.** `src/panini/derive.py` derives each word with Vidyut and keeps
+  its sūtra steps, and `tests/test_clause.py` tests it.
+
+Three findings changed the design:
+
+- **Vidyut does enforce pada.** It derives nothing for a pada the root does
+  not take, so that check is Vidyut's (`NO_DERIVATION`). Section 1.2's list
+  holds otherwise.
+- **The kosha cannot decide gender.** It inflects stems in every gender, and
+  its stem-level gender list is incomplete. Gender therefore comes from the
+  reviewed stem table. As a result, the constraint layer no longer depends on
+  the CC BY-NC-SA kosha, which serves only the informational round trip (35 of
+  36 fixture forms confirmed).
+- **Feminine-suffix stems must be declared.** `Pratipadika.basic("sItA")`
+  declines wrongly (`sItAH`); `Pratipadika.nyap` is right. The stem table
+  records the kind.
 
 ### Stage 3: Sanskrit-side analysis dataset and heads
 

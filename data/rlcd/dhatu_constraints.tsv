@@ -1,0 +1,32 @@
+code	aupadeshika	gana	artha	karmakatva	status	note
+01.0001	BU	Bhvadi	sattAyAm	akarmaka	draft_unreviewed
+01.0051	KAdf~	Bhvadi	BakzaRe	sakarmaka	draft_unreviewed
+01.0381	paWa~	Bhvadi	vyaktAyAM vAci	sakarmaka	draft_unreviewed
+01.0643	jIva~	Bhvadi	prARaDAraRe	akarmaka	draft_unreviewed
+01.0863	vfDu~\	Bhvadi	vfdDO	akarmaka	draft_unreviewed	Atmanepada
+01.0924	cala~	Bhvadi	kampane	akarmaka	draft_unreviewed
+01.0979	patx~	Bhvadi	gatO	akarmaka	draft_unreviewed	gati meaning; check against usage
+01.0989	ra\mu~\	Bhvadi	krIqAyAm	akarmaka	draft_unreviewed	Atmanepada
+01.1045	Bf\Y	Bhvadi	BaraRe	sakarmaka	draft_unreviewed	ubhayapada
+01.1046	hf\Y	Bhvadi	haraRe	sakarmaka	draft_unreviewed	ubhayapada; dvikarmaka use (1.4.51) not modelled in v0.3
+01.1049	RI\Y	Bhvadi	prApaRe	sakarmaka	draft_unreviewed	ubhayapada; dvikarmaka use (1.4.51) not modelled in v0.3
+01.1074	pA\	Bhvadi	pAne	sakarmaka	draft_unreviewed
+01.1077	zWA\	Bhvadi	gatinivfttO	akarmaka	draft_unreviewed
+01.1092	Sru\	Bhvadi	SravaRe	sakarmaka	draft_unreviewed
+01.1130	qula\Ba~\z	Bhvadi	prAptO	sakarmaka	draft_unreviewed	Atmanepada
+01.1137	ga\mx~	Bhvadi	gatO	sakarmaka	draft_unreviewed
+01.1141	tya\ja~	Bhvadi	hAnO	sakarmaka	draft_unreviewed
+01.1143	df\Si~r	Bhvadi	prekzaRe	sakarmaka	draft_unreviewed
+01.1160	va\sa~	Bhvadi	nivAse	akarmaka	draft_unreviewed	sakarmaka with aDi/upa/anu/AN (1.4.48), not modelled in v0.3
+01.1164	vada~	Bhvadi	vyaktAyAM vAci	sakarmaka	draft_unreviewed
+02.0026	SIN	Adadi	svapne	akarmaka	draft_unreviewed	Atmanepada; sakarmaka with aDi (1.4.46), not modelled in v0.3
+02.0040	i\R	Adadi	gatO	sakarmaka	draft_unreviewed
+02.0044	yA\	Adadi	prApaRe	sakarmaka	draft_unreviewed
+02.0060	asa~	Adadi	Buvi	akarmaka	draft_unreviewed
+02.0064	Svasa~	Adadi	prARane	akarmaka	draft_unreviewed
+03.0010	qudA\Y	Juhotyadi	dAne	sakarmaka	draft_unreviewed	ubhayapada
+04.0086	kru\Da~	Divadi	kroDe	akarmaka	draft_unreviewed	object of anger in caturthI (1.4.37)
+06.0092	liKa~	Tudadi	akzaravinyAse	sakarmaka	draft_unreviewed
+06.0149	pra\Ca~	Tudadi	jYIpsAyAm	sakarmaka	draft_unreviewed	dvikarmaka use (1.4.51) not modelled in v0.3
+08.0010	qukf\Y	Tanadi	karaRe	sakarmaka	draft_unreviewed	ubhayapada
+09.0043	jYA\	Kryadi	avaboDane	sakarmaka	draft_unreviewed
