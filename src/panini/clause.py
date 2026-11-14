@@ -51,6 +51,7 @@ VIOLATIONS = {
     "LINGA_MISMATCH": "the stem table does not list this gender for the stem",
     "NO_DERIVATION": "Vidyut derives no form (for example, a pada the root does not take)",
     "ROUND_TRIP_MISMATCH": "the derived form is in the lexicon only with other analyses",
+    "ENGINE_DEFECT": "Vidyut 0.4.0 derives a wrong form for this combination; blocked until fixed upstream",
 }
 
 

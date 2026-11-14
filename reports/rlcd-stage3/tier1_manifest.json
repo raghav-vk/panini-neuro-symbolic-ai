@@ -1,0 +1,85 @@
+{
+ "dataset": "rlcd-tier1-v0",
+ "plan": "docs/RLCD_TRANSITION_PLAN.md, stage 3 step 1",
+ "seed": 1729,
+ "sentences": 10000,
+ "attempts": 10703,
+ "rejected": {
+  "ENGINE_DEFECT": 67,
+  "ROUND_TRIP_MISMATCH": 48,
+  "no_fitting_stem": 3
+ },
+ "sha256": "3a61cd8f607cc86bd62bf68c32519958f5020b7ad68284ac159ed958fbba19e9",
+ "tables": {
+  "data/rlcd/dhatu_constraints.tsv": "06dd3edfae1cf64e146b4ea737379d20f3911a6689f3982ab645289efb324524",
+  "data/rlcd/stem_lexicon.tsv": "b450a647a1e7cc0adc90b6dcc3f96dedd2c2b83482a12b3e0984e85dcca8cdb0",
+  "data/rlcd/frames.tsv": "bada0b9ebf308bf87fd1ca0b56cbf9143c4a80cef31f9508a331c28a5700ab15",
+  "data/rlcd/stem_classes.tsv": "17231fa6f3868347bf7cdce07e9c12eb3bfdd8b92a748d7ea06f35f6cc528bca"
+ },
+ "table_rows_unreviewed": 140,
+ "for_training": false,
+ "vidyut": "0.4.0",
+ "words": 28732,
+ "forms_not_in_kosha": 473,
+ "by_root": {
+  "01.0001": 312,
+  "01.0051": 341,
+  "01.0381": 386,
+  "01.0643": 317,
+  "01.0863": 277,
+  "01.0924": 288,
+  "01.0979": 310,
+  "01.0989": 324,
+  "01.1045": 347,
+  "01.1046": 348,
+  "01.1049": 339,
+  "01.1074": 322,
+  "01.1077": 282,
+  "01.1092": 255,
+  "01.1130": 339,
+  "01.1137": 355,
+  "01.1141": 328,
+  "01.1143": 358,
+  "01.1160": 306,
+  "01.1164": 303,
+  "02.0026": 316,
+  "02.0040": 326,
+  "02.0044": 318,
+  "02.0060": 326,
+  "02.0064": 318,
+  "03.0010": 338,
+  "04.0086": 292,
+  "06.0092": 351,
+  "06.0149": 346,
+  "08.0010": 309,
+  "09.0043": 323
+ },
+ "by_lakara": {
+  "AshirLin": 998,
+  "Lan": 1032,
+  "Lat": 1038,
+  "Lit": 998,
+  "Lot": 996,
+  "Lrn": 1027,
+  "Lrt": 996,
+  "Lun": 912,
+  "Lut": 951,
+  "VidhiLin": 1052
+ },
+ "by_prayoga": {
+  "Bhave": 720,
+  "Karmani": 1722,
+  "Kartari": 7558
+ },
+ "by_purusha": {
+  "Madhyama": 511,
+  "Prathama": 8951,
+  "Uttama": 538
+ },
+ "by_word_count": {
+  "2": 3303,
+  "3": 4881,
+  "4": 1597,
+  "5": 219
+ }
+}

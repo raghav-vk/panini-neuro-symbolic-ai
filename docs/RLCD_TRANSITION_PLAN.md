@@ -537,6 +537,44 @@ first.
    sentences with the Vidyut reward of section 4.1. Compare with supervised
    training alone on the same dev set.
 
+**Progress (2026-11-14), step 1.** `scripts/generate_tier1.py` produces
+`rlcd-tier1-v0`: 10,000 distinct clauses (28,732 words) from seed 1729. The
+output regenerates byte for byte and is not committed. Its manifest is
+`reports/rlcd-stage3/tier1_manifest.json`.
+
+- **How it samples.** Participants are drawn to fit each root's role frame
+  (`data/rlcd/frames.tsv`, with `data/rlcd/stem_classes.tsv`). Person and
+  number follow the agreeing participant. Every clause then goes through the
+  stage 2 compiler.
+- **Mix.** Kartari 7,558, karmaṇi 1,722, bhāve 720. About 1,000 per lakāra,
+  except 912 for luṅ. 255 to 386 per root.
+- **Review sample.** 100 sentences, at least one per root, in
+  `data/reviews/rlcd_tier1_sample.{md,jsonl}`, for the text reader's
+  naturalness check. The frames and classes are draft tables for the text
+  reader. The root and stem tables are under review in issue #78.
+- **Not for training yet.** The manifest records `for_training: false` while
+  any table row is unreviewed (140 rows now).
+
+Two findings came from the kosha round trip during generation:
+
+- **A Vidyut defect.** Vidyut 0.4.0 omits ciṇ (3.1.66) in bhāve luṅ. It gives
+  `aBAvizwa` for *aBāvi*, though karmaṇi luṅ is right (`agAmi`). The
+  combination is blocked as `ENGINE_DEFECT` (fixture X18), so 67 proposals
+  were rejected. This is worth reporting upstream.
+- **A kosha gap.** The kosha files the luṅ forms of *kṛ* (`akArzIt`, `akfta`)
+  under another `kf\Y` entry, not Tanādi `qukf\Y`. The round trip therefore
+  rejects them (48 proposals). The rejection is conservative and false, and is
+  kept until the stem and root analysis does not depend on the kosha.
+
+**Next for stage 3.**
+- **Step 2 needs the full DCS CoNLL-U** (CC BY 4.0, pinned commit, sparse
+  checkout, as in `docs/GOLD_SET_PLAN.md` section 3). It gives real
+  sentences with case, number, gender, tense, mood and person. DCS_pick's
+  numeric `cng` codes cannot be decoded without a code table the repository
+  does not have.
+- **Steps 4 to 6** (heads, baselines, RL fine-tuning) are pre-registered
+  before they run, as stage 1 was.
+
 ### Stage 4: English interface (later work, separate paper)
 
 1. Decide how the model reads English (section 6).

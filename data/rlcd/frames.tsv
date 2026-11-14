@@ -1,0 +1,32 @@
+code	aupadeshika	gloss	kartf	karman	karaRa	aDikaraRa	status	note
+01.0001	BU	be, become	human,animal,plant,place,element	-	-	place	draft_unreviewed	
+01.0051	KAdf~	eat	human,animal	food	hand	place	draft_unreviewed	
+01.0381	paWa~	read, recite	human	text,knowledge	-	place	draft_unreviewed	
+01.0643	jIva~	live	human,animal,plant	-	-	place	draft_unreviewed	
+01.0863	vfDu~\	grow	human,animal,plant	-	-	place	draft_unreviewed	
+01.0924	cala~	move, tremble	human,animal,plant,group	-	-	place	draft_unreviewed	
+01.0979	patx~	fall, fly	human,animal,food,object	-	-	place	draft_unreviewed	
+01.0989	ra\mu~\	enjoy, play	human	-	-	place	draft_unreviewed	
+01.1045	Bf\Y	carry, bear	human,animal	object,food,liquid	hand	place	draft_unreviewed	
+01.1046	hf\Y	take away	human,animal	object,food	hand	place	draft_unreviewed	
+01.1049	RI\Y	lead	human	human,animal,object	vehicle	place	draft_unreviewed	
+01.1074	pA\	drink	human,animal	liquid	hand	place	draft_unreviewed	
+01.1077	zWA\	stand, stay	human,animal,plant,object	-	-	place	draft_unreviewed	
+01.1092	Sru\	hear	human	-	-	place	draft_unreviewed	no suitable object stem yet
+01.1130	qula\Ba~\z	obtain	human	object,food,knowledge	-	place	draft_unreviewed	
+01.1137	ga\mx~	go	human,animal,group	place	vehicle	-	draft_unreviewed	
+01.1141	tya\ja~	abandon	human	place,object,human	-	-	draft_unreviewed	
+01.1143	df\Si~r	see	human,animal	human,animal,plant,place,element,object,text	-	place	draft_unreviewed	
+01.1160	va\sa~	dwell	human,animal	-	-	place	draft_unreviewed	
+01.1164	vada~	speak	human	-	-	place	draft_unreviewed	no suitable object stem yet
+02.0026	SIN	lie, sleep	human,animal	-	-	place	draft_unreviewed	
+02.0040	i\R	go	human	place	vehicle	-	draft_unreviewed	
+02.0044	yA\	go	human,animal,group	place	vehicle	-	draft_unreviewed	
+02.0060	asa~	be	human,animal,plant,place,element,object	-	-	place	draft_unreviewed	
+02.0064	Svasa~	breathe	human,animal	-	-	place	draft_unreviewed	
+03.0010	qudA\Y	give	human	object,food,knowledge,text	hand	place	draft_unreviewed	recipient (sampradana) not in schema v0.3
+04.0086	kru\Da~	be angry	human	-	-	place	draft_unreviewed	
+06.0092	liKa~	write	human	text	instrument	place	draft_unreviewed	
+06.0149	pra\Ca~	ask	human	human	-	place	draft_unreviewed	
+08.0010	qukf\Y	do, make	human	object,food	hand	place	draft_unreviewed	
+09.0043	jYA\	know	human	knowledge,text,human	-	-	draft_unreviewed	
