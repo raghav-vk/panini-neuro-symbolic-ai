@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/raghav-vk/panini-neuro-symbolic-ai/data/schemas/rlcd-clause.schema.json",
+  "title": "RLCD clause AST, schema v0.3 (docs/RLCD_TRANSITION_PLAN.md, stage 2)",
+  "description": "One clause with one finite verb. Enum values are Vidyut 0.4.0 names; strings are SLP1. Shared contract for the Python and any later Rust implementation; fixtures in data/rlcd/clause_fixtures.jsonl.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "dhatu", "upasargas", "prayoga", "lakara", "purusha", "vacana", "participants"],
+  "$defs": {
+    "vacana": {"enum": ["Eka", "Dvi", "Bahu"]},
+    "linga": {"enum": ["Pum", "Stri", "Napumsaka"]},
+    "role": {"enum": ["kartf", "karman", "karaRa", "aDikaraRa"]},
+    "upasarga": {"enum": ["pra", "parA", "apa", "sam", "anu", "ava", "nis", "nir", "dus", "dur", "vi", "AN", "ni", "aDi", "api", "ati", "su", "ut", "aBi", "prati", "pari", "upa"]},
+    "participant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "stem", "linga", "vacana"],
+      "properties": {
+        "role": {"$ref": "#/$defs/role"},
+        "stem": {"type": "string", "pattern": "^[a-zA-Z~\\\\^/']+$", "description": "Pratipadika in SLP1"},
+        "linga": {"$ref": "#/$defs/linga"},
+        "vacana": {"$ref": "#/$defs/vacana"}
+      }
+    }
+  },
+  "properties": {
+    "schema_version": {"const": "0.3.0"},
+    "dhatu": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["aupadeshika", "gana", "code"],
+      "properties": {
+        "aupadeshika": {"type": "string", "description": "Dhatupatha entry in SLP1 with anubandhas and accents, e.g. ga\\mx~"},
+        "gana": {"enum": ["Bhvadi", "Adadi", "Juhotyadi", "Divadi", "Svadi", "Tudadi", "Rudhadi", "Tanadi", "Kryadi", "Curadi"]},
+        "code": {"type": "string", "pattern": "^[0-9]{2}\\.[0-9]{4}$", "description": "Dhatupatha code, e.g. 01.1137"}
+      }
+    },
+    "upasargas": {"type": "array", "items": {"$ref": "#/$defs/upasarga"}, "maxItems": 3},
+    "prayoga": {"enum": ["Kartari", "Karmani", "Bhave"]},
+    "lakara": {"enum": ["Lat", "Lit", "Lut", "Lrt", "Lot", "Lan", "VidhiLin", "AshirLin", "Lun", "Lrn"]},
+    "dhatu_pada": {"enum": ["Parasmaipada", "Atmanepada"], "description": "Optional; only needed to pick one pada of an ubhayapada root"},
+    "purusha": {"enum": ["Prathama", "Madhyama", "Uttama"]},
+    "vacana": {"$ref": "#/$defs/vacana"},
+    "participants": {"type": "array", "items": {"$ref": "#/$defs/participant"}, "maxItems": 4}
+  }
+}
