@@ -1,8 +1,18 @@
 # Project Panini: Unified Neuro-Symbolic Architecture (`v1.0`)
 
-**File Path:** `docs/UNIFIED_NEURO_SYMBOLIC_DESIGN.md`  
+**File Path:** `docs/architecture/unified_neuro_symbolic_architecture_specification.md`  
 **Core Components:** Tiny Byte/SLP1 Transformer (`S-PA`) + Calibrated RLCD Decision Engine + `Vidyut` Paninian Compiler  
 **Target Hardware:** Consumer Silicon (Apple M-Series MPS / Single Consumer CUDA GPU / CPU)
+
+> **Status:** Draft design, not adopted; no results. Only the pretraining
+> metrics in section 3.1 are measured (`reports/pretraining-v1/pretrain_S_PA_seed11.json`).
+> Every other probability, latency and memory figure is illustrative or a
+> target. Reviewed in `docs/RLCD_TRANSITION_PLAN.md` (draft amendment 0.7),
+> which lists the known gaps: Vidyut needs a constraint layer to reject
+> invalid ASTs, the encoder has never seen English, and the joint AST
+> confidence used by the gate is not yet defined. RLCD follows Jev (Guo et
+> al., arXiv:2609.29429, 2026); Jev's training is not published, so the
+> training here is this project's own design.
 
 ---
 
@@ -11,8 +21,8 @@
 Project Panini replaces the conventional, compute-heavy autoregressive Large Language Model (LLM) paradigm with a **Compiler-Style Neuro-Symbolic Architecture**. Instead of training a multi-billion-parameter decoder to probabilistically guess Sanskrit characters and inflections token-by-token, the system decouples **perception and semantic intent (System 1)** from **morphological and phonetic derivation (System 2)**:
 
 1. **Perception Trunk (Pretrained Tiny Transformer — `4.94M` params):** Encodes raw UTF-8 / SLP1 byte sequences into contextual phonetic and morphological representations.
-2. **Decision Layer (RLCD Engine):** Maps pooled encoder states in a single parallel forward pass into a calibrated probability distribution over discrete Paninian parameters (*Vivakṣā*, *Kāraka*, *Dhātu*, *Lakāra*) trained via Strictly Proper Scoring Rules (Brier Score + Batch ECE).
-3. **Symbolic Compiler (`Vidyut` Paninian Engine in Rust):** Deterministically executes the *Aṣṭādhyāyī* sūtras over the RLCD Abstract Syntax Tree (AST) to synthesize or audit 100% grammatically valid Sanskrit with full sūtra-level provenance.
+2. **Decision Layer (RLCD Engine):** Answers typed questions (Jev's Choice, Score and Noul) about discrete Paninian parameters (*Vivakṣā*, *Kāraka*, *Dhātu*, *Lakāra*) in a single parallel forward pass, with calibrated probabilities. Training starts supervised (Brier score, then temperature scaling on held-out dev) and adds reinforcement learning as specified in `docs/RLCD_TRANSITION_PLAN.md`, section 4.1.
+3. **Symbolic Compiler (`Vidyut` Paninian Engine in Rust):** Deterministically executes the *Aṣṭādhyāyī* sūtras over the RLCD Abstract Syntax Tree (AST) to synthesize Sanskrit with full sūtra-level provenance. Vidyut derives a form for any input it is given, including invented roots and impossible combinations, so a constraint layer (Dhātupāṭha lookup, pada, transitivity, voice and number limits, round-trip check) must accept the AST first. Output is then valid for the encoded rules; it does not prove that the AST matches the speaker's meaning.
 
 ---
 
@@ -43,7 +53,7 @@ Project Panini replaces the conventional, compute-heavy autoregressive Large Lan
 │  2. DECISION LAYER: RLCD Engine (Calibrated Multi-Head Schema)                  │
 │     • Parallel Single-Pass Evaluation over Typed Primitives (Choice/Score/Noul) │
 │     • Emits: Paninian AST + Calibrated Probabilities p ∈ [0, 1]                 │
-│     • Trained via Strictly Proper Scoring Rules (Brier Score + Batch ECE)       │
+│     • Supervised Brier + temperature scaling, then RL (see transition plan)     │
 └────────────────────────────────────────┬────────────────────────────────────────┘
                                          │
                          ┌───────────────┴───────────────┐
@@ -55,7 +65,7 @@ Project Panini replaces the conventional, compute-heavy autoregressive Large Lan
                                          │
                                          ▼
                          ┌───────────────────────────────┐
-                         │  Confidence Gate (τ = 0.85)   │
+                         │ Confidence Gate (τ, e.g. 0.85)│
                          └───┬───────────────────────┬───┘
               (p ≥ τ: Direct)│                       │(p < τ: Ambiguous)
                              ▼                       ▼
@@ -95,10 +105,10 @@ Rather than initializing a decision network from scratch, Layer 1 reuses the **4
 | :--- | :--- | :--- | :--- |
 | **`train_mlm_loss`** | `3.2095` | `1.5366` | Smooth convergence of byte-level contextual representations. |
 | **`masked_byte_accuracy`** | `25.33%` | `51.38%` | Demonstrates why pure neural byte prediction hits a ceiling on fusional morphology. |
-| **`train_disc_loss`** | `0.3725` | `0.0302` | Near-complete mastery of phonetic perturbation boundaries (`a/A`, `i/I`, `u/U`, `e/E`, `o/O`). |
+| **`train_disc_loss`** | `0.3725` | `0.0302` | Training loss on the vowel-length swaps (`a/A`, `i/I`, `u/U`, `e/E`, `o/O`); see dev accuracy for generalisation. |
 | **`disc_attested_accuracy`** | `97.85%` | `99.56%` | `1,576 / 1,583` valid Sanskrit words recognized accurately. |
 | **`disc_altered_accuracy`** | `40.59%` | `91.14%` | `247 / 271` synthetic Sandhi/vowel corruptions caught (peak `91.51%` at Step 28k). |
-| **`disc_balanced_accuracy`** | `69.22%` | `95.35%` | Confirms the 4.94M backbone encodes deep Paninian structural awareness. |
+| **`disc_balanced_accuracy`** | `69.22%` | `95.35%` | Shows the encoder detects single-word vowel-length swaps (the only alteration it was trained on); not evidence of broader grammatical knowledge. |
 
 **Why Layer 1 Stops at Representation:**  
 While the 4.94M encoder achieves **95.35% balanced accuracy** on discriminating valid vs. altered forms, **8.86%** of altered words still pass through unflagged, and surface byte generation plateaus at **51.38%**. Freezing or fine-tuning this encoder as a feature extractor $\mathbf{H} = f_{\theta}(\mathbf{x})$ preserves its compact 19.8 MB footprint while offloading exact surface generation to the RLCD + Vidyut layers.
@@ -107,19 +117,19 @@ While the 4.94M encoder achieves **95.35% balanced accuracy** on discriminating 
 
 ### 3.2 Layer 2: The RLCD Engine (Calibrated Decision Heads)
 
-Attached directly to the Tiny Transformer's pooled and span-level hidden states $\mathbf{H}$, the **RLCD (Reinforcement Learning for Calibrated Decisions)** module replaces the standard vocabulary projection matrix with structured, schema-conditioned Plackett–Luce and sigmoid heads:
+Attached directly to the Tiny Transformer's pooled and span-level hidden states $\mathbf{H}$, the **RLCD (reinforcement learning for calibrated decisions, after Jev, arXiv:2609.29429)** module replaces the standard vocabulary projection matrix with structured, schema-conditioned Plackett–Luce and sigmoid heads:
 
 * **Clause-Level Vivakṣā Heads:**
   * `prayoga`: `Choice(kartari, karmani, bhave)` — Sūtra `3.4.69`
   * `lakara`: `Choice(laW, liW, luW, lfW, loW, laN, viDiliN, ASIrliN, luN, lfN)` — Sūtras `3.2.123–3.3.176`
 * **Verbal Core (`Tiṅanta`) Heads:**
   * `dhatu_selection`: `Choice(K <= 255)` over candidate roots retrieved from `vidyut-kosha`
-  * `upasarga_prefix`: `Choice(NOUL, pra, parA, apa, sam, ...)` (22 Upasargas + `NOUL` abstention)
+  * `upasarga_prefix`: `Choice(NONE, pra, parA, apa, sam, ...)` (22 Upasargas + `NONE` for no prefix)
   * `purusha` & `vacana`: `Choice(praTama, maDyama, uttama)` $\times$ `Choice(eka, dvi, bahu)`
 * **Nominal Slot (`Kāraka / Subanta`) Heads:**
-  * Evaluated in parallel across extracted entity spans: `Choice(NOUL, kartf, karman, karaRa, sampradAna, apAdAna, aDikaraRa, sambanDa_zazWI, upapada_nimitta)` paired with `linga` and `vacana`.
+  * Evaluated in parallel across extracted entity spans (span extraction not yet specified): `Choice(NONE, kartf, karman, karaRa, sampradAna, apAdAna, aDikaraRa, sambanDa_zazWI, upapada_nimitta)` paired with `linga` and `vacana`.
 * **Token-Level Auditor Head (`Path B`):**
-  * Upgrades the pretrained binary `disc` head into a Brier-calibrated `Score` head outputting $p_{\text{valid}}(w_i) \in [0, 1]$ for every surface token or sandhi boundary.
+  * Upgrades the pretrained binary `disc` head into a calibrated `Noul` ("Is this word lawful here?") outputting $p_{\text{valid}}(w_i)$ for every surface token or sandhi boundary. The current head was trained only on single-word vowel-length swaps; detecting agreement errors between words needs a new objective and data.
 
 #### Mathematical Calibration Objective
 To guarantee that the neural network never bluffs when encountering ambiguous compounds (*Samāsa*) or homophonous *Sandhi* splits, RLCD optimizes the policy $\pi_\phi(a \mid \mathbf{H})$ using a **Multi-Class Brier Score** combined with a differentiable **Batch Expected Calibration Error (ECE)** penalty:
@@ -128,7 +138,7 @@ $$
 \mathcal{L}_{\text{RLCD}}(\phi) = \frac{1}{K} \sum_{k=1}^{K} \left( \pi_\phi(a_k \mid \mathbf{H}) - y_k \right)^2 + \lambda_{\text{ECE}} \sum_{m=1}^{M} \frac{\vert B_m \vert}{N} \left\vert \text{acc}(B_m) - \text{conf}(B_m) \right\vert
 $$
 
-When the RLCD head reports $p = 0.62$, it is empirically accurate $62\%$ of the time. This allows the **Confidence Gate ($\tau = 0.85$)** to deterministically switch between single-shot compilation ($p \ge 0.85$) and symbolic branch search ($p < 0.85$).
+The goal is that when the RLCD head reports $p = 0.62$, it is right about $62\%$ of the time; this must be measured on held-out data, not assumed. The ECE term is a project choice, not Jev's: its hard binning passes no gradient through bin membership, and adding it makes the loss no longer strictly proper. Calibration would allow the **Confidence Gate ($\tau = 0.85$)** to switch between single-shot compilation ($p \ge 0.85$) and symbolic branch search ($p < 0.85$). Which probability the gate uses for a whole AST (heads are answered independently, but voice, case and number are coupled) is not yet defined.
 
 ---
 
@@ -145,28 +155,30 @@ The symbolic backend is powered by the Rust-based `Vidyut` ecosystem (exposed to
 
 ## 4. Dual Execution Walkthroughs
 
+> All probabilities and timings in this section are illustrative, not model output.
+
 ### 4.1 Path A: The Constructor (English $\rightarrow$ Validated Sanskrit)
 
 * **Input:** `"The two boys happily go to the village."`
-* **Step 1 (Tiny Transformer):** Encodes UTF-8 bytes into $\mathbf{H} \in \mathbb{R}^{41 \times 256}$ in `1.8 ms`.
+* **Step 1 (Tiny Transformer):** Encodes UTF-8 bytes into $\mathbf{H} \in \mathbb{R}^{41 \times 256}$. The current encoder was pretrained on SLP1 Sanskrit only and has never seen English; Path A needs an English-capable encoder (transition plan, section 6).
 * **Step 2 (RLCD Single-Pass Output — `3.4 ms`):**
   * `prayoga`: `kartari` ($p = 0.991$)
   * `lakara`: `laW` ($p = 0.978$)
-  * `dhatu`: `gam\l~` ($p = 0.942$)
+  * `dhatu`: `ga\mx~` ($p = 0.942$)
   * `Span["The two boys"]`: `role = kartf` ($p = 0.995$), `stem = bAlaka` ($p = 0.910$), `vacana = dvivacana` ($p = 0.988$)
   * `Span["to the village"]`: `role = karman` ($p = 0.960$), `stem = grAma` ($p = 0.982$), `vacana = ekavacana` ($p = 0.994$)
-  * `Span["happily"]`: `role = kriyAviSezaRa` ($p = 0.920$), `stem = suKa` (`tftIyA` adverbial, $p = 0.890$)
+  * `Span["happily"]`: `role = kriyAviSezaRa` ($p = 0.920$; not yet an option in the schema), `stem = suKa` (`tftIyA` adverbial, $p = 0.890$)
 * **Step 3 (Vidyut Compilation — `0.4 ms`):**
   * `bAlaka` + `praTamA/dvi` $\xrightarrow{\text{1.4.54, 2.3.46, 6.1.102}}$ `bAlakO`
   * `suKa` + `tftIyA/eka` $\xrightarrow{\text{2.3.18, 7.1.12}}$ `suKena`
   * `grAma` + `dvitIyA/eka` $\xrightarrow{\text{1.4.49, 2.3.2, 6.1.107}}$ `grAmam`
-  * `gam\l~` + `laW` + `praTama/dvi` $\xrightarrow{\text{3.2.123, 3.4.78, 7.3.77}}$ `gacCataH`
+  * `ga\mx~` + `laW` + `praTama/dvi` $\xrightarrow{\text{3.2.123, 3.4.78, 7.3.77}}$ `gacCataH`
   * Sandhi Assembly $\rightarrow$ `bAlakO suKena grAmaM gacCataH` $\rightarrow$ **बालकौ सुखेन ग्रामं गच्छतः ।**
 
 ### 4.2 Path B: The Auditor (Sanskrit Validation & Self-Correction)
 
 * **Input:** `"rAmeRa vanaM gacCati"` *(Error: Instrumental agent `rAmeRa` paired with active verb `gacCati`)*
-* **Step 1 (Tiny Transformer + Calibrated `disc` Head):**
+* **Step 1 (Tiny Transformer + Calibrated `disc` Head; target behaviour, beyond what the current head was trained to detect):**
   * Token `rAmeRa`: $p_{\text{valid}} = 0.14$ (Flagged below $\tau = 0.85$)
   * Token `vanaM`: $p_{\text{valid}} = 0.98$
   * Token `gacCati`: $p_{\text{valid}} = 0.42$ (Agreement conflict detected)
@@ -175,18 +187,21 @@ The symbolic backend is powered by the Rust-based `Vidyut` ecosystem (exposed to
     * Vidyut Output: `rAmo vanaM gacCati` (**रामो वनं गच्छति**)
   * **Branch 2 ($p = 0.29$ — Passive Voice Repair):** Preserve `rAmeRa` (`3/1` via Sūtra `2.3.18 kartṛkaraṇayos tṛtīyā`), switch `prayoga = karmani` $\rightarrow$ `vanaM` (`1/1`) + `gamyate` (`gam + yak + te` via Sūtra `3.1.67 sārvadhātuke yak`).
     * Vidyut Output: `rAmeRa vanaM gamyate` (**रामेण वनं गम्यते**)
-* **Step 3 (Output):** Both mathematically proven corrections and their governing sūtras are presented to the user.
+* **Step 3 (Output):** Both rule-derived corrections and their governing sūtras are presented to the user.
 
 ---
 
 ## 5. Repository Directory Layout & Implementation Blueprint
 
+Proposed layout. Of the paths below, `data/processed/pretrain-v1/`, `data/rules/development_sandhi.jsonl`, `runs/pretrain-S-PA-seed11/` and `scripts/simulate_calibration.py` exist; the rest are planned. The encoder currently lives in `src/panini/pretraining.py`.
+
 ```text
 panini-neuro-symbolic-ai/
 ├── docs/
-│   ├── PANINIAN_ENGINE_ARCHITECTURE.md
-│   ├── RLCD_DECISION_SCHEMA.md
-│   └── UNIFIED_NEURO_SYMBOLIC_DESIGN.md     <-- This specification
+│   ├── architecture/PANINIAN_ENGINE_ARCHITECTURE.md
+│   ├── architecture/rlcd_decision_schema_specification.md
+│   ├── architecture/unified_neuro_symbolic_architecture_specification.md  <-- This specification
+│   └── RLCD_TRANSITION_PLAN.md              <-- Review and staged plan (draft amendment 0.7)
 ├── data/
 │   ├── processed/pretrain-v1/               <-- SLP1 byte corpora (P-A.jsonl, dev_sentences.jsonl)
 │   ├── rules/development_sandhi.jsonl       <-- Phonetic perturbation rules
@@ -203,13 +218,16 @@ panini-neuro-symbolic-ai/
 │   └── schema/
 │       └── panini_rlcd_schema.json          <-- Typed decision schema definition
 └── scripts/
-    ├── eval_calibration.py                  <-- Computes ECE, Brier Score & Reliability Diagrams
+    ├── eval_calibration.py                  <-- Planned (stage 1): real ECE, Brier & reliability diagrams from checkpoints
+    ├── simulate_calibration.py              <-- Existing simulation only; its outputs are not results
     └── run_panini_engine.py                 <-- CLI / Voice inference entry point
 ```
 
 ---
 
 ## 6. Reference Implementation (`src/engine/neuro_symbolic_pipeline.py`)
+
+Sketch only; not in the repository and not run. The existing encoder (`src/panini/pretraining.py`) has no `encode` method, and mean pooling over the whole sentence cannot carry several entity spans.
 
 ```python
 from dataclasses import dataclass
@@ -223,7 +241,7 @@ import torch.nn.functional as F
 class PaninianAST:
     prayoga: str          # "kartari" | "karmani" | "bhave"
     lakara: str           # "laW" | "liW" | "luW" | "lfW" | "loW" | "laN" | ...
-    dhatu: str            # SLP1 root e.g. "gam\\l~"
+    dhatu: str            # SLP1 Dhatupatha entry e.g. "ga\\mx~"
     upasarga: Optional[str]
     purusha: str          # "praTama" | "maDyama" | "uttama"
     vacana: str           # "ekavacana" | "dvivacana" | "bahuvacana"
@@ -242,7 +260,7 @@ class CalibratedRLCDModule(nn.Module):
         self.prayoga_head = nn.Linear(d_model, 3)
         self.lakara_head = nn.Linear(d_model, 10)
         self.dhatu_head = nn.Linear(d_model, num_dhatus)
-        self.upasarga_head = nn.Linear(d_model, 23)  # 22 Upasargas + NOUL
+        self.upasarga_head = nn.Linear(d_model, 23)  # 22 Upasargas + NONE
         self.audit_score_head = nn.Linear(d_model, 1)
 
         # Learned temperature parameter for post-hoc / online ECE calibration
@@ -302,7 +320,9 @@ def compute_rlcd_brier_ece_loss(
 
 ## 7. Hardware & Latency Profile
 
-| Stage | Component | Precision / Size | Execution Device | Latency (p95) |
+**Targets, not measurements.** Only the parameter count (4,937,220) is measured. Latency and memory will be measured on the project Mac in stage 1 and reported with every accuracy figure.
+
+| Stage | Component | Precision / Size | Execution Device | Target latency (p95) |
 | :--- | :--- | :--- | :--- | :--- |
 | **Layer 1** | Tiny Transformer (`S-PA`, 4.94M params) | FP32 (`19.8 MB`) / FP16 (`9.9 MB`) | Apple MPS / CPU / CUDA | `~2.1 ms` |
 | **Layer 2** | RLCD Decision Heads (`Choice` / `Score`) | FP32 (`< 1.2 MB`) | Apple MPS / CPU / CUDA | `~0.8 ms` |

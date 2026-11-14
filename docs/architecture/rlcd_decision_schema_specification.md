@@ -4,18 +4,29 @@
 **Architecture:** Neuro-Symbolic Decision Compiler (Jev / Laya RLCD Pattern)  
 **Encoding Standard:** SLP1 (`Sanskrit Library Phonetic Basic`)
 
+> **Status:** Draft design, not adopted; no results. All probabilities,
+> latencies and ECE values below are illustrative, not measured. Reviewed in
+> `docs/RLCD_TRANSITION_PLAN.md` (draft amendment 0.7), which lists the known
+> gaps. RLCD and the Choice, Score and Noul primitives come from Jev (Guo et
+> al., *Just Ask Jev: Reinforcement Learning for Calibrated Decisions as a
+> Zero-Shot Detector of AI Alignment Failures*, arXiv:2609.29429, 2026).
+> Jev's training is not published; the training described in section 4 is
+> this project's own design.
+
 ---
 
 ## 1. Architectural Overview
 
-Instead of using a large autoregressive language model to predict Sanskrit surface tokens one by one—which leads to subword fragmentation and morphological hallucinations—Project Panini uses **Reinforcement Learning for Calibrated Decisions (RLCD)** on a compact transformer encoder.
+Instead of using a large autoregressive language model to predict Sanskrit surface tokens one by one—which leads to subword fragmentation and morphological hallucinations—Project Panini uses **reinforcement learning for calibrated decisions (RLCD)**, the approach introduced with Jev (arXiv:2609.29429), on a compact transformer encoder. The acronym also stands for reinforcement learning from contrastive distillation (Yang et al., 2024); here it always means the Jev sense.
 
-In a single forward pass ($\approx 15\text{--}35\text{ ms}$ on consumer hardware), the tiny transformer reads the input sentence (English or Sanskrit) alongside a fixed schema of grammatical questions. It outputs **calibrated probability distributions** over discrete Paninian parameters (*Vivakṣā*). The deterministic Rust engine (`Vidyut`) then compiles these parameters into mathematically guaranteed Sanskrit forms.
+In a single forward pass (target latency, not yet measured), the tiny transformer reads the input sentence (English or Sanskrit) alongside a fixed schema of grammatical questions. It outputs **calibrated probability distributions** over discrete Paninian parameters (*Vivakṣā*). The deterministic Rust engine (`Vidyut`) then compiles these parameters into mathematically guaranteed Sanskrit forms.
 
 ### RLCD Primitive Types Used
-1. **`Choice` ($1\text{ of }K$, max $255$):** A mutually exclusive categorical distribution over Paninian primitives (e.g., selecting the exact *Lakāra*, *Prayoga*, or *Kāraka* role) modeled via a Plackett–Luce head.
-2. **`Score` ($[0, 1]$):** A continuous calibrated confidence or grammaticality rating (e.g., validating whether a user's surface *Sandhi* is lawful).
-3. **`Noul` (Null / Abstain):** An explicit abstention weight allowing the model to signal when a semantic slot (such as an optional *Upasarga* or secondary object) is absent, or when input ambiguity requires symbolic branching.
+The three primitives follow Jev's definitions:
+
+1. **`Choice`:** a probability distribution over a listed set of options, with the most probable option and a confidence (e.g., selecting the *Lakāra*, *Prayoga*, or *Kāraka* role). An absent slot is the option `NONE`. *Project choices, not from Jev:* a cap of 255 options and a Plackett–Luce head when options must be ranked.
+2. **`Score`:** a probability distribution over ordered levels $0, \dots, K-1$, with the expected level (e.g., a graded naturalness or grammaticality rubric).
+3. **`Noul`:** a yes/no question; returns $P(\text{yes})$ (e.g., "Is this split licensed by 6.1.101?", "Is this surface form lawful?").
 
 ---
 
@@ -38,9 +49,8 @@ When querying the RLCD encoder during **Path A (Constructor: English $\rightarro
       "description": "Determines cognitive pipeline routing."
     },
     "surface_grammaticality": {
-      "type": "Score",
-      "range": [0.0, 1.0],
-      "description": "Calibrated probability that the raw input is already Paninian-compliant (used in Auditor mode)."
+      "type": "Noul",
+      "description": "Is the raw input already Paninian-compliant? Returns calibrated P(yes) (used in Auditor mode)."
     }
   },
   "vivaksha_clause_frame": {
@@ -76,32 +86,32 @@ When querying the RLCD encoder during **Path A (Constructor: English $\rightarro
     "dhatu_selection": {
       "type": "Choice",
       "max_candidates": 255,
-      "allow_noul": false,
+      "allow_none": false,
       "candidates_source": "dynamic_lexical_lookup",
       "options_example": [
-        "gam\\l~ (1.1137 - gati)",
-        "i\\R (2.0040 - gati)",
-        "ya\\ (2.0044 - prApaRe)",
-        "paW\\a~ (1.0381 - vyaktAyAM vAci)"
+        "ga\\mx~ (01.1137 - gatO)",
+        "i\\R (02.0040 - gatO)",
+        "yA\\ (02.0044 - prApaRe)",
+        "paWa~ (01.0381 - vyaktAyAM vAci)"
       ],
-      "description": "Selects the exact Paninian verbal root (with anubandha markers in SLP1) from retrieved candidates."
+      "description": "Selects the exact Paninian verbal root, written as its Dhatupatha entry in SLP1 with anubandha and accent markers (Vidyut 0.4.0 needs `ga\\mx~`; `gam\\l~` is rejected and `gamx~` derives the wrong form `gamataH`)."
     },
     "upasarga_prefix": {
       "type": "Choice",
-      "allow_noul": true,
+      "allow_none": true,
       "options": [
-        "NOUL",
+        "NONE",
         "pra", "parA", "apa", "sam", "anu", "ava", "nis", "nir",
         "dus", "dur", "vi", "AN", "ni", "aDi", "api", "ati",
         "su", "ut", "aBi", "prati", "pari", "upa"
       ],
-      "description": "Selects verbal prefix or abstains via NOUL if the root is unprefixed."
+      "description": "Selects the verbal prefix, or NONE if the root is unprefixed."
     },
     "pada_override": {
       "type": "Choice",
-      "allow_noul": true,
+      "allow_none": true,
       "options": [
-        "NOUL",
+        "NONE",
         "parasmEpada",
         "Atmanepada"
       ],
@@ -123,10 +133,10 @@ When querying the RLCD encoder during **Path A (Constructor: English $\rightarro
     "slot_template": {
       "karaka_role": {
         "type": "Choice",
-        "allow_noul": true,
+        "allow_none": true,
         "sutra_ref": "1.4.23 (kArake) - 1.4.55",
         "options": [
-          "NOUL",
+          "NONE",
           "kartf (1.4.54 - svatantraH kartA)",
           "karman (1.4.49 - kartur IpsitatamaM karma)",
           "karaRa (1.4.42 - sADakatamaM karaRam)",
@@ -171,6 +181,7 @@ The RLCD transformer evaluates the input state against the schema and returns th
 
 ```json
 {
+  "_note": "Illustrative values only; nothing here is measured.",
   "inference_time_ms": 18.4,
   "calibration_ece_estimate": 0.014,
   "decisions": {
@@ -180,11 +191,11 @@ The RLCD transformer evaluates the input state against the schema and returns th
     },
     "tinanta_verbal_core": {
       "dhatu_selection": {
-        "choice": "gam\\l~",
+        "choice": "ga\\mx~",
         "prob": 0.910,
         "runner_up": { "choice": "i\\R", "prob": 0.075 }
       },
-      "upasarga_prefix": { "choice": "NOUL", "prob": 0.991 },
+      "upasarga_prefix": { "choice": "NONE", "prob": 0.991 },
       "purusha": { "choice": "praTama", "prob": 0.998 },
       "vacana": { "choice": "ekavacana", "prob": 0.995 }
     },
@@ -235,6 +246,15 @@ The RLCD transformer evaluates the input state against the schema and returns th
 ---
 
 ## 4. Training Objective: Brier Score + Batch ECE
+
+> **Project design, not Jev's.** Jev measures calibration with ECE and
+> reliability curves and does not publish its training objective. The loss
+> below is supervised. The reinforcement-learning stages (a cost-aware
+> confidence gate, and policy-gradient fine-tuning with a Vidyut-verified
+> reward and a proper-scoring calibration reward) are specified in
+> `docs/RLCD_TRANSITION_PLAN.md`, section 4.1. Two cautions: the hard ECE
+> binning passes no gradient through bin membership, and adding ECE makes the
+> loss no longer strictly proper.
 
 To train the tiny encoder on consumer GPUs (e.g., single RTX 3090/4090) without reward hacking or overconfident hallucinations, the policy $\pi_\theta(a \mid s)$ is optimized using a strictly proper scoring rule over synthetic `Vidyut` derivations:
 
