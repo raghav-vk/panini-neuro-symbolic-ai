@@ -1,0 +1,67 @@
+{
+  "mode": "seed11_history_verified",
+  "num_samples": 1854,
+  "num_attested": 1583,
+  "num_altered": 271,
+  "brier_uncalibrated": 0.01741,
+  "brier_calibrated": 0.01639,
+  "ece_uncalibrated": 0.01326,
+  "ece_calibrated": 0.0091,
+  "mce_uncalibrated": 0.46647,
+  "mce_calibrated": 0.39623,
+  "optimal_temperature": 0.675,
+  "prior_bias_correction": -0.15,
+  "neural_only_balanced_acc": 0.95351,
+  "hybrid_tau_085_balanced_acc": 0.96489,
+  "hybrid_tau_085_symbolic_rate": 0.04153,
+  "hybrid_tau_095_balanced_acc": 0.97754,
+  "hybrid_tau_095_symbolic_rate": 0.10032,
+  "uncal_bin_acc": [
+    1.0,
+    1.0,
+    0.88889,
+    0.875,
+    0.86538,
+    0.94643,
+    0.91,
+    0.99622
+  ],
+  "uncal_bin_conf": [
+    0.53353,
+    0.59595,
+    0.6503,
+    0.7283,
+    0.78395,
+    0.84313,
+    0.90711,
+    0.99465
+  ],
+  "cal_bin_acc": [
+    1.0,
+    1.0,
+    0.90909,
+    0.90909,
+    0.85106,
+    0.91176,
+    0.99172
+  ],
+  "cal_bin_conf": [
+    0.60377,
+    0.66718,
+    0.72907,
+    0.78133,
+    0.84398,
+    0.90752,
+    0.9966
+  ],
+  "bin_counts": [
+    2,
+    7,
+    9,
+    40,
+    52,
+    56,
+    100,
+    1588
+  ]
+}
