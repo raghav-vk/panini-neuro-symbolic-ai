@@ -1,5 +1,5 @@
 {
-  "mode": "seed11_history_verified",
+  "mode": "simulated_from_seed11_counts",
   "num_samples": 1854,
   "num_attested": 1583,
   "num_altered": 271,

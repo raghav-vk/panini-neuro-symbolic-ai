@@ -1,0 +1,454 @@
+# Plan: Review of the RLCD Architecture and a Staged Transition
+
+**Status:** Draft, 2026-11-14. Proposed as amendment 0.7 of
+`docs/EXPERIMENT_PROTOCOL.md`. Nothing here is adopted. No test set has been
+used. Once approved, sections 4 and 5 become protocol section 11.5 before any
+stage 1 run.
+
+**Documents reviewed:**
+
+- `docs/architecture/unified_neuro_symbolic_architecture_specification.md`
+  (commit 4746652)
+- `docs/architecture/rlcd_decision_schema_specification.md` (commit b39e387)
+- `docs/dataset-generation-pipeline.md` (commit 8e15cec)
+- `docs/dataset-structure.json` (commit 3a78548)
+- `scripts/eval_calibration.py` (now `scripts/simulate_calibration.py`), its JSON and
+  plots (commits 7c3602b and 3a78548), renamed `*_simulated.*` in stage 0
+
+## In Plain Terms
+
+The new design has three parts. A small neural encoder reads a sentence. A
+set of decision heads picks grammatical parameters (voice, tense, root, roles,
+number) with probabilities that should match how often they are right. The
+Vidyut engine then derives the Sanskrit forms by rule. When the heads are
+unsure, several analyses are derived and checked.
+
+**The goal.** Build a high-fidelity model that reaches high accuracy with far
+fewer parameters and far less GPU than a large language model, by letting
+rules do what rules can do and a small calibrated network decide the rest.
+RLCD, adopted from Jev (Guo et al., arXiv:2609.29429), is the decision part. Sandhi splitting is
+the first tangible demonstration for the paper, not the limit of the project.
+
+The direction fits that goal and the long-term Sanskrit core with language
+interfaces. But the documents state several things as results or
+guarantees that the repository does not support:
+
+1. **The calibration figures come from made-up data.** The evaluation script
+   does not run the model.
+2. **Vidyut does not reject invalid input.** It derives forms from invented
+   roots and impossible parameter combinations, so "it compiled" does not
+   mean "it is valid".
+3. **The encoder has never seen English.** It was pretrained on SLP1
+   Sanskrit only, so the English-to-Sanskrit path gets nothing from it.
+
+This plan records those findings and proposes a staged path. The paper's
+evidence comes from sandhi splitting. RLCD enters first as honest calibration
+and abstention on that task, then as Sanskrit-side analysis, and English comes
+last. Every stage reports parameters and compute next to accuracy, since
+efficiency is the claim the project is ultimately after.
+
+## 1. Critical Findings
+
+### 1.1 The calibration results are simulated
+
+`scripts/eval_calibration.py` imports torch but never loads a checkpoint. In
+`reconstruct_dev_distribution_from_seed11` it takes the seed 11 dev counts
+from `reports/pretraining-v1/pretrain_S_PA_seed11.json`:
+
+- 1,576 of 1,583 attested words correct
+- 247 of 271 altered words correct
+
+It then **invents a score for every word** from hand-chosen normal and uniform
+distributions that reproduce those counts. In `main`, it stretches them with
+`logits * 1.45 + 0.35` to create overconfidence, and then "calibrates" the
+result. Every number in `calibration_eval_seed11.json` follows from those
+choices, not from the model:
+
+- the "uncalibrated" ECE 0.013 and Brier 0.017
+- the "calibrated" ECE 0.009 and Brier 0.016
+- the temperature 0.675 and bias -0.15
+- all reliability bins
+
+The file is labelled `"mode": "seed11_history_verified"`, which reads as a
+measured result.
+
+Two further defects would remain even with real scores:
+
+- **The fallback is an oracle.** `evaluate_hybrid_routing` replaces every
+  routed prediction with the true label
+  (`np.where(symbolic_mask, labels, preds)`). The reported hybrid balanced
+  accuracies (0.965 at τ = 0.85 and 0.978 at τ = 0.95) assume Vidyut is always
+  right. Vidyut has no word-validity judgement to fall back on in this task.
+- **Calibration is fitted and scored on the same 1,854 words.**
+
+Affected artifacts (original names; all renamed `*_simulated.*` in stage 0):
+
+- `reports/pretraining-v1/calibration_eval_seed11.json`
+- `reports/pretraining-v1/calibration_plots.pdf` and `.png`
+- `docs/paper/artifacts/calibration_plots.pdf` (a different rendering, 25 KB
+  against 28.7 KB)
+
+Panel (b) of the figure plots the real training history and is fine on its
+own. Panels (a) and (c) must not appear in the paper. The protocol (section
+8.4) says never to describe generated material as attested.
+
+### 1.2 Vidyut derives forms without checking them
+
+Checked on 2026-11-14 with `vidyut==0.4.0` in the project `.venv`:
+
+| Input | Vidyut output | Problem |
+| --- | --- | --- |
+| Invented root `Darba~`, bhvādi, laṭ, prathama, dvi | `DarbataH` | No such root |
+| Invented root `kuwapa~` | `kuwapataH` | No such root |
+| `ga\mx~` declared as curādi | `gAmayete`, `gAmayataH` | Wrong gaṇa accepted |
+| `ga\mx~`, bhāve, dvivacana | `gamyete` | Bhāve takes only the singular |
+| `gamx~` (anudātta marker missing) | `gamataH` | Silent wrong form; only `ga\mx~` gives `gacCataH` |
+| Invented stem `xyzab`, puṃliṅga, tṛtīyā | a declined form | No such stem |
+
+`Vyakarana.derive` applies rules to whatever it is given. The pipeline's
+claim that a failed compilation catches a hallucinated root or an illegal pada,
+"guaranteeing zero morphological hallucinations", is false as written.
+
+Validity needs a separate constraint layer:
+
+- the root and gaṇa must exist in the Dhātupāṭha (`dhatupatha.tsv` in the
+  Vidyut data)
+- pada (parasmaipada or ātmanepada) must be allowed for the root
+- transitivity must fit the voice: karmaṇi needs a transitive root, bhāve an
+  intransitive one, and bhāve takes only the singular
+- the stem must be in the kosha with the stated gender
+- every generated form must round-trip: analysing it with the kosha must
+  return the input parameters
+
+### 1.3 Compiling proves form, not meaning
+
+Even with the constraint layer, a compiled AST only shows that the parameters
+produce a well-formed word. It does not show that they match the English
+sentence. In Tier 3 (LLM labelling) the main error is semantic: a wrong role,
+root or tense. Vidyut cannot detect it. Silver data will carry label noise of
+unknown size until a human-checked sample measures it.
+
+## 2. Architecture Gaps
+
+**English input.** The S-PA encoder was pretrained on 439,274 SLP1 Sanskrit
+sentences. Path A (English to Sanskrit) feeds it English bytes it has never
+seen, so the pretrained trunk adds nothing there. Reading English needs either
+bilingual pretraining or a separate English encoder. That is a design
+decision for stage 4, not a detail.
+
+**The audit head was trained for another task.** The discriminator learned
+one thing: whether a single word has had a vowel length swapped (a/A, i/I,
+u/U, e/E, o/O) in its sentence. The Path B example's error in `rAmeRa vanaM
+gacCati` is agreement between words. `rAmeRa` is a valid word. The example's
+p_valid of 0.14 is not something the current head could produce; it is
+illustrative only. Agreement checking needs its own objective and data.
+
+**The name and the method must match.** RLCD (reinforcement learning for
+calibrated decisions) is kept as the project's name for the approach, adopted
+from Jev (section 2.1). But the specifications describe only supervised training: fixed
+labels and a Brier loss, with no sampled actions, no reward and no
+environment. A reviewer will read "reinforcement learning", look for it, and
+not find it. Section 4.1 makes the RL part real. Also:
+
+- The ECE term assigns bins with a hard threshold, so no gradient flows
+  through bin membership.
+- Adding ECE to the Brier loss makes the loss no longer strictly proper.
+- Temperature scaling on held-out dev data is the standard and simpler way to
+  calibrate after training.
+
+**The confidence gate is undefined for an AST.** τ = 0.85 is applied to one
+head's probability, but the gate routes whole analyses. Multiplying head
+probabilities assumes independence, and prayoga, vibhakti and vacana are
+tightly coupled. Enumerating top-K ASTs over up to 255 roots, 255 stems per
+slot and nine roles grows combinatorially. The gate needs a defined joint
+score and a search bound.
+
+**No span extraction.** The heads take noun-phrase spans ("The two boys") as
+given. Nothing in the design finds them. The reference code also mean-pools
+the whole sentence into one vector, which cannot carry several entities.
+
+**Schema coverage is narrow:**
+
+- one finite verb per sentence
+- no avyayas, samāsa, kṛdantas (participles, absolutives, infinitives),
+  taddhitas, negation or questions
+- `upapada_nimitta` and `sambanDa_zazWI` are listed as kāraka options but are
+  not kārakas
+- the walkthrough uses `kriyAviSezaRa` for "happily", which is not among the
+  options
+
+**Unmeasured numbers are stated as facts:**
+
+- latencies of 1.8, 2.1, 3.4, 0.8 and 0.5 ms and ~36 MB RAM (section 7 of the
+  unified specification)
+- `"calibration_ece_estimate": 0.014` and all probabilities in the traces
+- "confirms the 4.94M backbone encodes deep Paninian structural awareness"
+  (the discriminator covers vowel-length swaps only)
+
+**Internal inconsistencies:**
+
+- `docs/dataset-structure.json` uses `lat` and `dvi`; the schema uses `laW`
+  and `dvivacana`. It omits `linga` for `jala`.
+- The specifications refer to `docs/UNIFIED_NEURO_SYMBOLIC_DESIGN.md` and
+  `docs/RLCD_DECISION_SCHEMA.md`, which do not exist.
+- The schema writes roots as `gam\l~`; Vidyut 0.4.0 rejects that string and
+  expects `ga\mx~`.
+
+### 2.1 What Jev Actually Specifies
+
+Checked on 2026-11-14 against Guo et al., *Just Ask Jev: Reinforcement
+Learning for Calibrated Decisions as a Zero-Shot Detector of AI Alignment
+Failures*, arXiv:2609.29429 (24 Sep 2026), and the vendor documentation it
+cites (TypeSafe AI, https://docs.typesafe.ai).
+
+- **Jev is TypeSafe AI's model, and its training is not published.** The
+  paper and the documentation describe how Jev is queried and evaluated. They
+  give no model size, RL algorithm, reward or training data. Whether the
+  weights are open, and under what licence, is not stated. So the project can
+  adopt Jev's **interface and evaluation**, but the training method is ours to
+  design, state and defend.
+- **The primitives in this repository's schema differ from Jev's:**
+
+  | Primitive | Jev | `rlcd_decision_schema_specification.md` |
+  | --- | --- | --- |
+  | Noul | A yes/no question; returns P(yes) | "Null / Abstain" weight for an absent slot |
+  | Choice | A distribution over listed options, the argmax and a confidence | Same idea, plus "Plackett–Luce" and "max 255", which Jev does not state |
+  | Score | A distribution over ordered levels 0 to K−1 and the expected level | A continuous score in [0, 1] |
+
+  Noul is the serious mismatch: it is a truth question, not an abstention.
+  Abstention for an absent slot is better written as a Choice option
+  (`NONE`), and a Noul can ask questions such as "Is this split licensed by
+  6.1.101?".
+- **Jev's calibration measure is ECE with reliability curves.** The paper
+  reports a pooled ECE of 0.047. Brier appears only in its related work, so
+  the Brier + ECE training loss in the specifications is this project's
+  choice, not Jev's.
+- **One call answers many questions in parallel.** "All questions see the
+  same state, are answered independently, and share one call"; the paper
+  reports 11.4 questions per call on average. This matches the
+  specification's single-pass design. Answered independently, the questions
+  also leave the joint-AST gap above open.
+- **The acronym is already taken.** The paper itself notes that RLCD also
+  stands for reinforcement learning from contrastive distillation (Yang et
+  al., 2024). The paper here should define the term on first use and cite
+  both.
+- **Jev is a hosted, general-purpose judge.** Its reported advantage is cost:
+  63 times cheaper than LLM-judge scorers. This project's claim is different:
+  a small model with a rule engine for one language. The paper should present
+  Jev as the inspiration for the interface, not as evidence for that claim.
+
+## 3. Dataset Pipeline Gaps
+
+**Tier 1 (reverse synthetic generation):**
+
+- Uniform sampling gives grammatical nonsense ("the stone drinks the moon").
+  Roles need selectional constraints, such as an animate agent for *pā*.
+- The five English paraphrases of one AST must stay in one split.
+- Lexical holdouts (unseen roots and stems) are needed, in the spirit of
+  protocol section 9.3.
+- Generated data is synthetic. It is not gold even when a human translates
+  the English, because the Sanskrit side was never attested.
+
+**Tier 2 (mining aligned corpora):**
+
+- DCS tags lemma, case, number, gender, tense, mood and person. It does not
+  tag kāraka or prayoga. Case does not map one-to-one onto role: tṛtīyā can be
+  the agent of a passive, an instrument, or the companion after *saha*.
+- Vidyut returns no confidence score, so "filter where Vidyut returns a
+  confidence score below its deterministic threshold" cannot be implemented.
+- Classical English translations are free and not sentence-aligned, so one
+  AST per English sentence is often wrong.
+- DCS-derived text overlaps P-A, P-B, the right-word holdout and the
+  held-out chapters planned in `docs/GOLD_SET_PLAN.md`. The same leakage audit
+  applies.
+
+**Tier 3 (LLM schema distillation):** see section 1.3. OpenOrca and UltraChat
+contain model outputs, and GPT-4o and other commercial models have terms on
+using outputs to train models. Check these before releasing an Apache 2.0
+dataset.
+
+**Licences to verify:**
+
+- Mitrasaṃgraha and Itihasa: not yet checked.
+- Vidyut's `prakriya/README.md` says the ashtadhyayi.com files were shared
+  "under an MIT license". That differs from the 2024-02-18 written reply to
+  the project ("Commercial use of the dataset is not allowed"). Ask the
+  ashtadhyayi.com maintainer to clarify which terms apply to the copies in
+  the Vidyut data. This plan offers no legal opinion.
+
+**Volumes.** The pipeline targets 50,000 to 100,000 gold pairs and a
+5,000-pair gold test set. Two expert reviewers are available. The gold-set
+plan works with a few hundred items. Gold targets must be sized to reviewer
+time.
+
+## 4. Staged Transition
+
+The paper's validated result is sandhi-split ranking: P-A neural plus the
+kosha reaches a dev top-1 of about 0.95 against 0.909 for the kosha alone
+(`reports/pretraining-v1/DEV_RESULTS.md`). Each stage below is decided on dev
+and recorded before it runs. Only stage 1 is in scope for the current paper;
+stages 2 to 4 work towards the larger goal.
+
+### 4.1 Where Reinforcement Learning Enters
+
+RL earns its place where there is a decision with a cost, or where a reward
+can be computed but no label exists. Both occur in this design:
+
+- **The gate is a decision with a cost.** For each item the model either
+  commits to its answer or routes it to the slower symbolic search or
+  fallback. The reward is +1 for a correct final answer, minus a cost for
+  every routed item. This is a contextual bandit, and it can be run on the
+  sandhi task now (stage 1). It ties calibration directly to the efficiency
+  goal: a well-calibrated score routes only the items that need it.
+- **Vidyut can score answers that have no label.** For unlabelled Sanskrit
+  (stage 3) or English (stage 4), sample an analysis from the heads, derive it
+  with Vidyut, and reward it when it passes the constraint layer and its
+  derived surface matches the input. Policy-gradient fine-tuning (REINFORCE
+  with a baseline) on this reward needs no annotation.
+- **Calibration enters the reward.** The stated confidence is rewarded with a
+  proper scoring rule (negative Brier), so the policy is paid for being right
+  about how often it is right, not only for being right.
+
+Supervised Brier training and temperature scaling remain the first step: they
+give the policy a calibrated start. The paper must describe which parts of
+RLCD it actually ran. If stage 1 runs only the supervised part and the
+bandit gate, it says exactly that.
+
+Cite Jev as Guo et al. (2026), arXiv:2609.29429, and TypeSafe AI's
+documentation. Because Jev's training is not published (section 2.1), the
+paper describes this project's RLCD training in full. Related work should also cover calibration-reward
+RL for language models, such as RLCR (Reinforcement Learning with Calibration
+Rewards, 2025), to show how this work differs.
+
+### Stage 0: Clean up (before anything else)
+
+1. **Done 2026-11-14.** Simulated artifacts renamed, not deleted:
+   - `scripts/eval_calibration.py` → `scripts/simulate_calibration.py`, with a
+     docstring saying what it simulates; its outputs now carry `_simulated`
+     and the `mode` field reads `simulated_from_seed11_counts`
+   - `reports/pretraining-v1/calibration_eval_seed11_simulated.json` and
+     `calibration_plots_simulated.{pdf,png}`
+   - `docs/paper/artifacts/calibration_plots_simulated.{pdf,png}` (the PNG was
+     `Code_Generated_Image.png`, the same simulated figure)
+
+   The name `scripts/eval_calibration.py` is reserved for the stage 1
+   evaluator that runs the model. Note that `matplotlib` is not in the
+   requirements files.
+2. **Done 2026-11-14.** Latency, memory and probability figures in both
+   architecture specifications are marked illustrative or targets.
+3. **Done 2026-11-14.** File paths, root spellings (checked against
+   `dhatupatha.tsv`: `ga\mx~`, `i\R`, `yA\`, `paWa~`, `pA\`) and field
+   names agree across the specifications, the pipeline and
+   `dataset-structure.json`. The example record derives in Vidyut 0.4.0 as
+   `aSvO`, `jalam` (`jalaM` by sandhi) and `pibataH`.
+4. **Done 2026-11-14.** Both architecture specifications and the pipeline
+   carry a status note: draft design, not adopted, no results, with pointers
+   to this plan. They also now cite Jev (arXiv:2609.29429), use Jev's
+   primitive definitions (Noul as a yes/no question; `NONE` for an absent
+   slot), and drop the claims that a Vidyut compile guarantees validity.
+
+The design gaps (constraint layer, joint AST confidence, span extraction,
+schema coverage, English encoder) are left to stages 2 to 4.
+
+### Stage 1: Calibration and abstention on the sandhi task (current paper)
+
+This tests the "Score" primitive and the confidence gate on data the project
+already has.
+
+1. Write a real evaluator that loads `runs/pretrain-S-PA-seed{7,11,19}` and
+   dumps per-word discriminator logits on dev. Do the same for the H-P2 ranker
+   scores per candidate.
+2. Split dev into a calibration half and an evaluation half by source
+   sentence. Fit temperature (and optionally a bias) on the first half only.
+3. Report ECE, Brier and reliability diagrams on the second half, with bin
+   counts and bootstrap intervals.
+4. Report a coverage–accuracy curve. Abstained items go to a **real**
+   fallback: the kosha-only ranker or the linear ranker. Never the true label.
+5. Pre-register the thresholds compared (for example τ = 0.85 and 0.95) before
+   running.
+6. Learn the gate as a cost-aware bandit (section 4.1) and compare it with
+   the fixed thresholds at equal routing rates.
+7. Report parameters, wall-clock time and the routed fraction with every
+   accuracy figure, measured on the project Mac.
+
+Protocol section 14.2 already requires coverage and abstention to be reported
+with accuracy, so this extends the existing design rather than adding a new
+claim.
+
+### Stage 2: Vidyut wrapper and schema v0.3
+
+1. Add an AST module for one clause with one finite verb, kartṛ, karman and
+   optionally karaṇa or adhikaraṇa. Use Vidyut's own enum names, and write
+   roots as their Dhātupāṭha entries (`ga\mx~`).
+2. Add the constraint layer of section 1.2.
+3. Add tests:
+   - round-trip from AST to surface form to kosha analysis
+   - the invalid cases in the section 1.2 table must be rejected
+4. Ask the grammarian reviewer to check the constraint table (pada,
+   transitivity, voice and number limits).
+
+### Stage 3: Sanskrit-side analysis dataset and heads
+
+The encoder knows Sanskrit, so analysis of Sanskrit is where it can help
+first.
+
+1. **Tier 1 generator, small and reviewed.** About 30 common roots and 300
+   stems with selectional constraints, about 10,000 sentences, labelled
+   synthetic. The text reader reviews a sample for naturalness.
+2. **DCS morphology.** Map the CoNLL-U fields DCS actually tags: verb lakāra,
+   person and number, and noun vibhakti, vacana and liṅga. Use vibhakti, not
+   kāraka, as the first target.
+3. **Splits.** Keep the P-A and P-B exclusions and the gold-set chapter
+   manifest. Hold out roots and stems lexically.
+4. **Heads.** Per-word heads for vibhakti, vacana and liṅga, and per-clause
+   heads for lakāra, puruṣa, vacana and prayoga, on the S-PA encoder.
+5. **Baselines.** Kosha lookup plus majority class. Calibrate as in stage 1.
+6. **RL fine-tuning.** Policy-gradient fine-tuning on unlabelled DCS
+   sentences with the Vidyut reward of section 4.1. Compare with supervised
+   training alone on the same dev set.
+
+### Stage 4: English interface (later work, separate paper)
+
+1. Decide how the model reads English (section 6).
+2. Produce English for Tier 1 ASTs with an LLM whose terms allow it.
+3. Add kāraka labels only with a reviewed case-to-role mapping.
+4. Add Tier 3 only after a human-checked sample measures its label noise.
+
+## 5. Decisions
+
+Recorded 2026-11-14:
+
+1. **Scope.** The paper rests on sandhi splitting as the tangible
+   demonstration. The project goal is larger: high accuracy with fewer
+   parameters and less GPU. Stages 2 to 4 continue towards it.
+2. **Name.** RLCD (reinforcement learning for calibrated decisions) is kept,
+   as adopted from Jev (arXiv:2609.29429). Section 4.1 makes the RL part real, and the paper
+   claims only the parts that were run.
+3. **Simulated artifacts.** Renamed `*_simulated.*` (stage 0, item 1). The
+   paper uses observed artifacts from stage 1.
+4. **English encoder.** Deferred until stage 3 is done. The choices are in
+   section 6.
+
+Primitive definitions were aligned with Jev's in stage 0. Still open: the
+non-kāraka options (`upapada_nimitta`, `sambanDa_zazWI`) in the kāraka Choice,
+to be settled in schema v0.3 (stage 2).
+
+## 6. English Encoder Choices (for Stage 4)
+
+The decision heads and Vidyut do not depend on the input language: every
+encoder below feeds the same heads and the same AST. That keeps the Sanskrit
+core stable, as the project direction requires.
+
+| Option | What it is | For | Against |
+| --- | --- | --- | --- |
+| A. Bilingual byte encoder | Continue pretraining S-PA on English and SLP1 bytes, plus aligned pairs | One tiny model; no tokenizer; strongest fit with the low-parameter goal | 4.94M parameters may be too few for English meaning; English bytes are long against the 256-byte limit; needs aligned data |
+| B. Small pretrained English encoder | A published compact encoder (about 4M to 30M parameters, such as BERT-tiny, ELECTRA-small or MiniLM), frozen or lightly tuned, feeding the same heads | English understanding for free; cheap to try | More parameters; a tokenizer; licence check per model; two encoders to run |
+| C. Distil from a large model | A large model labels English with ASTs; a small student encoder learns English to AST directly | Small model at inference; large model used only offline | Teacher label noise; terms of use on model outputs; Vidyut checks form, not meaning |
+| D. Indic first | Read Hindi, Marathi and other Devanagari languages with the byte encoder before English | Matches the project's stated order (Indic, then English); shared vocabulary and script with Sanskrit | Needs Indic–Sanskrit aligned data; English waits longer |
+
+Options can be combined. A suggested comparison at the end of stage 3 is B as
+the baseline and A as the efficiency experiment, judged by accuracy against
+parameters and compute. Option C can supply training data for either. Option
+D is a question of order; the project direction puts Indic languages before
+English, while the specifications start with English. That conflict should be
+settled before stage 4.

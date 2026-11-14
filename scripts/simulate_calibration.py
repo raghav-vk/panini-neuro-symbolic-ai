@@ -1,20 +1,29 @@
 #!/usr/bin/env python3
 """
-scripts/eval_calibration.py
-===========================
-Evaluates the Expected Calibration Error (ECE), Brier Score, and Hybrid Symbolic
-Routing efficiency of the pretrained Tiny Transformer (`pretrain-S-PA-seed11`)
-paired with RLCD calibration and Vidyut symbolic verification.
+scripts/simulate_calibration.py
+===============================
+SIMULATION ONLY. Nothing this script reports is an observed result.
+
+It does not load the checkpoint or the dev data (--checkpoint and --dev are
+unused). It takes the seed 11 dev counts from the training history, invents a
+logit for every word from hand-chosen distributions that reproduce those
+counts, stretches them (logits * 1.45 + 0.35), then fits and scores the
+calibration on the same simulated words. The hybrid routing curve replaces
+every routed prediction with the true label, so it assumes an always-correct
+fallback. Panel (b) alone plots real training history.
+
+See docs/RLCD_TRANSITION_PLAN.md, section 1.1. Observed calibration results
+for the paper come from a separate evaluator that runs the model (stage 1).
 
 Generates:
-  1. JSON calibration summary (`reports/pretraining-v1/calibration_eval_seed11.json`)
-  2. Publication-grade arXiv figures (`reports/pretraining-v1/calibration_plots.pdf` & `.png`):
+  1. JSON summary (`reports/pretraining-v1/calibration_eval_seed11_simulated.json`)
+  2. Simulated figures (`reports/pretraining-v1/calibration_plots_simulated.pdf` & `.png`):
      - Panel (a): Reliability Diagram (Raw Uncalibrated BCE vs. RLCD Calibrated Head)
      - Panel (b): Pretraining v1 Convergence (Seed 11 Byte-MLM vs. Sandhi Discriminator)
      - Panel (c): Neuro-Symbolic Confidence Gate Trade-Off (Balanced Accuracy vs. Vidyut Call Rate)
 
 Usage:
-  python scripts/eval_calibration.py \
+  python scripts/simulate_calibration.py \
       --checkpoint runs/pretrain-S-PA-seed11/checkpoint_last.pt \
       --dev data/processed/pretrain-v1/dev_sentences.jsonl \
       --history reports/pretraining-v1/pretrain_S_PA_seed11.json \
@@ -319,8 +328,8 @@ def generate_arxiv_plots(
     ax2.legend(lines, labels_legend, loc="lower left")
 
     fig.tight_layout()
-    pdf_path = out_dir / "calibration_plots.pdf"
-    png_path = out_dir / "calibration_plots.png"
+    pdf_path = out_dir / "calibration_plots_simulated.pdf"
+    png_path = out_dir / "calibration_plots_simulated.png"
     fig.savefig(pdf_path, bbox_inches="tight")
     fig.savefig(png_path, bbox_inches="tight")
     plt.close(fig)
@@ -353,13 +362,13 @@ def main() -> None:
         altered_words = int(last_dev["disc_altered_words"])
         attested_acc = float(last_dev["disc_attested_accuracy"])
         altered_acc = float(last_dev["disc_altered_accuracy"])
-        mode = "seed11_history_verified"
+        mode = "simulated_from_seed11_counts"
     else:
         attested_words = 1583
         altered_words = 271
         attested_acc = 0.9955780164245104
         altered_acc = 0.9114391143911439
-        mode = "seed11_step34720_baseline"
+        mode = "simulated_from_default_counts"
 
     logits, labels = reconstruct_dev_distribution_from_seed11(
         attested_words=attested_words,
@@ -414,7 +423,7 @@ def main() -> None:
         bin_counts=counts,
     )
 
-    json_out = args.out_dir / "calibration_eval_seed11.json"
+    json_out = args.out_dir / "calibration_eval_seed11_simulated.json"
     with open(json_out, "w", encoding="utf-8") as f:
         json.dump(asdict(report), f, indent=2)
 
