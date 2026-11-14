@@ -56,3 +56,54 @@ subset might serve as a kāraka source, after review.
 **Overlap.** DCS_pick, our pretraining source, is a 2017 subset of DCS. Before
 any DCS sentence is used for training or evaluation, the overlap and held-out
 chapter rules of `docs/GOLD_SET_PLAN.md` section 3 apply.
+
+## Overlap with DCS_pick (`scripts/convert_dcs_conllu.py`)
+
+Rule as in the pretraining corpora: an exact match after normalisation, or
+at least two distinct 30-character substrings shared with any DCS_pick
+sentence. Summary in `overlap_summary.json`; per chapter in
+`overlap_by_chapter.jsonl`.
+
+| Item | Count |
+| --- | ---: |
+| DCS sentences | 770,945 |
+| Exact copies of a DCS_pick sentence | 429,766 (56%) |
+| Near copies | 10,755 |
+| Matching a right-word holdout **dev** source sentence | 1,406 sentences in 1,166 chapters |
+| Matching a right-word holdout **test** source sentence | 1,292 sentences in 1,039 chapters |
+| Chapters with no overlap at all | 6,792 |
+| … of which not marked Vedic | 531 chapters, 40,475 sentences |
+| … and also not in DCS time slot 1 | 37,837 sentences |
+
+**The held-out sentences are spread across the corpus.** The 984 dev and 817
+test source sentences recur (repeated verses, shared formulas) in more than a
+thousand chapters each. Every matching DCS sentence must stay out of stage 3
+training.
+
+**The Vedic flag is incomplete.** A `<details>` block marks 9,970 chapters as
+Vedic, but some Vedic texts have none: Hiraṇyakeśi- and Mānavaśrautasūtra and
+the Ṣaḍviṃśabrāhmaṇa. All of them are in DCS time slot 1. The proposed rule
+for "classical" is no `<details>` block and a time slot other than 1. A
+reviewed text list would be better.
+
+**The clean classical pool is concentrated:**
+
+- **Whole clean texts.** 12 non-Vedic texts are clean in every chapter,
+  totalling 6,241 sentences. The kāvya among them are Saundarānanda (2,128),
+  Āryāsaptaśatī (1,464), Narmamālā (816), Kokilasaṃdeśa (324), Bhallaṭaśataka
+  (206), Haṃsasaṃdeśa (120), Caurapañcaśikā (100) and Mukundamālā (68).
+- **Partly clean texts.** These add 34,234 clean sentences, 24,734 of them
+  from Kathāsaritsāgara.
+
+The gold set (`docs/GOLD_SET_PLAN.md`) and the stage 3 evaluation must divide
+this pool, without sharing a chapter. That is a decision to record before any
+of it is read for results.
+
+**Other notes.**
+- One chapter (Śikṣāsamuccaya, 10815) has no metadata entry. It is kept but
+  never counted as classical.
+- One metadata entry (Skandapurāṇa, Revākhaṇḍa chapter 230) has a `:` in its
+  file name, and the file did not check out as `.conllu` on macOS.
+- 200,917 sentences contain IAST *ai* or *au*, which the converter reads as
+  diphthongs. Hiatus spellings would be misread there; they are flagged, not
+  corrected.
