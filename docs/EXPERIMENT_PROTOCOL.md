@@ -1,6 +1,6 @@
 # Experimental Protocol: Proof-Carrying External Vowel-Sandhi Splitting
 
-**Protocol version:** 0.6 (amendments of 2026-10-23/24: right-word holdout, section 9.5; silver-data rules and ranker settings, sections 11.1 and 11.2; pretraining plan, section 11.3. Amendment of 2026-10-30: SLP1 as the internal transliteration, section 11.4)
+**Protocol version:** 0.7 (amendments of 2026-10-23/24: right-word holdout, section 9.5; silver-data rules and ranker settings, sections 11.1 and 11.2; pretraining plan, section 11.3. Amendment of 2026-10-30: SLP1 as the internal transliteration, section 11.4. Amendment of 2026-11-14: RLCD transition plan, section 11.5)
 **Status:** Planned independent-corpus study; development smoke run separately frozen
 **Primary task:** Rank rule-licensed analyses of one external vowel-sandhi boundary
 **Compute target:** CPU or one modest consumer GPU
@@ -527,6 +527,50 @@ recorded under IAST in section 11.2. The difference is within the seed spread,
 so the switch neither helps nor hurts the existing neural ranker measurably.
 It still trails the linear model. Checkpoints trained before this amendment
 read IAST bytes and are not comparable with later ones.
+
+### 11.5 RLCD Transition Plan (Amendment 0.7)
+
+Adopted on 2026-11-14. No test set was used. The plan is
+`docs/RLCD_TRANSITION_PLAN.md`: its review findings (sections 1 to 3), staged
+transition (section 4), decisions (section 5), English encoder choices
+(section 6) and implementation languages (section 7).
+
+**Term.** RLCD is reinforcement learning for calibrated decisions, after Jev
+(Guo et al., arXiv:2609.29429, 2026), whose Choice, Score and Noul primitives
+the schema follows. Jev's training is not published. This project's RLCD
+training is its own design and is described in full wherever it is reported.
+The paper claims only the RLCD parts that were actually run.
+
+**Scope.** Sandhi splitting remains the paper's evidence. The project goal is
+high accuracy with fewer parameters and less compute. Stages 2 to 4 (Vidyut
+constraint layer and schema, Sanskrit-side analysis heads with RL fine-tuning,
+an English or Indic interface) work towards it. They are not claims of this
+study until each is pre-registered and run.
+
+**Simulated material.** Files named `*_simulated.*` and
+`scripts/simulate_calibration.py` are simulations, not results. They must
+never be presented as observed.
+
+**Stage 1, disclosure.** The stage 1 settings (plan section 4, "Stage 1
+Pre-Registered Settings") were committed in 7d82b6b and run in adcdbda, the
+same day and before this amendment formally adopted the plan. The settings
+were not changed after the run. One summary, the mean raw confidence per
+seed, was seen before the settings were written; the plan records this.
+
+**Stage 1 result (dev).** `reports/rlcd-stage1/DEV_RESULTS.md`; figure
+`reports/rlcd-stage1/calibration_figure.pdf`.
+- The H-P2 ranker and the discriminator are calibrated without fitting
+  (equal-mass ECE 0.013 to 0.029 and 0.001 to 0.003), and cross-fitted
+  temperature scaling changes nothing.
+- At τ = 0.95 on dev, 77 to 81 percent of items are accepted, with 0.991 to
+  0.996 accuracy. These are the coverage and risk–coverage metrics of
+  section 14.2.
+- Routing to a three-seed ensemble gains at most 0.007, inside the intervals.
+  It is reported as a negative finding.
+
+**Test use.** τ and the routing cost are not frozen. Reporting either on the
+right-word holdout test set needs a further amendment that freezes them and
+discloses that use, as section 11.3 requires for the pretraining settings.
 
 ## 12. Baselines
 

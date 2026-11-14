@@ -1,9 +1,9 @@
 # Plan: Review of the RLCD Architecture and a Staged Transition
 
-**Status:** Draft, 2026-11-14. Proposed as amendment 0.7 of
-`docs/EXPERIMENT_PROTOCOL.md`. Nothing here is adopted. No test set has been
-used. Once approved, sections 4 and 5 become protocol section 11.5 before any
-stage 1 run.
+**Status:** Adopted as amendment 0.7 of `docs/EXPERIMENT_PROTOCOL.md`
+(section 11.5) on 2026-11-14. No test set has been used. Stage 1 was
+pre-registered and run on dev the same day, before formal adoption; protocol
+section 11.5 discloses this.
 
 **Documents reviewed:**
 
