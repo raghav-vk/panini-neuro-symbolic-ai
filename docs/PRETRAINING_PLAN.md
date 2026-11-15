@@ -4,6 +4,10 @@
 (section 11.3) on 2026-10-24. Since amendment 0.6 (2026-10-30), all corpora
 and model input are SLP1.
 
+**Test settings (2026-11-14):** frozen by protocol amendment 0.9 (section
+11.7, `docs/SANDHI_PRETRAINING_TEST_AMENDMENT.md`), the step 7 amendment.
+The test run follows once its frozen script is merged.
+
 **Progress (2026-11-02):** step 1 (corpora, `reports/pretraining-v1/corpus_audit.json`)
 and step 2 (timing pilot, `reports/pretraining-v1/pilot_S_1000_steps.json`) are done.
 Step 3 (size S on P-A, 10 passes) is done, and step 4 has a first dev result

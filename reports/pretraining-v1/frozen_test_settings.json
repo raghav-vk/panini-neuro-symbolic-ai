@@ -1,0 +1,56 @@
+{
+ "status": "frozen by protocol amendment 0.9 (section 11.7, docs/SANDHI_PRETRAINING_TEST_AMENDMENT.md), adopted 2026-11-14",
+ "test_set": "right-word holdout (strict_right_lemma), 821 examples; fourth use",
+ "encoders": {
+  "P-A-seed7": {
+   "path": "runs/pretrain-S-PA-seed7/encoder.pt",
+   "sha256": "10c88892c53c7c9d3e4144c51efae6a3d0110ed1fb8917e6438b95bf5db20435"
+  },
+  "P-A-seed11": {
+   "path": "runs/pretrain-S-PA-seed11/encoder.pt",
+   "sha256": "724290964bbd42fe0b7cc50a318eda0ad230424de61cf582df11dbdf22eb12ac"
+  },
+  "P-A-seed19": {
+   "path": "runs/pretrain-S-PA-seed19/encoder.pt",
+   "sha256": "0b6e715a0f43be387a52b628a805e2f092ad56dec515ba30c5274671a453e71e"
+  },
+  "P-B-seed7": {
+   "path": "runs/pretrain-S-PB-seed7/encoder.pt",
+   "sha256": "e06b50875b8cd8b139bc7e2bba4a7e1e6f417d44cf1a70520acf2fd5357bbc32",
+   "role": "descriptive"
+  }
+ },
+ "split_sha256": {
+  "train": "9e3c7d7416ff8937096ea295f2f9f930e4eb1699e8ef9769d72f73222c93fcb3",
+  "dev": "c1733e33afe3fd6592710e1a9f980196e690a95b4fa9b683cb82a0213fad73d6",
+  "test": "b498d6dab52fc805b144d037c765f6fa098a8a6e063fd8c9b6ceb4e7db91d28c"
+ },
+ "rules_sha256": "9f4844226ac879dac72791b6343d43b6f93f552899172b865ddee4f56f3bdda0",
+ "vidyut_data_sha256": "5269cda86451a75dbc93b605f6864bb5a52cc79d66da02f18f30cf87d0059ecb",
+ "ranker": {
+  "model": "linear_features_short_vowel",
+  "seed": 7,
+  "neural_score": "words scored alone (--no-context)"
+ },
+ "gate": {
+  "confidence": "raw softmax top-candidate probability of the H-P2 ranker, no calibration",
+  "tau": 0.95,
+  "dev": {
+   "7": {
+    "dev_accuracy": 0.9504048582995951,
+    "dev_coverage_raw_tau_095": 0.7651821862348178,
+    "dev_accepted_accuracy": 0.9933862433862434
+   },
+   "11": {
+    "dev_accuracy": 0.9524291497975709,
+    "dev_coverage_raw_tau_095": 0.805668016194332,
+    "dev_accepted_accuracy": 0.9937185929648241
+   },
+   "19": {
+    "dev_accuracy": 0.9564777327935222,
+    "dev_coverage_raw_tau_095": 0.7611336032388664,
+    "dev_accepted_accuracy": 0.9960106382978723
+   }
+  }
+ }
+}

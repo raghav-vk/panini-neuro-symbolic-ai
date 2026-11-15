@@ -1,6 +1,6 @@
 # Experimental Protocol: Proof-Carrying External Vowel-Sandhi Splitting
 
-**Protocol version:** 0.8 (amendments of 2026-10-23/24: right-word holdout, section 9.5; silver-data rules and ranker settings, sections 11.1 and 11.2; pretraining plan, section 11.3. Amendment of 2026-10-30: SLP1 as the internal transliteration, section 11.4. Amendments of 2026-11-14: RLCD transition plan, section 11.5; frozen stage 3 test settings, section 11.6)
+**Protocol version:** 0.9 (amendments of 2026-10-23/24: right-word holdout, section 9.5; silver-data rules and ranker settings, sections 11.1 and 11.2; pretraining plan, section 11.3. Amendment of 2026-10-30: SLP1 as the internal transliteration, section 11.4. Amendments of 2026-11-14: RLCD transition plan, section 11.5; frozen stage 3 test settings, section 11.6; frozen sandhi pretraining test settings, section 11.7)
 **Status:** Planned independent-corpus study; development smoke run separately frozen
 **Primary task:** Rank rule-licensed analyses of one external vowel-sandhi boundary
 **Compute target:** CPU or one modest consumer GPU
@@ -615,6 +615,40 @@ is retrained or reselected afterwards.
 - **T-4 supported.** Coverage 0.884 to 0.886.
 
 The stage 3 test part is now used; any further use must be disclosed.
+
+### 11.7 Frozen Settings for the Sandhi Pretraining Test Run (Amendment 0.9)
+
+Adopted on 2026-11-14. This is the further amendment that section 11.3
+requires, made before any pretraining condition was scored on the test set.
+The full text is `docs/SANDHI_PRETRAINING_TEST_AMENDMENT.md`; the frozen
+values are in `reports/pretraining-v1/frozen_test_settings.json`.
+
+**Test set.** The right-word holdout test set, 821 examples. **This is its
+fourth use**, disclosed as reuse. The reference arm's score (linear + kosha,
+0.943) is already known; only the pretraining arms are new on test.
+
+**What is frozen.**
+- The P-A encoders, seeds 7, 11 and 19, and P-B seed 7 (descriptive), by
+  SHA-256.
+- The neural word score, with words scored alone.
+- `linear_features_short_vowel`, seed 7, trained on the training split, in
+  three arms: kosha (R-K), neural (R-N), and kosha + neural (R-KN).
+- A raw-confidence gate at τ = 0.95.
+
+**Not tested.** H-P3, which failed its dev stopping rule.
+
+**Confirmatory hypotheses.** Intervals are 95%, from a source-group
+bootstrap.
+- **T-P1.** R-N is non-inferior to R-K: margin 0.010, for every seed and for
+  the interval's lower bound.
+- **T-P1s.** R-N beats R-K.
+- **T-P2.** R-KN beats R-K.
+- **T-P3.** R-KN coverage at τ lies within [0.71, 0.86] for every seed.
+
+All four are reported whatever the outcome.
+
+**Procedure.** One run, by a hash-checked frozen script merged first.
+Nothing is retrained or retuned afterwards.
 
 ## 12. Baselines
 
