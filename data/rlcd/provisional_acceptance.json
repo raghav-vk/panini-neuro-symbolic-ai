@@ -1,12 +1,15 @@
 {
  "decided": "2026-11-14",
  "decided_by": "project owner",
- "scope": "Treat these tables as accurate for generation and training while the grammarian review (issue #78) is pending.",
+ "scope": "Treat these tables as accurate for generation and training while the expert reviews are pending: the grammarian's root and stem tables (issue #78) and the text reader's role frames and stem classes (naturalness review, data/reviews/rlcd_tier1_sample.*).",
  "not_a_review": "Rows keep status draft_unreviewed; this records a working assumption, not an expert judgement.",
  "condition": "If the review brings significant corrections, regenerate every artifact built on these tables and re-run the affected training and evaluation.",
  "lapses_when": "A table's SHA-256 no longer matches the value recorded here (for example after the reviewer edits it).",
  "tables": {
   "data/rlcd/dhatu_constraints.tsv": "06dd3edfae1cf64e146b4ea737379d20f3911a6689f3982ab645289efb324524",
-  "data/rlcd/stem_lexicon.tsv": "b450a647a1e7cc0adc90b6dcc3f96dedd2c2b83482a12b3e0984e85dcca8cdb0"
- }
+  "data/rlcd/stem_lexicon.tsv": "b450a647a1e7cc0adc90b6dcc3f96dedd2c2b83482a12b3e0984e85dcca8cdb0",
+  "data/rlcd/frames.tsv": "bada0b9ebf308bf87fd1ca0b56cbf9143c4a80cef31f9508a331c28a5700ab15",
+  "data/rlcd/stem_classes.tsv": "17231fa6f3868347bf7cdce07e9c12eb3bfdd8b92a748d7ea06f35f6cc528bca"
+ },
+ "decided_frames_and_classes": "2026-11-14"
 }

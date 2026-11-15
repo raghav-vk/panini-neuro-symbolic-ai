@@ -25,10 +25,12 @@
  },
  "provisionally_accepted": [
   "data/rlcd/dhatu_constraints.tsv",
+  "data/rlcd/frames.tsv",
+  "data/rlcd/stem_classes.tsv",
   "data/rlcd/stem_lexicon.tsv"
  ],
- "table_rows_blocking_training": 70,
- "for_training": false,
+ "table_rows_blocking_training": 0,
+ "for_training": true,
  "vidyut": "0.4.0",
  "words": 28732,
  "forms_not_in_kosha": 473,
