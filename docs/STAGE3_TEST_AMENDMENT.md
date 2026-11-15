@@ -1,8 +1,9 @@
-# Draft Amendment 0.8: Frozen Settings for the RLCD Stage 3 Test Run
+# Amendment 0.8: Frozen Settings for the RLCD Stage 3 Test Run
 
-**Status:** Draft, 2026-11-14. Not adopted. The stage 3 test part has never
-been read. Once approved, this becomes section 11.6 of
-`docs/EXPERIMENT_PROTOCOL.md`, and the test run follows exactly once.
+**Status:** Adopted 2026-11-14 as section 11.6 of
+`docs/EXPERIMENT_PROTOCOL.md`. At adoption the stage 3 test part had never
+been read. The test run follows exactly once, after the hash-checked
+`--frozen` mode (section 4) is merged.
 
 **Scope.** The DCS stage 3 test part, which is used here for the first time.
 It is a different set from the right-word holdout sandhi test set (protocol
@@ -27,6 +28,7 @@ Nothing below may change after adoption. The values are recorded in
 | --- | --- | --- |
 | N1 | Tagger fine-tuned from the P-A encoder, seeds 7, 11, 19 | Checkpoint SHA-256s (e.g. seed 7 `5019b8d3…`) |
 | N2 | Same architecture from scratch, seeds 7, 11, 19 | Checkpoint SHA-256s |
+| N3 | As N1 with Brier loss, seeds 7, 11, 19; **descriptive only** | Checkpoint SHA-256s |
 | B2 | Kosha + training prior, as in `scripts/eval_tagger.py` | The code at the run commit, the training file (`split_manifest.json` hash) and the Vidyut 0.4.0 data (`scripts/fetch_vidyut_data.py` hash) |
 | J0 | Raw product of the five head probabilities | — |
 | J4 | Platt scaling of logit(c₀), fitted once on **all** dev words per N1 seed | (a, b) = (0.8036, 0.2338), (0.8271, 0.1840), (0.8192, 0.1830) for seeds 7, 11, 19 |
@@ -65,6 +67,7 @@ chapter-bootstrap interval of the mean paired difference excludes 0.
 - accepted full-tag accuracy at τ
 - ECE for J0 and J4
 - N1 against B2 on unseen forms and per head
+- N3 (descriptive arm): full-tag accuracy, per-head accuracy and the J0 calibration metrics. No J4 is fitted for N3, and no hypothesis concerns it.
 
 **Multiplicity.** These are five pre-specified tests, and all five are
 reported whatever the outcome. No correction is applied. Each verdict stands
@@ -100,9 +103,9 @@ alone and is labelled confirmatory.
   not the expert gold set. The gold set (`docs/GOLD_SET_PLAN.md`) is reserved
   separately and is not used here.
 
-## 6. Decisions Needed Before Adoption
+## 6. Decisions at Adoption (2026-11-14)
 
-1. Is the confirmatory family right? In particular, should T-2b stay as a
-   test of the negative dev finding?
-2. Is the T-4 tolerance of ±0.05 around 90% coverage right?
-3. Should N3 be added as a descriptive arm? It currently is not.
+1. **T-2b stays** as a confirmatory test of the negative dev finding.
+2. **T-4 tolerance.** ±0.05 around 90% coverage.
+3. **N3 is added as a descriptive arm.** It is frozen by checkpoint hash and
+   carries no hypothesis.

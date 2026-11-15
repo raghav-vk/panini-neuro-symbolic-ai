@@ -46,6 +46,21 @@
   "N2-seed19": {
    "checkpoint": "runs/tagger-N2-seed19/tagger.pt",
    "sha256": "653296ffac172b0b172d5bcc4dc078e00ce70632eee639a3ef2aed215b0eec55"
+  },
+  "N3-seed7": {
+   "checkpoint": "runs/tagger-N3-seed7/tagger.pt",
+   "sha256": "ed2b56c0ef1d5c22b2823a7a8fe53855cab64eb7bd6579f6c8bbb979936316a5",
+   "role": "descriptive"
+  },
+  "N3-seed11": {
+   "checkpoint": "runs/tagger-N3-seed11/tagger.pt",
+   "sha256": "3461174f8d245dab272363fe407ae36bcba2f6651a59e1247a73b6d8c8b96c68",
+   "role": "descriptive"
+  },
+  "N3-seed19": {
+   "checkpoint": "runs/tagger-N3-seed19/tagger.pt",
+   "sha256": "3f14a3e623e8fd8d067e554d8de6d06cfbf6e6a0be9a3e88240f1dfc04f09777",
+   "role": "descriptive"
   }
  },
  "test_structure": {
@@ -80,7 +95,7 @@
    ]
   ]
  },
- "status": "draft for amendment 0.8 (docs/STAGE3_TEST_AMENDMENT_DRAFT.md); frozen only once adopted",
+ "status": "frozen by protocol amendment 0.8 (section 11.6, docs/STAGE3_TEST_AMENDMENT.md), adopted 2026-11-14",
  "vidyut_data_sha256": "5269cda86451a75dbc93b605f6864bb5a52cc79d66da02f18f30cf87d0059ecb",
  "train_sha256": "8dae35bc594e0a40ca068b0be744a425e552e3b38e0bd84996b1a105386208a6",
  "test_sha256": "7d454f0dffc753a0dafa573491096752e7fd28219c5d573c7cd310d932eacf50",
