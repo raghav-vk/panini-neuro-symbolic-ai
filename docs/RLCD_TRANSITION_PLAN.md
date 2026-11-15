@@ -744,6 +744,18 @@ the label distributions per field. No dev or test sentence was read.
 - **Report.** `reports/rlcd-stage3/TAGGER_DEV_RESULTS.md`, with the
   generated tables beside it.
 
+**Joint calibration result (dev, post hoc, 2026-11-14).**
+`reports/rlcd-stage3/JOINT_CALIBRATION_RESULTS.md`.
+
+- **H-J1 and H-J2 not supported.** J2 is worse than J0 and JT.
+- **Cause: a specification error.** J1 and J2 use log probabilities, which
+  cannot express confidence near 1; standard Platt scaling uses the logit.
+- **Isotonic regression (J3) calibrates the whole-tag confidence almost
+  exactly** (ECE about 0.001, lowest NLL). It transfers partly across texts
+  (ECE 0.016 to 0.018 on non-Kathāsaritsāgara texts, against 0.027 to 0.031
+  raw).
+- **The prose texts are the worst calibrated.**
+
 #### Stage 3 Joint Calibration Pre-Registered Settings
 
 Recorded 2026-11-14 and committed before any joint calibrator is fitted or

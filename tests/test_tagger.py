@@ -74,3 +74,19 @@ def test_eval_helpers_match_the_plain_metrics():
     point, samples = ratio_ci(correct, np.ones(10, bool), counts, word_chapter)
     assert point["value"] == pytest.approx(0.6) and point["ci95"][0] <= 0.6 <= point["ci95"][1]
     assert ratio_ci(correct, np.zeros(10, bool), counts, word_chapter)[0] == {"value": None, "ci95": None}
+
+
+def test_joint_calibrators_fit_known_cases():
+    np = pytest.importorskip("numpy")
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from joint_calibration import isotonic_fit, isotonic_predict, logistic_fit, logistic_predict
+    rng = np.random.default_rng(0)
+    x = np.hstack([rng.normal(size=(20000, 2)), np.ones((20000, 1))])
+    true = np.array([1.5, -0.5, 0.3])
+    y = (rng.random(20000) < 1 / (1 + np.exp(-(x @ true)))).astype(float)
+    assert np.allclose(logistic_fit(x, y), true, atol=0.1)
+    assert logistic_predict(x[:1], true)[0] == pytest.approx(1 / (1 + np.exp(-(x[0] @ true))))
+    c = np.array([0.1, 0.2, 0.3, 0.4, 0.5, 0.6])
+    model = isotonic_fit(c, np.array([0.0, 1.0, 0.0, 1.0, 1.0, 1.0]))
+    fitted = isotonic_predict(c, model)
+    assert np.all(np.diff(fitted) >= 0) and fitted[0] == 0.0 and fitted[1] == fitted[2] == 0.5 and fitted[-1] == 1.0
