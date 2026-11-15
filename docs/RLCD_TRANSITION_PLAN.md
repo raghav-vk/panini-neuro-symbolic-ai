@@ -616,6 +616,22 @@ Two findings came from the kosha round trip during generation:
 - **Steps 4 to 6** (heads, baselines, RL fine-tuning) are pre-registered
   before they run, as stage 1 was.
 
+**Steps 4 and 5 result (dev, 2026-11-14).**
+`reports/rlcd-stage3/TAGGER_DEV_RESULTS.md`.
+
+- **H-S3-2 supported.** Pretraining adds +0.064 full-tag accuracy, robust
+  across seeds.
+- **H-S3-1 supported on pooled dev** (+0.025, interval [+0.004, +0.040]).
+  The gain is carried by Kathāsaritsāgara, 76% of dev words. N1 beats the
+  kosha baseline in only 8 of 17 texts and loses by about 0.14 on two prose
+  texts.
+- **Unseen forms.** N1 scores 0.78 against 0.48 for the kosha baseline.
+- **Verbs.** N1 is behind on verbs (lakāra macro 0.72).
+- **Brier loss.** No advantage over cross-entropy.
+- **Calibration.** Per-head temperature scaling makes the whole-tag
+  confidence worse (ECE 0.015 → 0.033), because head errors are correlated.
+  The gate needs joint calibration.
+
 #### Stage 3 Training Pre-Registered Settings (steps 4 and 5)
 
 Recorded 2026-11-14 and committed before any model is trained. Dev only. The
