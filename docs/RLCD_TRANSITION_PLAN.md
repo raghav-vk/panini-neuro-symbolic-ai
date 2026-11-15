@@ -827,6 +827,19 @@ y.
 **Outputs.** `scripts/joint_calibration.py` writes
 `reports/rlcd-stage3/joint_calibration.json` and `JOINT_CALIBRATION.md`.
 
+**Logit Platt result (dev, post hoc, 2026-11-14).**
+`reports/rlcd-stage3/PLATT_CALIBRATION_RESULTS.md`.
+
+- **H-J3 supported.** J4, Platt scaling on logit(c₀), lowers NLL below the
+  raw product for every seed (−0.0028 [−0.0037, −0.0020]). In-domain it
+  matches isotonic regression.
+- **J4 transfers best across texts.** It beats J0 on transfer NLL for all
+  six runs, where isotonic regression sometimes does worse than nothing.
+- **H-J4 not supported.** J5 is worse than J0.
+- **Recommendation.** J4 as the gate's calibrator for whole analyses, two
+  numbers that ship with the model. A test-set confirmation needs a frozen
+  amendment.
+
 #### Stage 3 Logit Platt Calibration Pre-Registered Settings
 
 Recorded 2026-11-14 and committed before the calibrators below are fitted or

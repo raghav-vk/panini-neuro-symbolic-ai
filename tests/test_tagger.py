@@ -90,3 +90,13 @@ def test_joint_calibrators_fit_known_cases():
     model = isotonic_fit(c, np.array([0.0, 1.0, 0.0, 1.0, 1.0, 1.0]))
     fitted = isotonic_predict(c, model)
     assert np.all(np.diff(fitted) >= 0) and fitted[0] == 0.0 and fitted[1] == fitted[2] == 0.5 and fitted[-1] == 1.0
+
+
+def test_platt_on_logit_contains_the_identity():
+    np = pytest.importorskip("numpy")
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from joint_calibration import features, logistic_predict
+    log_p = np.log(np.array([[0.999, 0.99, 0.9, 0.95, 0.999], [0.5, 0.9, 0.99, 0.8, 0.7]]))
+    c0 = np.exp(log_p.sum(1))
+    assert np.allclose(logistic_predict(features(log_p, "J4"), np.array([1.0, 0.0])), c0)
+    assert features(log_p, "J5").shape == (2, 6) and features(log_p, "J1").shape == (2, 2)
