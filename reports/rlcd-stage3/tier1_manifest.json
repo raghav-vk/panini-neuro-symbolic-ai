@@ -17,7 +17,20 @@
   "data/rlcd/stem_classes.tsv": "17231fa6f3868347bf7cdce07e9c12eb3bfdd8b92a748d7ea06f35f6cc528bca"
  },
  "table_rows_unreviewed": 140,
- "for_training": false,
+ "table_rows_unreviewed_by_table": {
+  "data/rlcd/dhatu_constraints.tsv": 31,
+  "data/rlcd/stem_lexicon.tsv": 39,
+  "data/rlcd/frames.tsv": 31,
+  "data/rlcd/stem_classes.tsv": 39
+ },
+ "provisionally_accepted": [
+  "data/rlcd/dhatu_constraints.tsv",
+  "data/rlcd/frames.tsv",
+  "data/rlcd/stem_classes.tsv",
+  "data/rlcd/stem_lexicon.tsv"
+ ],
+ "table_rows_blocking_training": 0,
+ "for_training": true,
  "vidyut": "0.4.0",
  "words": 28732,
  "forms_not_in_kosha": 473,

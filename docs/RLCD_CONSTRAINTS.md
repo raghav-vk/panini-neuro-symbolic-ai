@@ -1,6 +1,19 @@
 # RLCD Constraint Layer: Review Request
 
-**Status:** Draft, 2026-11-14. Nothing here has been reviewed. Part of stage 2
+**Status:** Draft, 2026-11-14. Nothing here has been reviewed.
+
+**Provisional acceptance (2026-11-14).** To keep work moving, the project
+owner decided to treat the root table and the stem table as accurate while
+this review is pending. This is recorded in
+`data/rlcd/provisional_acceptance.json` with each table's SHA-256.
+
+- **Rows are unchanged.** They keep `draft_unreviewed`; this is a working
+  assumption, not a review.
+- **Edits end the acceptance.** It lapses as soon as a table changes, for
+  example when the reviewer's corrections are merged.
+- **Corrections trigger a re-run.** If the corrections are significant,
+  every artifact built on these tables is regenerated and the affected
+  training and evaluation are re-run. Part of stage 2
 of `docs/RLCD_TRANSITION_PLAN.md` (protocol amendment 0.7, section 11.5).
 **Reviewer:** the project grammarian.
 
