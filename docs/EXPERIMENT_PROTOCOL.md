@@ -1,6 +1,6 @@
 # Experimental Protocol: Proof-Carrying External Vowel-Sandhi Splitting
 
-**Protocol version:** 0.7 (amendments of 2026-10-23/24: right-word holdout, section 9.5; silver-data rules and ranker settings, sections 11.1 and 11.2; pretraining plan, section 11.3. Amendment of 2026-10-30: SLP1 as the internal transliteration, section 11.4. Amendment of 2026-11-14: RLCD transition plan, section 11.5)
+**Protocol version:** 0.8 (amendments of 2026-10-23/24: right-word holdout, section 9.5; silver-data rules and ranker settings, sections 11.1 and 11.2; pretraining plan, section 11.3. Amendment of 2026-10-30: SLP1 as the internal transliteration, section 11.4. Amendments of 2026-11-14: RLCD transition plan, section 11.5; frozen stage 3 test settings, section 11.6)
 **Status:** Planned independent-corpus study; development smoke run separately frozen
 **Primary task:** Rank rule-licensed analyses of one external vowel-sandhi boundary
 **Compute target:** CPU or one modest consumer GPU
@@ -571,6 +571,39 @@ seed, was seen before the settings were written; the plan records this.
 **Test use.** τ and the routing cost are not frozen. Reporting either on the
 right-word holdout test set needs a further amendment that freezes them and
 discloses that use, as section 11.3 requires for the pretraining settings.
+
+### 11.6 Frozen Settings for the RLCD Stage 3 Test Run (Amendment 0.8)
+
+Adopted on 2026-11-14, before the stage 3 test part was read. The full text
+is `docs/STAGE3_TEST_AMENDMENT.md`; the frozen values are in
+`reports/rlcd-stage3/frozen_test_settings.json`.
+
+**Scope.** The DCS stage 3 test part (192 chapters, 16,271 sentences, 25
+texts), used for the first time. The right-word holdout sandhi test set is
+not touched.
+
+**What is frozen.**
+- Checkpoints, by SHA-256: N1 and N2, seeds 7, 11, 19; N3, descriptive
+  only.
+- B2, by its code and data hashes.
+- J4, fitted once on all dev words per N1 seed.
+- The gate threshold τ, giving 90% coverage on dev.
+
+**Confirmatory hypotheses.** Each holds only if every seed agrees and the
+95% chapter-bootstrap interval of the mean paired difference excludes 0:
+- **T-1.** N1 beats N2.
+- **T-2.** N1 beats B2, pooled.
+- **T-2b.** B2 beats N1 outside Kathāsaritsāgara; a negative dev finding
+  tested for replication.
+- **T-3.** The frozen J4 has lower NLL than the raw product.
+- **T-4.** Test coverage at the frozen τ lies within [0.85, 0.95] for every
+  seed.
+
+All five are reported whatever the outcome.
+
+**Procedure.** The test part is read exactly once, by a `--frozen` mode
+that refuses to run on any hash mismatch and fits nothing on test. Nothing
+is retrained or reselected afterwards.
 
 ## 12. Baselines
 
