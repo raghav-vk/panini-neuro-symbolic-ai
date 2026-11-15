@@ -744,6 +744,68 @@ the label distributions per field. No dev or test sentence was read.
 - **Report.** `reports/rlcd-stage3/TAGGER_DEV_RESULTS.md`, with the
   generated tables beside it.
 
+#### Stage 3 Joint Calibration Pre-Registered Settings
+
+Recorded 2026-11-14 and committed before any joint calibrator is fitted or
+scored. Dev only; the test part stays sealed.
+
+**Disclosure.** This analysis is motivated by a dev result already seen.
+Per-head temperature scaling made the whole-tag confidence worse (ECE 0.015
+→ 0.033; `reports/rlcd-stage3/TAGGER_DEV_RESULTS.md`, finding 6). The
+settings below are fixed before computing anything new, but on dev the
+analysis is post hoc. A confirmatory claim needs the test part, under a
+later frozen amendment.
+
+**Question.** Which calibrator makes the confidence that a whole word tag
+is correct match how often it is? That is the quantity a confidence gate
+over whole analyses needs.
+
+**Inputs.**
+- **Runs.** The final checkpoints of N1 seeds 7, 11 and 19 (primary) and N3
+  seeds 7, 11 and 19 (secondary), on the stage 3 dev words exactly as
+  scored in `tagger_dev.json`.
+- **Per word.** The five heads' raw top probabilities p₁…p₅, their product
+  c₀, and y = 1 if all five heads are correct.
+
+**Calibrators.** Each is fitted by minimising the negative log-likelihood of
+y.
+
+| ID | Calibrator | Parameters |
+| --- | --- | --- |
+| J0 | None: c₀ as is | 0 |
+| JT | The stage 3 per-head temperatures, then the product (as already reported) | 5 |
+| J1 | Platt scaling of log c₀: σ(a · log c₀ + b) | 2 |
+| J2 | Logistic regression on log p₁ … log p₅, plus an intercept; no penalty | 6 |
+| J3 | Isotonic regression of y on c₀ (pool-adjacent-violators) | non-parametric |
+
+**Fitting schemes.**
+1. **Cross-fit (primary).** 2 folds over dev chapters, by SHA-256 of
+   `rlcd-stage3-cal:` plus the chapter ID (the stage 3 folds). Each word is
+   scored by the calibrator fitted on the other fold.
+2. **Transfer (secondary).** Fitted on every Kathāsaritsāgara dev word,
+   scored on the words of the other 16 dev texts.
+
+**Metrics.**
+- **Primary.** Mean NLL of y. It is a proper scoring rule.
+- **Also reported.**
+  - ECE with 10 equal-mass bins, and top-label Brier
+  - mean confidence against accuracy
+  - AURC and full-tag accuracy at 90% and 95% coverage (J2 can reorder
+    words; J1 and J3 cannot, apart from ties)
+  - ECE for each of the 8 largest dev texts
+- **Intervals.** 95% intervals from 1,000 chapter-bootstrap resamples, seed
+  1729.
+
+**Hypotheses and decision rules (dev, post hoc).**
+- **H-J1.** J2 has lower cross-fitted NLL than J0. Supported if this holds
+  for every N1 seed and the 95% interval of the mean paired difference over
+  seeds excludes 0.
+- **H-J2.** J2 has lower cross-fitted NLL than JT, by the same rule.
+- **Descriptive.** J1 and J3 against J0; the transfer scheme; N3 against N1.
+
+**Outputs.** `scripts/joint_calibration.py` writes
+`reports/rlcd-stage3/joint_calibration.json` and `JOINT_CALIBRATION.md`.
+
 ### Stage 4: English interface (later work, separate paper)
 
 1. Decide how the model reads English (section 6).
