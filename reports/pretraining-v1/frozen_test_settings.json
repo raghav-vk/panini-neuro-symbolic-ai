@@ -1,5 +1,5 @@
 {
- "status": "draft for amendment 0.9 (docs/SANDHI_PRETRAINING_TEST_AMENDMENT.md); frozen only once adopted",
+ "status": "frozen by protocol amendment 0.9 (section 11.7, docs/SANDHI_PRETRAINING_TEST_AMENDMENT.md), adopted 2026-11-14",
  "test_set": "right-word holdout (strict_right_lemma), 821 examples; fourth use",
  "encoders": {
   "P-A-seed7": {

@@ -1,8 +1,9 @@
-# Draft Amendment 0.9: Frozen Settings for the Sandhi Pretraining Test Run
+# Amendment 0.9: Frozen Settings for the Sandhi Pretraining Test Run
 
-**Status:** Draft, 2026-11-14. Not adopted. No pretraining condition has
-been scored on the test set. Once approved, this becomes section 11.7 of
-`docs/EXPERIMENT_PROTOCOL.md`. It is the "further amendment" that section
+**Status:** Adopted 2026-11-14 as section 11.7 of
+`docs/EXPERIMENT_PROTOCOL.md`. At adoption no pretraining condition had been
+scored on the test set. The test run follows exactly once, after the
+hash-checked frozen script (section 4) is merged. It is the "further amendment" that section
 11.3 and `docs/PRETRAINING_PLAN.md` section 8, step 7, require before the
 test run.
 
@@ -116,9 +117,9 @@ correction is applied.
 - **Licensing.** The kosha includes CC BY-NC-SA material. The pretrained
   encoders do not; no kosha data was used in pretraining.
 
-## 6. Decisions Needed Before Adoption
+## 6. Decisions at Adoption (2026-11-14)
 
-1. Is a non-inferiority margin of 0.010 right for T-P1?
-2. Should this fourth use go ahead now, or wait for the expert gold set to
-   be the first test?
-3. Should the P-B arms stay descriptive?
+1. **Margin.** The non-inferiority margin for T-P1 is 0.010.
+2. **Timing.** The fourth use goes ahead now. The expert gold set remains
+   the final untouched evaluation.
+3. **P-B arms.** They stay descriptive.
