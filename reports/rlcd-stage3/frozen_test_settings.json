@@ -1,0 +1,88 @@
+{
+ "fitted_on": "all stage 3 dev words (130,107)",
+ "dev_sha256": "49802a6587ee2123aea1efea3aa213546f8dbbcfdb45178c29289ff0a78a655f",
+ "runs": {
+  "N1-seed7": {
+   "checkpoint": "runs/tagger-N1-seed7/tagger.pt",
+   "sha256": "5019b8d351ca64f5a0ac8c65d72861e91807d3ec2fedfef41e39655c1bfc89d5",
+   "J4": {
+    "a": 0.8036456017373426,
+    "b": 0.23380348449349228
+   },
+   "tau_90_coverage": 0.6006613758965176,
+   "dev_coverage_at_tau": 0.8999976942055385,
+   "dev_accepted_accuracy_at_tau": 0.9420987907358065
+  },
+  "N1-seed11": {
+   "checkpoint": "runs/tagger-N1-seed11/tagger.pt",
+   "sha256": "f997f7544463b4f61ef2123d3445244f74f58ed09c32f57bab7a3943d3fedecf",
+   "J4": {
+    "a": 0.8271006126643998,
+    "b": 0.1839729514636576
+   },
+   "tau_90_coverage": 0.5895905540439879,
+   "dev_coverage_at_tau": 0.8999976942055385,
+   "dev_accepted_accuracy_at_tau": 0.9399296303887409
+  },
+  "N1-seed19": {
+   "checkpoint": "runs/tagger-N1-seed19/tagger.pt",
+   "sha256": "d20b72e8018e73a11a618dc1cb6d9305e1e1d4ac169d241e5752b10134fcd52e",
+   "J4": {
+    "a": 0.8192412095298638,
+    "b": 0.18301138966527866
+   },
+   "tau_90_coverage": 0.5854627864108958,
+   "dev_coverage_at_tau": 0.8999976942055385,
+   "dev_accepted_accuracy_at_tau": 0.938930450228872
+  },
+  "N2-seed7": {
+   "checkpoint": "runs/tagger-N2-seed7/tagger.pt",
+   "sha256": "e012af5062169cef926f9af46a63675c14a42e3b33ff2059f76ef3f810b71c33"
+  },
+  "N2-seed11": {
+   "checkpoint": "runs/tagger-N2-seed11/tagger.pt",
+   "sha256": "3550771dface8e474f206abe67c36f3a16360c27774f6c4df9db8d304a51289b"
+  },
+  "N2-seed19": {
+   "checkpoint": "runs/tagger-N2-seed19/tagger.pt",
+   "sha256": "653296ffac172b0b172d5bcc4dc078e00ce70632eee639a3ef2aed215b0eec55"
+  }
+ },
+ "test_structure": {
+  "chapters": 192,
+  "sentences": 16271,
+  "words": 133178,
+  "texts": 25,
+  "largest_texts": [
+   [
+    "Kathāsaritsāgara",
+    11513
+   ],
+   [
+    "Kirātārjunīya",
+    1067
+   ],
+   [
+    "Tantrāloka",
+    751
+   ],
+   [
+    "Mīmāṃsāsūtrabhāṣya",
+    400
+   ],
+   [
+    "Harṣacarita",
+    382
+   ],
+   [
+    "Nāṭyaśāstra",
+    332
+   ]
+  ]
+ },
+ "status": "draft for amendment 0.8 (docs/STAGE3_TEST_AMENDMENT_DRAFT.md); frozen only once adopted",
+ "vidyut_data_sha256": "5269cda86451a75dbc93b605f6864bb5a52cc79d66da02f18f30cf87d0059ecb",
+ "train_sha256": "8dae35bc594e0a40ca068b0be744a425e552e3b38e0bd84996b1a105386208a6",
+ "test_sha256": "7d454f0dffc753a0dafa573491096752e7fd28219c5d573c7cd310d932eacf50",
+ "gate": "accept a word if its J4 confidence >= tau; tau gives 90% coverage on dev"
+}
