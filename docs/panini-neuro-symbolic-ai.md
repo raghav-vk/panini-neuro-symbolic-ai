@@ -1,14 +1,19 @@
 # Proof-Carrying External Vowel-Sandhi Splitting with Typed Pāṇinian Rules and a Tiny Transformer
 
 **Author:** Raghavendra V. Karnam
-**Working manuscript version:** 0.4, September 2026
+**Working manuscript version:** 0.5, November 2026
 **Repository:** https://github.com/raghav-vk/panini-neuro-symbolic-ai
-**Status:** Runnable development system; independent-corpus evaluation pending
+**Status:** Runnable development system. The sandhi independent-corpus
+evaluation is pending. The pre-registered extension of Section 12 is complete:
+one confirmatory test run.
 
 > This version is not ready for arXiv resubmission. It contains a complete
-> study design and measured synthetic engineering results, but no completed
-> independent-corpus or expert evaluation. Planned-study TBD cells must not
-> be filled using the synthetic probe scores.
+> sandhi study design, measured synthetic engineering results and the
+> completed Section 12 extension, but no completed sandhi independent-corpus
+> or expert evaluation. The sandhi results already measured on silver data
+> (repository reports `dcs-silver-v3` and `pretraining-v1`) are not yet
+> written into Section 11. Planned-study TBD cells must not be filled using
+> the synthetic probe scores.
 
 ## Abstract
 
@@ -36,7 +41,21 @@ executes 18 narrow draft encodings across five families, converts the DCS
 archive without executing pickle objects, and runs a small CPU Transformer
 on synthetic nonce-string probes. Those measurements establish engineering
 reproducibility, not Sanskrit accuracy; independent-corpus results remain
-pending and no claim of general grammatical correctness is made.
+pending and no claim of general grammatical correctness is made. A
+separately pre-registered extension (Section 12) tests the same small
+encoder on real text, as a set of calibrated Choice decisions: per-word
+case, number, gender, person and tense for 133,107 held-out words of the
+Digital Corpus of Sanskrit, with the segmentation given. In one frozen test
+run:
+- pretraining the 4.94M-parameter byte encoder on Sanskrit improves
+  whole-tag accuracy by 0.061 over the same model trained from scratch;
+- a two-parameter calibration fitted on development data transfers to
+  held-out texts;
+- a confidence gate chosen for 90% development coverage keeps 88.5% of test
+  words at 0.94 whole-tag accuracy.
+
+The tagger does not reliably beat a dictionary-plus-statistics baseline
+across texts. It trails it on several prose texts, by up to 0.17.
 
 ## 1. Introduction
 
@@ -170,7 +189,9 @@ description alone is insufficient.
   source layer for staged expansion.
 - Full sentence segmentation as the primary task.
 - Morphological generation, kāraka analysis, translation, correction, and
-  literary generation.
+  literary generation. Morphological tagging appears only in the separately
+  pre-registered extension of Section 12, which is evaluated on its own
+  terms and does not change the claims of the sandhi study.
 - Vedic-only rules unless declared as a separate evaluation stratum.
 - Claims of complete Pāṇinian or semantic correctness.
 
@@ -540,7 +561,145 @@ verified from saved predictions before replacing TBD.
 | No hard constraint | TBD | TBD | TBD |
 | Randomized rule IDs | TBD | TBD | TBD |
 
-## 12. Expert Evaluation
+## 12. Extension: Calibrated Morphological Decisions on Real Text
+
+This section reports a separately pre-registered extension. It asks whether
+the small byte encoder of the sandhi study, pretrained on Sanskrit text, can
+make **calibrated typed decisions** about real Sanskrit. It was carried out
+under protocol amendments 0.7 and 0.8. The plan, pre-registrations and all
+reports are in the repository (`docs/RLCD_TRANSITION_PLAN.md`,
+`docs/STAGE3_TEST_AMENDMENT.md`, `reports/rlcd-stage3/`).
+
+### 12.1 Approach
+
+The decision layer follows the reinforcement-learning-for-calibrated-decisions
+(RLCD) interface of Jev (Guo et al. 2026). The model answers typed questions
+about its input in one pass. Each answer is a *Choice*: a probability
+distribution over a listed set of options. The training reported here is
+supervised. Jev's training is not published, and the reinforcement-learning
+stages planned for this project are not part of these results.
+
+### 12.2 Task and Data
+
+**Task.** For every word of a sentence, given in its pre-sandhi
+(pada-pāṭha) segmentation, predict five Choices: vibhakti, vacana, liṅga,
+puruṣa and lakāra. Each also has a NONE option for "not applicable". DCS
+merges two pairs of lakāras (perfect and aorist, and the two futures), so
+those are scored as merged classes. Kāraka and prayoga are not predicted.
+
+**Source.** The Digital Corpus of Sanskrit in CoNLL-U (Hellwig 2010–2024),
+pinned at one commit: 271 texts, 770,945 sentences. It was converted from
+IAST to SLP1.
+
+**Overlap audit.** Each sentence was checked against DCS_pick, the
+pretraining source, with the pretraining overlap rule. 56% of DCS sentences
+are exact copies of DCS_pick text.
+
+**Division.** Recorded before any sentence was read for results:
+- **Evaluation.** Development and test come only from chapters with no exact
+  or near copy of DCS_pick text, in classical texts. They are split into dev
+  and test by hashed chapter. Test has 133,107 words in 167 chapters and 25
+  texts, never seen in pretraining or training.
+- **Gold-set reserve.** Eight whole clean kāvya texts, for the expert gold
+  set.
+- **Training.** 336,132 classical sentences.
+
+Labels are DCS analyses, each verified by one annotator. They are silver
+labels, not expert gold.
+
+### 12.3 Systems
+
+| System | Description |
+| --- | --- |
+| B2 | Dictionary plus statistics: the most frequent tag of the form in training; for unseen forms, the Vidyut kosha analysis most frequent in training |
+| N1 | The 4,937,220-parameter encoder pretrained on decontaminated DCS_pick text (P-A), fine-tuned with five linear Choice heads; cross-entropy loss; 3 seeds |
+| N2 | The same architecture trained from scratch; 3 seeds |
+| N3 | As N1 with a multi-class Brier loss; 3 seeds; descriptive only |
+
+Training settings were fixed in advance: two passes, learning rate 2 × 10⁻⁴,
+and the final checkpoint, with no selection on development data. Each run
+takes about 10 minutes on an Apple M-series laptop GPU.
+
+### 12.4 Whole-Analysis Confidence and Gate
+
+A gate that accepts or defers a whole analysis needs the probability that
+*all five* decisions are correct. Three findings on development data led to
+the frozen choices.
+
+- **Per-head calibration hurts the joint confidence.** Temperature-scaling
+  each head separately (Guo et al. 2017) made the whole-tag confidence
+  *worse*: ECE rose from 0.015 to 0.033. The heads' errors are correlated,
+  so the product of separately calibrated probabilities understates the
+  joint accuracy.
+- **Calibrate the joint confidence directly.** Isotonic regression (Zadrozny
+  and Elkan 2002) and Platt scaling (Platt 1999) of the logit of the raw
+  product c₀ both calibrated it well. Platt scaling, with two parameters,
+  transferred best across texts.
+- **Frozen gate.** The Platt parameters were fitted once on all development
+  words. The gate threshold τ was set to accept 90% of development words.
+
+These calibration choices were made post hoc on development data. The test
+run below is their first independent check.
+
+### 12.5 Confirmatory Test
+
+All systems, the calibrator, τ and five hypotheses were frozen by hash before
+the test part was read (amendment 0.8). The test part was then read exactly
+once. Each hypothesis holds only if every seed agrees and the 95%
+chapter-bootstrap interval of the mean paired difference excludes 0.
+
+| Hypothesis | Mean over seeds [95% CI] | Verdict |
+| --- | --- | --- |
+| T-1: N1 beats N2 on whole-tag accuracy | +0.061 [+0.058, +0.064] | Supported |
+| T-2: N1 beats B2 on whole-tag accuracy, pooled | +0.018 [−0.005, +0.040] | Not supported |
+| T-2b: B2 beats N1 outside Kathāsaritsāgara | +0.037 [−0.018, +0.081] | Not supported |
+| T-3: the frozen calibration lowers NLL against the raw product | −0.0038 [−0.0058, −0.0020] | Supported |
+| T-4: test coverage at the frozen τ lies within [0.85, 0.95] | 0.884–0.886 | Supported |
+
+**Accuracy on test** (ranges over seeds; head columns are accuracy on words
+whose gold value is not NONE):
+
+| System | Whole tag | Unseen forms | vibhakti | vacana | liṅga | puruṣa | lakāra |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| B2 | 0.862 | 0.485 | 0.864 | 0.946 | 0.852 | 0.950 | 0.948 |
+| N1 | 0.878–0.882 | 0.760–0.768 | 0.910–0.912 | 0.953–0.955 | 0.871–0.876 | 0.937–0.942 | 0.917–0.925 |
+| N2 | 0.817–0.819 | 0.695–0.701 | 0.872–0.874 | 0.928–0.930 | 0.813–0.815 | 0.862–0.866 | 0.835–0.836 |
+| N3 | 0.875–0.878 | 0.757–0.767 | 0.907–0.909 | 0.951–0.953 | 0.870–0.874 | 0.916–0.923 | 0.895–0.899 |
+
+**Calibration and gate on test (N1):**
+- **ECE.** The frozen Platt calibration lowers it from 0.019–0.020 for the
+  raw product to 0.006–0.008.
+- **Gate.** It accepts 88.4–88.6% of words. The accepted words have 0.939–0.942
+  whole-tag accuracy, the same as on development data, against 0.878–0.882
+  for all words.
+
+**By text.** N1 beats B2 in 14 of 25 test texts and is worse in 10.
+Kathāsaritsāgara supplies 65% of test words, and there N1 is ahead: 0.914
+against 0.862 for seed 7. N1 trails on several prose texts: Harṣacarita,
+0.694 against 0.860; Lalitavistara, 0.738 against 0.873.
+
+### 12.6 Interpretation
+
+**What the test supports:**
+1. **Pretraining helps.** Self-supervised pretraining of a 4.94M-parameter
+   byte encoder on Sanskrit text measurably improves its decisions about
+   unseen classical texts. The gain is +0.061, about the same as on
+   development data (+0.064), and holds for every head.
+2. **The confidence is usable.** A two-parameter calibration of the
+   whole-analysis confidence, fitted on development data, transfers to
+   held-out texts. A threshold chosen on development data keeps its
+   accepted-word accuracy. The system can say which of its analyses to trust,
+   which is the property a neuro-symbolic gate needs.
+3. **It generalises beyond lookup.** The encoder handles unseen word forms
+   far better than lookup: 0.76 against 0.49 whole-tag accuracy.
+
+**What it does not support:** a reliable advantage over a
+dictionary-plus-statistics baseline across texts. The dev-observed loss
+outside Kathāsaritsāgara recurred in direction on test, but the frozen test
+for it lacked the power to confirm it. The prose texts, where the encoder
+trails most, are the obvious target for further work.
+
+## 13. Expert Evaluation
 
 At least 200 outputs will be sampled across rules, split families, correctness
 categories, and abstentions. When feasible, two reviewers with Pāṇinian
@@ -555,7 +714,7 @@ The paper reports acceptance rates, raw agreement, Cohen's kappa when two
 reviewers participate, and a qualitative error taxonomy. Reviewer
 disagreements remain visible and may motivate a narrower rule inventory.
 
-## 13. Reproducibility
+## 14. Reproducibility
 
 Every reported run must preserve:
 
@@ -578,7 +737,7 @@ gates, deterministic lexical splitting, zero lemma overlap, pickle-opcode
 audit, all-sandhi source-corpus reproducibility, and legacy compatibility
 tests.
 
-## 14. Limitations and Risks
+## 15. Limitations and Risks
 
 First, a 25-rule inventory represents only a small operational subset and may
 not capture commentary-dependent interpretation, optionality, lexical
@@ -602,6 +761,19 @@ Fifth, results on external vowel sandhi do not justify claims about full word
 segmentation, morphology, syntax, translation, literary quality, or language
 modeling.
 
+Sixth, the Section 12 extension has its own limits:
+- **Silver labels.** Its labels are silver, single-annotator DCS analyses.
+- **Gold-segmented input.** Its input is gold-segmented.
+- **Merged tenses.** It scores two pairs of tenses as merged classes.
+- **Narrow bootstrap.** Its bootstrap reflects chapter variation within the
+  chosen texts, not the choice of texts.
+- **Post hoc calibration.** Its calibration choices were made post hoc on
+  development data and confirmed only by a single test run.
+- **Imperfect text rule.** The rule defining classical texts admitted two
+  Vedic-ritual commentaries, with 488 test words between them.
+- **Spent test part.** The test part is now used; any further use must be
+  disclosed.
+
 Finally, the DCS archive is released under CC BY 4.0. The ashtadhyayi-com
 material is available only for products offered free of charge and may not be
 used commercially, which is stricter than this project's Apache-2.0 code
@@ -610,7 +782,7 @@ and includes only ancient source text, factual classifications, code,
 manifests, hashes, and reconstruction instructions, not modern commentary or
 translations.
 
-## 15. Conclusion
+## 16. Conclusion
 
 This study replaces a broad proposal for a Sanskrit language model with a
 bounded experiment whose claims can be falsified. A reproducible all-sandhi
@@ -622,6 +794,13 @@ is lightweight by design, but archival value will come from completed
 experiments, leakage controls, baselines, ablations, resource measurements,
 and expert analysis. Until those results replace all placeholders, this
 document remains a working protocol rather than a completed research article.
+The completed extension in Section 12 shows, on real held-out text, the two
+properties the larger design depends on:
+- the small encoder benefits from Sanskrit pretraining;
+- its confidence in a whole analysis can be calibrated and used to decide
+  when to trust it.
+
+It also shows where a lookup baseline remains stronger.
 
 ## References
 
@@ -654,3 +833,21 @@ https://github.com/ambuda-org/vidyut
 
 Ambuda contributors. Sanitized data from the Digital Corpus of Sanskrit.
 https://github.com/ambuda-org/dcs
+
+Guo, Chuan, Geoff Pleiss, Yu Sun, and Kilian Q. Weinberger. 2017. On
+Calibration of Modern Neural Networks. Proceedings of ICML 2017, PMLR 70.
+
+Guo, Ruoqi, Yi Liu, Gelei Deng, Yuekang Li, Lida Zhao, Yutao Wu, Simin Chen,
+Ying Zhang, and Leo Yu Zhang. 2026. Just Ask Jev: Reinforcement Learning for
+Calibrated Decisions as a Zero-Shot Detector of AI Alignment Failures.
+arXiv:2609.29429.
+
+Hellwig, Oliver. 2010–2024. The Digital Corpus of Sanskrit (DCS).
+https://github.com/OliverHellwig/sanskrit
+
+Platt, John C. 1999. Probabilistic Outputs for Support Vector Machines and
+Comparisons to Regularized Likelihood Methods. In Advances in Large Margin
+Classifiers. MIT Press.
+
+Zadrozny, Bianca, and Charles Elkan. 2002. Transforming Classifier Scores into
+Accurate Multiclass Probability Estimates. Proceedings of KDD 2002.
