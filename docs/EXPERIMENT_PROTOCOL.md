@@ -605,6 +605,17 @@ All five are reported whatever the outcome.
 that refuses to run on any hash mismatch and fits nothing on test. Nothing
 is retrained or reselected afterwards.
 
+**Result (2026-11-14, one run, commit 6367e00).**
+`reports/rlcd-stage3/test/TEST_RESULTS.md`.
+- **T-1 supported.** +0.061 [+0.058, +0.064].
+- **T-2 not supported.** +0.018 [−0.005, +0.040].
+- **T-2b not supported.** B2 is ahead by +0.037 [−0.018, +0.081]; the
+  direction holds for every seed, but the test was underpowered.
+- **T-3 supported.** −0.0038 [−0.0058, −0.0020].
+- **T-4 supported.** Coverage 0.884 to 0.886.
+
+The stage 3 test part is now used; any further use must be disclosed.
+
 ## 12. Baselines
 
 Run at least these baselines under identical splits:

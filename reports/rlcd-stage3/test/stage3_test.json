@@ -1,0 +1,2104 @@
+{
+ "amendment": "0.8 (protocol section 11.6, docs/STAGE3_TEST_AMENDMENT.md)",
+ "data": "stage 3 test part",
+ "data_sha256": "7d454f0dffc753a0dafa573491096752e7fd28219c5d573c7cd310d932eacf50",
+ "code_commit": "6367e00773b5d0f87f9237e0a2980fef553f5612",
+ "rerun_after_crash": null,
+ "deviation": "Frozen mode implemented as scripts/run_stage3_test.py, reusing the dev evaluator's functions, not as options of eval_tagger.py and joint_calibration.py (amendment section 4).",
+ "words": 133107,
+ "dropped_words": 71,
+ "truncated_words": 0,
+ "chapters": 167,
+ "words_outside_kss": 47089,
+ "unseen_form_words": 9446,
+ "b2_from_kosha": 7929,
+ "systems": {
+  "B2": {
+   "full_tag": {
+    "value": 0.8615625023477352,
+    "ci95": [
+     0.8571788505929059,
+     0.866240716936519
+    ]
+   },
+   "full_tag_unseen_forms": {
+    "value": 0.48528477662502645,
+    "ci95": [
+     0.4668875253424912,
+     0.5060794210488633
+    ]
+   },
+   "heads": {
+    "vibhakti": {
+     "applicable": {
+      "value": 0.8643084209852574,
+      "ci95": [
+       0.8567091136048456,
+       0.8717527903370506
+      ]
+     },
+     "none_predictions": 0.9558366733466934,
+     "macro": 0.840057987411803
+    },
+    "vacana": {
+     "applicable": {
+      "value": 0.946003176283748,
+      "ci95": [
+       0.942417518885248,
+       0.9498600253881716
+      ]
+     },
+     "none_predictions": 0.9458944525628457,
+     "macro": 0.9232110149585688
+    },
+    "linga": {
+     "applicable": {
+      "value": 0.852021437900647,
+      "ci95": [
+       0.8437824644290389,
+       0.8602522840580019
+      ]
+     },
+     "none_predictions": 0.9393791718353122,
+     "macro": 0.8684652206646524
+    },
+    "purusha": {
+     "applicable": {
+      "value": 0.9501241927471435,
+      "ci95": [
+       0.9413789388252678,
+       0.9563351954593425
+      ]
+     },
+     "none_predictions": 0.9959730999837951,
+     "macro": 0.94728822264862
+    },
+    "lakara": {
+     "applicable": {
+      "value": 0.9484351713859911,
+      "ci95": [
+       0.9401217714398284,
+       0.9543930597223828
+      ]
+     },
+     "none_predictions": 0.9959730999837951,
+     "macro": 0.925083585158581
+    }
+   },
+   "per_text": {
+    "Abhidhānacintāmaṇi": {
+     "words": 1029,
+     "full_tag": 0.8726919339164237
+    },
+    "Avadānaśataka": {
+     "words": 643,
+     "full_tag": 0.8771384136858476
+    },
+    "Aṣṭādhyāyī": {
+     "words": 982,
+     "full_tag": 0.7423625254582484
+    },
+    "Harivaṃśa": {
+     "words": 805,
+     "full_tag": 0.8819875776397516
+    },
+    "Harṣacarita": {
+     "words": 12305,
+     "full_tag": 0.8598943518894758
+    },
+    "Kathāsaritsāgara": {
+     "words": 86018,
+     "full_tag": 0.8622148852565742
+    },
+    "Kauśikasūtradārilabhāṣya": {
+     "words": 266,
+     "full_tag": 0.8195488721804511
+    },
+    "Kauśikasūtrakeśavapaddhati": {
+     "words": 222,
+     "full_tag": 0.7117117117117117
+    },
+    "Kirātārjunīya": {
+     "words": 9336,
+     "full_tag": 0.8414738646101114
+    },
+    "Kāśikāvṛtti": {
+     "words": 48,
+     "full_tag": 0.9166666666666666
+    },
+    "Lalitavistara": {
+     "words": 1447,
+     "full_tag": 0.8728403593642018
+    },
+    "Mīmāṃsāsūtrabhāṣya": {
+     "words": 3669,
+     "full_tag": 0.8915235759062414
+    },
+    "Mūlamadhyamakārikāḥ": {
+     "words": 1514,
+     "full_tag": 0.8844121532364597
+    },
+    "Nibandhasaṃgraha": {
+     "words": 296,
+     "full_tag": 0.9358108108108109
+    },
+    "Nyāyabindu": {
+     "words": 115,
+     "full_tag": 0.9217391304347826
+    },
+    "Nāṭyaśāstra": {
+     "words": 2233,
+     "full_tag": 0.8199731303179579
+    },
+    "Rasaratnasamuccayabodhinī": {
+     "words": 5,
+     "full_tag": 0.4
+    },
+    "Rasaratnasamuccayaṭīkā": {
+     "words": 5,
+     "full_tag": 1.0
+    },
+    "Ratnaṭīkā": {
+     "words": 71,
+     "full_tag": 0.9859154929577465
+    },
+    "Rājanighaṇṭu": {
+     "words": 459,
+     "full_tag": 0.8235294117647058
+    },
+    "Tantrāloka": {
+     "words": 5741,
+     "full_tag": 0.8862567496951751
+    },
+    "Yogasūtrabhāṣya": {
+     "words": 223,
+     "full_tag": 0.8878923766816144
+    },
+    "Śatakatraya": {
+     "words": 2511,
+     "full_tag": 0.8554360812425329
+    },
+    "Śukasaptati": {
+     "words": 1063,
+     "full_tag": 0.8889934148635936
+    },
+    "Śyainikaśāstra": {
+     "words": 2101,
+     "full_tag": 0.8733936220847216
+    }
+   }
+  },
+  "N1-seed7": {
+   "full_tag": {
+    "value": 0.8822225728173575,
+    "ci95": [
+     0.8588618926646993,
+     0.9047548130517892
+    ]
+   },
+   "full_tag_unseen_forms": {
+    "value": 0.7676265085750582,
+    "ci95": [
+     0.7159891721995076,
+     0.8175232322391796
+    ]
+   },
+   "heads": {
+    "vibhakti": {
+     "applicable": {
+      "value": 0.9124938661432442,
+      "ci95": [
+       0.8933499955078131,
+       0.9307474508038718
+      ]
+     },
+     "none_predictions": 0.9593830463977382,
+     "macro": 0.8680080049849803
+    },
+    "vacana": {
+     "applicable": {
+      "value": 0.9550782727066475,
+      "ci95": [
+       0.9395474671054084,
+       0.9686536772385481
+      ]
+     },
+     "none_predictions": 0.9565796040592247,
+     "macro": 0.9277237511447224
+    },
+    "linga": {
+     "applicable": {
+      "value": 0.8764468331056432,
+      "ci95": [
+       0.8464921464519874,
+       0.9036616150067214
+      ]
+     },
+     "none_predictions": 0.9574647637095819,
+     "macro": 0.8933822530327566
+    },
+    "purusha": {
+     "applicable": {
+      "value": 0.942374565325385,
+      "ci95": [
+       0.9212008580721491,
+       0.9595857409512613
+      ]
+     },
+     "none_predictions": 0.9957328400950781,
+     "macro": 0.9473711786637766
+    },
+    "lakara": {
+     "applicable": {
+      "value": 0.9248882265275707,
+      "ci95": [
+       0.9022217043652788,
+       0.9433207790137479
+      ]
+     },
+     "none_predictions": 0.9954514865774261,
+     "macro": 0.7389234295904974
+    }
+   },
+   "per_text": {
+    "Abhidhānacintāmaṇi": {
+     "words": 1029,
+     "full_tag": 0.924198250728863
+    },
+    "Avadānaśataka": {
+     "words": 643,
+     "full_tag": 0.7807153965785381
+    },
+    "Aṣṭādhyāyī": {
+     "words": 982,
+     "full_tag": 0.7871690427698574
+    },
+    "Harivaṃśa": {
+     "words": 805,
+     "full_tag": 0.901863354037267
+    },
+    "Harṣacarita": {
+     "words": 12305,
+     "full_tag": 0.694108086143844
+    },
+    "Kathāsaritsāgara": {
+     "words": 86018,
+     "full_tag": 0.913692482968681
+    },
+    "Kauśikasūtradārilabhāṣya": {
+     "words": 266,
+     "full_tag": 0.8796992481203008
+    },
+    "Kauśikasūtrakeśavapaddhati": {
+     "words": 222,
+     "full_tag": 0.7342342342342343
+    },
+    "Kirātārjunīya": {
+     "words": 9336,
+     "full_tag": 0.8671808054841473
+    },
+    "Kāśikāvṛtti": {
+     "words": 48,
+     "full_tag": 0.7916666666666666
+    },
+    "Lalitavistara": {
+     "words": 1447,
+     "full_tag": 0.7380787836903939
+    },
+    "Mīmāṃsāsūtrabhāṣya": {
+     "words": 3669,
+     "full_tag": 0.866721177432543
+    },
+    "Mūlamadhyamakārikāḥ": {
+     "words": 1514,
+     "full_tag": 0.9114927344782034
+    },
+    "Nibandhasaṃgraha": {
+     "words": 296,
+     "full_tag": 0.8209459459459459
+    },
+    "Nyāyabindu": {
+     "words": 115,
+     "full_tag": 0.9391304347826087
+    },
+    "Nāṭyaśāstra": {
+     "words": 2233,
+     "full_tag": 0.9216300940438872
+    },
+    "Rasaratnasamuccayabodhinī": {
+     "words": 5,
+     "full_tag": 0.6
+    },
+    "Rasaratnasamuccayaṭīkā": {
+     "words": 5,
+     "full_tag": 1.0
+    },
+    "Ratnaṭīkā": {
+     "words": 71,
+     "full_tag": 0.8309859154929577
+    },
+    "Rājanighaṇṭu": {
+     "words": 459,
+     "full_tag": 0.8954248366013072
+    },
+    "Tantrāloka": {
+     "words": 5741,
+     "full_tag": 0.914823201532834
+    },
+    "Yogasūtrabhāṣya": {
+     "words": 223,
+     "full_tag": 0.7847533632286996
+    },
+    "Śatakatraya": {
+     "words": 2511,
+     "full_tag": 0.8004778972520908
+    },
+    "Śukasaptati": {
+     "words": 1063,
+     "full_tag": 0.8739416745061148
+    },
+    "Śyainikaśāstra": {
+     "words": 2101,
+     "full_tag": 0.9190861494526416
+    }
+   },
+   "gate": {
+    "tau": 0.6006613758965176,
+    "coverage": 0.8856333626330697,
+    "accepted_full_tag": 0.9418665807064572
+   },
+   "calibration": {
+    "J0": {
+     "nll": {
+      "value": 0.21158153969041937,
+      "ci95": [
+       0.18872649761688545,
+       0.23714935644011254
+      ]
+     },
+     "brier": {
+      "value": 0.06645227193404203,
+      "ci95": [
+       0.058325561469652946,
+       0.07548651573652584
+      ]
+     },
+     "ece_equal_mass": 0.020402294699716484,
+     "mean_confidence": 0.8736159801483154,
+     "accuracy": 0.8822225728173575
+    },
+    "J4": {
+     "nll": {
+      "value": 0.20733928072145769,
+      "ci95": [
+       0.18630526368789113,
+       0.23043515696571845
+      ]
+     },
+     "brier": {
+      "value": 0.06496371304252004,
+      "ci95": [
+       0.05769792572401027,
+       0.07292813831411708
+      ]
+     },
+     "ece_equal_mass": 0.005852412408784315,
+     "mean_confidence": 0.878729325590741,
+     "accuracy": 0.8822225728173575
+    }
+   },
+   "role": "confirmatory"
+  },
+  "N1-seed11": {
+   "full_tag": {
+    "value": 0.8782107627698017,
+    "ci95": [
+     0.854227595738408,
+     0.9015312839507194
+    ]
+   },
+   "full_tag_unseen_forms": {
+    "value": 0.7601100995130213,
+    "ci95": [
+     0.7099889203541992,
+     0.8094924070405978
+    ]
+   },
+   "heads": {
+    "vibhakti": {
+     "applicable": {
+      "value": 0.9104563589426298,
+      "ci95": [
+       0.8915925994439359,
+       0.9284716826914087
+      ]
+     },
+     "none_predictions": 0.9544426006939206,
+     "macro": 0.8663957375698956
+    },
+    "vacana": {
+     "applicable": {
+      "value": 0.9544606619778668,
+      "ci95": [
+       0.9391820291830131,
+       0.9680190082627381
+      ]
+     },
+     "none_predictions": 0.9559789142698604,
+     "macro": 0.9218399926658067
+    },
+    "linga": {
+     "applicable": {
+      "value": 0.8708621699118764,
+      "ci95": [
+       0.8400867400824235,
+       0.8989642244890123
+      ]
+     },
+     "none_predictions": 0.9569587972778626,
+     "macro": 0.8874210131441412
+    },
+    "purusha": {
+     "applicable": {
+      "value": 0.9388971684053651,
+      "ci95": [
+       0.9175132973681502,
+       0.9562844916269496
+      ]
+     },
+     "none_predictions": 0.9954735347799635,
+     "macro": 0.9437628110204571
+    },
+    "lakara": {
+     "applicable": {
+      "value": 0.9167411823149528,
+      "ci95": [
+       0.8929437384453448,
+       0.936520946912065
+      ]
+     },
+     "none_predictions": 0.9951514954960798,
+     "macro": 0.7262542228412612
+    }
+   },
+   "per_text": {
+    "Abhidhānacintāmaṇi": {
+     "words": 1029,
+     "full_tag": 0.9203109815354713
+    },
+    "Avadānaśataka": {
+     "words": 643,
+     "full_tag": 0.7713841368584758
+    },
+    "Aṣṭādhyāyī": {
+     "words": 982,
+     "full_tag": 0.7871690427698574
+    },
+    "Harivaṃśa": {
+     "words": 805,
+     "full_tag": 0.9006211180124224
+    },
+    "Harṣacarita": {
+     "words": 12305,
+     "full_tag": 0.6878504672897197
+    },
+    "Kathāsaritsāgara": {
+     "words": 86018,
+     "full_tag": 0.9095654397916715
+    },
+    "Kauśikasūtradārilabhāṣya": {
+     "words": 266,
+     "full_tag": 0.8872180451127819
+    },
+    "Kauśikasūtrakeśavapaddhati": {
+     "words": 222,
+     "full_tag": 0.7477477477477478
+    },
+    "Kirātārjunīya": {
+     "words": 9336,
+     "full_tag": 0.8585047129391602
+    },
+    "Kāśikāvṛtti": {
+     "words": 48,
+     "full_tag": 0.8541666666666666
+    },
+    "Lalitavistara": {
+     "words": 1447,
+     "full_tag": 0.7311679336558397
+    },
+    "Mīmāṃsāsūtrabhāṣya": {
+     "words": 3669,
+     "full_tag": 0.8656309621150177
+    },
+    "Mūlamadhyamakārikāḥ": {
+     "words": 1514,
+     "full_tag": 0.9220607661822986
+    },
+    "Nibandhasaṃgraha": {
+     "words": 296,
+     "full_tag": 0.8243243243243243
+    },
+    "Nyāyabindu": {
+     "words": 115,
+     "full_tag": 0.9217391304347826
+    },
+    "Nāṭyaśāstra": {
+     "words": 2233,
+     "full_tag": 0.9158083296014331
+    },
+    "Rasaratnasamuccayabodhinī": {
+     "words": 5,
+     "full_tag": 0.6
+    },
+    "Rasaratnasamuccayaṭīkā": {
+     "words": 5,
+     "full_tag": 1.0
+    },
+    "Ratnaṭīkā": {
+     "words": 71,
+     "full_tag": 0.7887323943661971
+    },
+    "Rājanighaṇṭu": {
+     "words": 459,
+     "full_tag": 0.8779956427015251
+    },
+    "Tantrāloka": {
+     "words": 5741,
+     "full_tag": 0.9197004006270685
+    },
+    "Yogasūtrabhāṣya": {
+     "words": 223,
+     "full_tag": 0.757847533632287
+    },
+    "Śatakatraya": {
+     "words": 2511,
+     "full_tag": 0.7988849064117881
+    },
+    "Śukasaptati": {
+     "words": 1063,
+     "full_tag": 0.8748824082784572
+    },
+    "Śyainikaśāstra": {
+     "words": 2101,
+     "full_tag": 0.9124226558781533
+    }
+   },
+   "gate": {
+    "tau": 0.5895905540439879,
+    "coverage": 0.8844688859338727,
+    "accepted_full_tag": 0.9394881465059586
+   },
+   "calibration": {
+    "J0": {
+     "nll": {
+      "value": 0.21560200118233339,
+      "ci95": [
+       0.19299495100846828,
+       0.24065828070965514
+      ]
+     },
+     "brier": {
+      "value": 0.06792797274526755,
+      "ci95": [
+       0.05995456760639186,
+       0.07672954161463884
+      ]
+     },
+     "ece_equal_mass": 0.01890252907055619,
+     "mean_confidence": 0.8711794018745422,
+     "accuracy": 0.8782107627698017
+    },
+    "J4": {
+     "nll": {
+      "value": 0.21221988610713147,
+      "ci95": [
+       0.19099327216182033,
+       0.23537136263568437
+      ]
+     },
+     "brier": {
+      "value": 0.06676914988373812,
+      "ci95": [
+       0.05945858929034876,
+       0.07474545855315358
+      ]
+     },
+     "ece_equal_mass": 0.006466572510934354,
+     "mean_confidence": 0.8743813569777914,
+     "accuracy": 0.8782107627698017
+    }
+   },
+   "role": "confirmatory"
+  },
+  "N1-seed19": {
+   "full_tag": {
+    "value": 0.8789169615422179,
+    "ci95": [
+     0.855740687782183,
+     0.9010734912855753
+    ]
+   },
+   "full_tag_unseen_forms": {
+    "value": 0.7610628837603218,
+    "ci95": [
+     0.710356184489303,
+     0.8108767752796856
+    ]
+   },
+   "heads": {
+    "vibhakti": {
+     "applicable": {
+      "value": 0.9104030210577969,
+      "ci95": [
+       0.8922902258242463,
+       0.92781270343689
+      ]
+     },
+     "none_predictions": 0.9572272130816595,
+     "macro": 0.8639724949848336
+    },
+    "vacana": {
+     "applicable": {
+      "value": 0.9529481459073836,
+      "ci95": [
+       0.9374500845847461,
+       0.9668918541604026
+      ]
+     },
+     "none_predictions": 0.9552362990903039,
+     "macro": 0.9220430990807758
+    },
+    "linga": {
+     "applicable": {
+      "value": 0.8718079596463046,
+      "ci95": [
+       0.8414111303016848,
+       0.8990994205828599
+      ]
+     },
+     "none_predictions": 0.9549951933742513,
+     "macro": 0.8878534691719473
+    },
+    "purusha": {
+     "applicable": {
+      "value": 0.9373075012419275,
+      "ci95": [
+       0.9150756860918867,
+       0.9550254850335959
+      ]
+     },
+     "none_predictions": 0.9953677037277411,
+     "macro": 0.939909447895856
+    },
+    "lakara": {
+     "applicable": {
+      "value": 0.9181321410829607,
+      "ci95": [
+       0.8943947831657127,
+       0.9374134592487107
+      ]
+     },
+     "none_predictions": 0.9950707765148444,
+     "macro": 0.7414448458364167
+    }
+   },
+   "per_text": {
+    "Abhidhānacintāmaṇi": {
+     "words": 1029,
+     "full_tag": 0.9203109815354713
+    },
+    "Avadānaśataka": {
+     "words": 643,
+     "full_tag": 0.7713841368584758
+    },
+    "Aṣṭādhyāyī": {
+     "words": 982,
+     "full_tag": 0.7922606924643585
+    },
+    "Harivaṃśa": {
+     "words": 805,
+     "full_tag": 0.9105590062111801
+    },
+    "Harṣacarita": {
+     "words": 12305,
+     "full_tag": 0.6960585127996749
+    },
+    "Kathāsaritsāgara": {
+     "words": 86018,
+     "full_tag": 0.9093794322118627
+    },
+    "Kauśikasūtradārilabhāṣya": {
+     "words": 266,
+     "full_tag": 0.8759398496240601
+    },
+    "Kauśikasūtrakeśavapaddhati": {
+     "words": 222,
+     "full_tag": 0.7837837837837838
+    },
+    "Kirātārjunīya": {
+     "words": 9336,
+     "full_tag": 0.8579691516709511
+    },
+    "Kāśikāvṛtti": {
+     "words": 48,
+     "full_tag": 0.7916666666666666
+    },
+    "Lalitavistara": {
+     "words": 1447,
+     "full_tag": 0.7360055286800277
+    },
+    "Mīmāṃsāsūtrabhāṣya": {
+     "words": 3669,
+     "full_tag": 0.8612701008449168
+    },
+    "Mūlamadhyamakārikāḥ": {
+     "words": 1514,
+     "full_tag": 0.9200792602377807
+    },
+    "Nibandhasaṃgraha": {
+     "words": 296,
+     "full_tag": 0.8108108108108109
+    },
+    "Nyāyabindu": {
+     "words": 115,
+     "full_tag": 0.9130434782608695
+    },
+    "Nāṭyaśāstra": {
+     "words": 2233,
+     "full_tag": 0.9193909538737125
+    },
+    "Rasaratnasamuccayabodhinī": {
+     "words": 5,
+     "full_tag": 0.6
+    },
+    "Rasaratnasamuccayaṭīkā": {
+     "words": 5,
+     "full_tag": 1.0
+    },
+    "Ratnaṭīkā": {
+     "words": 71,
+     "full_tag": 0.8309859154929577
+    },
+    "Rājanighaṇṭu": {
+     "words": 459,
+     "full_tag": 0.8932461873638344
+    },
+    "Tantrāloka": {
+     "words": 5741,
+     "full_tag": 0.9172618010799513
+    },
+    "Yogasūtrabhāṣya": {
+     "words": 223,
+     "full_tag": 0.7892376681614349
+    },
+    "Śatakatraya": {
+     "words": 2511,
+     "full_tag": 0.7988849064117881
+    },
+    "Śukasaptati": {
+     "words": 1063,
+     "full_tag": 0.8758231420507996
+    },
+    "Śyainikaśāstra": {
+     "words": 2101,
+     "full_tag": 0.91432651118515
+    }
+   },
+   "gate": {
+    "tau": 0.5854627864108958,
+    "coverage": 0.8854831075751087,
+    "accepted_full_tag": 0.9388193171791217
+   },
+   "calibration": {
+    "J0": {
+     "nll": {
+      "value": 0.21647461280646768,
+      "ci95": [
+       0.19320980684263248,
+       0.24164653743053174
+      ]
+     },
+     "brier": {
+      "value": 0.06821524288424202,
+      "ci95": [
+       0.05998118806915621,
+       0.07695095347857187
+      ]
+     },
+     "ece_equal_mass": 0.020280467704476623,
+     "mean_confidence": 0.8709726929664612,
+     "accuracy": 0.8789169615422179
+    },
+    "J4": {
+     "nll": {
+      "value": 0.21276330802393972,
+      "ci95": [
+       0.19097720403908555,
+       0.236117179254769
+      ]
+     },
+     "brier": {
+      "value": 0.06692243230334961,
+      "ci95": [
+       0.05933516440496983,
+       0.07503310399850438
+      ]
+     },
+     "ece_equal_mass": 0.007637953683870379,
+     "mean_confidence": 0.8736671832725053,
+     "accuracy": 0.8789169615422179
+    }
+   },
+   "role": "confirmatory"
+  },
+  "N2-seed7": {
+   "full_tag": {
+    "value": 0.8193558565665217,
+    "ci95": [
+     0.7961880630822942,
+     0.840903184260677
+    ]
+   },
+   "full_tag_unseen_forms": {
+    "value": 0.7006140165149269,
+    "ci95": [
+     0.6487634017515818,
+     0.7507424651020964
+    ]
+   },
+   "heads": {
+    "vibhakti": {
+     "applicable": {
+      "value": 0.873695888715837,
+      "ci95": [
+       0.8555523856307298,
+       0.8915851688062578
+      ]
+     },
+     "none_predictions": 0.9300486618004866,
+     "macro": 0.8061033754217254
+    },
+    "vacana": {
+     "applicable": {
+      "value": 0.9289495575890494,
+      "ci95": [
+       0.9121470649609791,
+       0.9437060095653146
+      ]
+     },
+     "none_predictions": 0.9363040918457463,
+     "macro": 0.8858336670603674
+    },
+    "linga": {
+     "applicable": {
+      "value": 0.8140997733107145,
+      "ci95": [
+       0.7824190125373782,
+       0.8427910813852642
+      ]
+     },
+     "none_predictions": 0.939438721976739,
+     "macro": 0.8364785718948655
+    },
+    "purusha": {
+     "applicable": {
+      "value": 0.8622950819672132,
+      "ci95": [
+       0.8362534664680263,
+       0.8844374736512223
+      ]
+     },
+     "none_predictions": 0.9895959644953194,
+     "macro": 0.8595939340399826
+    },
+    "lakara": {
+     "applicable": {
+      "value": 0.8347739692001988,
+      "ci95": [
+       0.8074618803161608,
+       0.8584744540754334
+      ]
+     },
+     "none_predictions": 0.9894223931734437,
+     "macro": 0.6476416358730137
+    }
+   },
+   "per_text": {
+    "Abhidhānacintāmaṇi": {
+     "words": 1029,
+     "full_tag": 0.8824101068999028
+    },
+    "Avadānaśataka": {
+     "words": 643,
+     "full_tag": 0.7091757387247278
+    },
+    "Aṣṭādhyāyī": {
+     "words": 982,
+     "full_tag": 0.7169042769857433
+    },
+    "Harivaṃśa": {
+     "words": 805,
+     "full_tag": 0.8857142857142857
+    },
+    "Harṣacarita": {
+     "words": 12305,
+     "full_tag": 0.6459975619666802
+    },
+    "Kathāsaritsāgara": {
+     "words": 86018,
+     "full_tag": 0.8490548489850961
+    },
+    "Kauśikasūtradārilabhāṣya": {
+     "words": 266,
+     "full_tag": 0.7857142857142857
+    },
+    "Kauśikasūtrakeśavapaddhati": {
+     "words": 222,
+     "full_tag": 0.7072072072072072
+    },
+    "Kirātārjunīya": {
+     "words": 9336,
+     "full_tag": 0.7787060839760068
+    },
+    "Kāśikāvṛtti": {
+     "words": 48,
+     "full_tag": 0.7083333333333334
+    },
+    "Lalitavistara": {
+     "words": 1447,
+     "full_tag": 0.65860400829302
+    },
+    "Mīmāṃsāsūtrabhāṣya": {
+     "words": 3669,
+     "full_tag": 0.7944944126464977
+    },
+    "Mūlamadhyamakārikāḥ": {
+     "words": 1514,
+     "full_tag": 0.880449141347424
+    },
+    "Nibandhasaṃgraha": {
+     "words": 296,
+     "full_tag": 0.7736486486486487
+    },
+    "Nyāyabindu": {
+     "words": 115,
+     "full_tag": 0.8782608695652174
+    },
+    "Nāṭyaśāstra": {
+     "words": 2233,
+     "full_tag": 0.8925212718316167
+    },
+    "Rasaratnasamuccayabodhinī": {
+     "words": 5,
+     "full_tag": 0.8
+    },
+    "Rasaratnasamuccayaṭīkā": {
+     "words": 5,
+     "full_tag": 1.0
+    },
+    "Ratnaṭīkā": {
+     "words": 71,
+     "full_tag": 0.8028169014084507
+    },
+    "Rājanighaṇṭu": {
+     "words": 459,
+     "full_tag": 0.8518518518518519
+    },
+    "Tantrāloka": {
+     "words": 5741,
+     "full_tag": 0.8724960808221565
+    },
+    "Yogasūtrabhāṣya": {
+     "words": 223,
+     "full_tag": 0.6905829596412556
+    },
+    "Śatakatraya": {
+     "words": 2511,
+     "full_tag": 0.7244125846276384
+    },
+    "Śukasaptati": {
+     "words": 1063,
+     "full_tag": 0.7958607714016933
+    },
+    "Śyainikaśāstra": {
+     "words": 2101,
+     "full_tag": 0.8657782008567348
+    }
+   },
+   "calibration": {
+    "J0": {
+     "nll": {
+      "value": 0.3011954180964771,
+      "ci95": [
+       0.28019687009221556,
+       0.3234871995080002
+      ]
+     },
+     "brier": {
+      "value": 0.09739359882294893,
+      "ci95": [
+       0.0898298675382077,
+       0.10549446628454402
+      ]
+     },
+     "ece_equal_mass": 0.02803183288742639,
+     "mean_confidence": 0.7917845249176025,
+     "accuracy": 0.8193558565665217
+    }
+   },
+   "role": "confirmatory"
+  },
+  "N2-seed11": {
+   "full_tag": {
+    "value": 0.8169818266507396,
+    "ci95": [
+     0.7928168294164389,
+     0.8395665142635059
+    ]
+   },
+   "full_tag_unseen_forms": {
+    "value": 0.695744230362058,
+    "ci95": [
+     0.6435372265233736,
+     0.7471640261378825
+    ]
+   },
+   "heads": {
+    "vibhakti": {
+     "applicable": {
+      "value": 0.8717757248618548,
+      "ci95": [
+       0.8534928465555764,
+       0.8897137965063632
+      ]
+     },
+     "none_predictions": 0.9300455235204856,
+     "macro": 0.798937989518059
+    },
+    "vacana": {
+     "applicable": {
+      "value": 0.927953817842648,
+      "ci95": [
+       0.9107098157623398,
+       0.9434200456615751
+      ]
+     },
+     "none_predictions": 0.9360609574291867,
+     "macro": 0.8801138930705736
+    },
+    "linga": {
+     "applicable": {
+      "value": 0.8134842593565628,
+      "ci95": [
+       0.7815093367223036,
+       0.841760547877617
+      ]
+     },
+     "none_predictions": 0.938254697531955,
+     "macro": 0.8363104481810758
+    },
+    "purusha": {
+     "applicable": {
+      "value": 0.8646795827123696,
+      "ci95": [
+       0.8363234069703561,
+       0.888538306000805
+      ]
+     },
+     "none_predictions": 0.9898379077569829,
+     "macro": 0.8657370304293843
+    },
+    "lakara": {
+     "applicable": {
+      "value": 0.8360655737704918,
+      "ci95": [
+       0.8079269842665094,
+       0.8604656236519219
+      ]
+     },
+     "none_predictions": 0.9898082891503944,
+     "macro": 0.6495447343707879
+    }
+   },
+   "per_text": {
+    "Abhidhānacintāmaṇi": {
+     "words": 1029,
+     "full_tag": 0.8794946550048591
+    },
+    "Avadānaśataka": {
+     "words": 643,
+     "full_tag": 0.6967340590979783
+    },
+    "Aṣṭādhyāyī": {
+     "words": 982,
+     "full_tag": 0.7067209775967414
+    },
+    "Harivaṃśa": {
+     "words": 805,
+     "full_tag": 0.853416149068323
+    },
+    "Harṣacarita": {
+     "words": 12305,
+     "full_tag": 0.6392523364485981
+    },
+    "Kathāsaritsāgara": {
+     "words": 86018,
+     "full_tag": 0.8487990885628589
+    },
+    "Kauśikasūtradārilabhāṣya": {
+     "words": 266,
+     "full_tag": 0.8045112781954887
+    },
+    "Kauśikasūtrakeśavapaddhati": {
+     "words": 222,
+     "full_tag": 0.6936936936936937
+    },
+    "Kirātārjunīya": {
+     "words": 9336,
+     "full_tag": 0.770458440445587
+    },
+    "Kāśikāvṛtti": {
+     "words": 48,
+     "full_tag": 0.75
+    },
+    "Lalitavistara": {
+     "words": 1447,
+     "full_tag": 0.6316516931582584
+    },
+    "Mīmāṃsāsūtrabhāṣya": {
+     "words": 3669,
+     "full_tag": 0.7887707822294904
+    },
+    "Mūlamadhyamakārikāḥ": {
+     "words": 1514,
+     "full_tag": 0.8778071334214003
+    },
+    "Nibandhasaṃgraha": {
+     "words": 296,
+     "full_tag": 0.7466216216216216
+    },
+    "Nyāyabindu": {
+     "words": 115,
+     "full_tag": 0.8695652173913043
+    },
+    "Nāṭyaśāstra": {
+     "words": 2233,
+     "full_tag": 0.8956560680698612
+    },
+    "Rasaratnasamuccayabodhinī": {
+     "words": 5,
+     "full_tag": 0.8
+    },
+    "Rasaratnasamuccayaṭīkā": {
+     "words": 5,
+     "full_tag": 1.0
+    },
+    "Ratnaṭīkā": {
+     "words": 71,
+     "full_tag": 0.7746478873239436
+    },
+    "Rājanighaṇṭu": {
+     "words": 459,
+     "full_tag": 0.8562091503267973
+    },
+    "Tantrāloka": {
+     "words": 5741,
+     "full_tag": 0.8700574812750392
+    },
+    "Yogasūtrabhāṣya": {
+     "words": 223,
+     "full_tag": 0.7130044843049327
+    },
+    "Śatakatraya": {
+     "words": 2511,
+     "full_tag": 0.705694942254082
+    },
+    "Śukasaptati": {
+     "words": 1063,
+     "full_tag": 0.8052681091251176
+    },
+    "Śyainikaśāstra": {
+     "words": 2101,
+     "full_tag": 0.8757734412184673
+    }
+   },
+   "calibration": {
+    "J0": {
+     "nll": {
+      "value": 0.30036850680655525,
+      "ci95": [
+       0.2790917162832793,
+       0.3231851297667459
+      ]
+     },
+     "brier": {
+      "value": 0.097008840555458,
+      "ci95": [
+       0.08940960972378163,
+       0.10524003511409372
+      ]
+     },
+     "ece_equal_mass": 0.028758109469505393,
+     "mean_confidence": 0.7886315584182739,
+     "accuracy": 0.8169818266507396
+    }
+   },
+   "role": "confirmatory"
+  },
+  "N2-seed19": {
+   "full_tag": {
+    "value": 0.8192506780259491,
+    "ci95": [
+     0.7958951798318935,
+     0.8413343193616307
+    ]
+   },
+   "full_tag_unseen_forms": {
+    "value": 0.6946855811983909,
+    "ci95": [
+     0.6429220346007145,
+     0.745944902110571
+    ]
+   },
+   "heads": {
+    "vibhakti": {
+     "applicable": {
+      "value": 0.8739839132939344,
+      "ci95": [
+       0.8550636917881659,
+       0.8924572322034372
+      ]
+     },
+     "none_predictions": 0.9316265289067842,
+     "macro": 0.8037039756746076
+    },
+    "vacana": {
+     "applicable": {
+      "value": 0.929882275832514,
+      "ci95": [
+       0.9132252268573868,
+       0.9448012116355153
+      ]
+     },
+     "none_predictions": 0.9375840781350778,
+     "macro": 0.8878318055947818
+    },
+    "linga": {
+     "applicable": {
+      "value": 0.8149104502259387,
+      "ci95": [
+       0.7832486414668575,
+       0.8433897478679739
+      ]
+     },
+     "none_predictions": 0.9399875897526815,
+     "macro": 0.8358056008056567
+    },
+    "purusha": {
+     "applicable": {
+      "value": 0.8658718330849479,
+      "ci95": [
+       0.8384133173501056,
+       0.8885921349420424
+      ]
+     },
+     "none_predictions": 0.9898384828054518,
+     "macro": 0.8644077410648029
+    },
+    "lakara": {
+     "applicable": {
+      "value": 0.8357675111773473,
+      "ci95": [
+       0.8081625749848048,
+       0.8594513383254891
+      ]
+     },
+     "none_predictions": 0.9895866152864287,
+     "macro": 0.6557003432510798
+    }
+   },
+   "per_text": {
+    "Abhidhānacintāmaṇi": {
+     "words": 1029,
+     "full_tag": 0.8726919339164237
+    },
+    "Avadānaśataka": {
+     "words": 643,
+     "full_tag": 0.6951788491446346
+    },
+    "Aṣṭādhyāyī": {
+     "words": 982,
+     "full_tag": 0.7189409368635438
+    },
+    "Harivaṃśa": {
+     "words": 805,
+     "full_tag": 0.8732919254658386
+    },
+    "Harṣacarita": {
+     "words": 12305,
+     "full_tag": 0.6428281186509549
+    },
+    "Kathāsaritsāgara": {
+     "words": 86018,
+     "full_tag": 0.849880257620498
+    },
+    "Kauśikasūtradārilabhāṣya": {
+     "words": 266,
+     "full_tag": 0.793233082706767
+    },
+    "Kauśikasūtrakeśavapaddhati": {
+     "words": 222,
+     "full_tag": 0.6756756756756757
+    },
+    "Kirātārjunīya": {
+     "words": 9336,
+     "full_tag": 0.7807412167952014
+    },
+    "Kāśikāvṛtti": {
+     "words": 48,
+     "full_tag": 0.7291666666666666
+    },
+    "Lalitavistara": {
+     "words": 1447,
+     "full_tag": 0.6510020732550104
+    },
+    "Mīmāṃsāsūtrabhāṣya": {
+     "words": 3669,
+     "full_tag": 0.788498228400109
+    },
+    "Mūlamadhyamakārikāḥ": {
+     "words": 1514,
+     "full_tag": 0.8678996036988111
+    },
+    "Nibandhasaṃgraha": {
+     "words": 296,
+     "full_tag": 0.7297297297297297
+    },
+    "Nyāyabindu": {
+     "words": 115,
+     "full_tag": 0.8521739130434782
+    },
+    "Nāṭyaśāstra": {
+     "words": 2233,
+     "full_tag": 0.8978952082400359
+    },
+    "Rasaratnasamuccayabodhinī": {
+     "words": 5,
+     "full_tag": 0.8
+    },
+    "Rasaratnasamuccayaṭīkā": {
+     "words": 5,
+     "full_tag": 1.0
+    },
+    "Ratnaṭīkā": {
+     "words": 71,
+     "full_tag": 0.8169014084507042
+    },
+    "Rājanighaṇṭu": {
+     "words": 459,
+     "full_tag": 0.8562091503267973
+    },
+    "Tantrāloka": {
+     "words": 5741,
+     "full_tag": 0.8782442083260756
+    },
+    "Yogasūtrabhāṣya": {
+     "words": 223,
+     "full_tag": 0.6995515695067265
+    },
+    "Śatakatraya": {
+     "words": 2511,
+     "full_tag": 0.7120669056152927
+    },
+    "Śukasaptati": {
+     "words": 1063,
+     "full_tag": 0.7986829727187206
+    },
+    "Śyainikaśāstra": {
+     "words": 2101,
+     "full_tag": 0.8714897667777249
+    }
+   },
+   "calibration": {
+    "J0": {
+     "nll": {
+      "value": 0.3009342400548791,
+      "ci95": [
+       0.27974902723927986,
+       0.3237002327525792
+      ]
+     },
+     "brier": {
+      "value": 0.09730536719542467,
+      "ci95": [
+       0.08969304174711998,
+       0.1055234366247203
+      ]
+     },
+     "ece_equal_mass": 0.028317859764516885,
+     "mean_confidence": 0.7914041876792908,
+     "accuracy": 0.8192506780259491
+    }
+   },
+   "role": "confirmatory"
+  },
+  "N3-seed7": {
+   "full_tag": {
+    "value": 0.8783159413103744,
+    "ci95": [
+     0.8544600255140299,
+     0.9011910861949741
+    ]
+   },
+   "full_tag_unseen_forms": {
+    "value": 0.7666737243277578,
+    "ci95": [
+     0.7146331550287143,
+     0.8163423388211349
+    ]
+   },
+   "heads": {
+    "vibhakti": {
+     "applicable": {
+      "value": 0.9092509227454076,
+      "ci95": [
+       0.8895842711116687,
+       0.9281457056335485
+      ]
+     },
+     "none_predictions": 0.9565744906728679,
+     "macro": 0.856061699762239
+    },
+    "vacana": {
+     "applicable": {
+      "value": 0.9528347072020974,
+      "ci95": [
+       0.9380673035489031,
+       0.9661311879108313
+      ]
+     },
+     "none_predictions": 0.9556169156072792,
+     "macro": 0.9154612972856369
+    },
+    "linga": {
+     "applicable": {
+      "value": 0.8738196393988981,
+      "ci95": [
+       0.8428783982224087,
+       0.9017804031741488
+      ]
+     },
+     "none_predictions": 0.9559244588840922,
+     "macro": 0.8888358494764912
+    },
+    "purusha": {
+     "applicable": {
+      "value": 0.9228017883755588,
+      "ci95": [
+       0.9004537865426359,
+       0.9409930705521883
+      ]
+     },
+     "none_predictions": 0.9942970091701501,
+     "macro": 0.9144948184041286
+    },
+    "lakara": {
+     "applicable": {
+      "value": 0.8992548435171386,
+      "ci95": [
+       0.876140863133633,
+       0.9187782924758515
+      ]
+     },
+     "none_predictions": 0.9940091643593854,
+     "macro": 0.647730926313708
+    }
+   },
+   "per_text": {
+    "Abhidhānacintāmaṇi": {
+     "words": 1029,
+     "full_tag": 0.9183673469387755
+    },
+    "Avadānaśataka": {
+     "words": 643,
+     "full_tag": 0.7620528771384136
+    },
+    "Aṣṭādhyāyī": {
+     "words": 982,
+     "full_tag": 0.7739307535641547
+    },
+    "Harivaṃśa": {
+     "words": 805,
+     "full_tag": 0.9031055900621118
+    },
+    "Harṣacarita": {
+     "words": 12305,
+     "full_tag": 0.6914262494920764
+    },
+    "Kathāsaritsāgara": {
+     "words": 86018,
+     "full_tag": 0.9096235671603617
+    },
+    "Kauśikasūtradārilabhāṣya": {
+     "words": 266,
+     "full_tag": 0.8947368421052632
+    },
+    "Kauśikasūtrakeśavapaddhati": {
+     "words": 222,
+     "full_tag": 0.7522522522522522
+    },
+    "Kirātārjunīya": {
+     "words": 9336,
+     "full_tag": 0.8577549271636675
+    },
+    "Kāśikāvṛtti": {
+     "words": 48,
+     "full_tag": 0.8125
+    },
+    "Lalitavistara": {
+     "words": 1447,
+     "full_tag": 0.7304768486523843
+    },
+    "Mīmāṃsāsūtrabhāṣya": {
+     "words": 3669,
+     "full_tag": 0.8612701008449168
+    },
+    "Mūlamadhyamakārikāḥ": {
+     "words": 1514,
+     "full_tag": 0.9227212681638045
+    },
+    "Nibandhasaṃgraha": {
+     "words": 296,
+     "full_tag": 0.8209459459459459
+    },
+    "Nyāyabindu": {
+     "words": 115,
+     "full_tag": 0.9217391304347826
+    },
+    "Nāṭyaśāstra": {
+     "words": 2233,
+     "full_tag": 0.922077922077922
+    },
+    "Rasaratnasamuccayabodhinī": {
+     "words": 5,
+     "full_tag": 1.0
+    },
+    "Rasaratnasamuccayaṭīkā": {
+     "words": 5,
+     "full_tag": 1.0
+    },
+    "Ratnaṭīkā": {
+     "words": 71,
+     "full_tag": 0.8169014084507042
+    },
+    "Rājanighaṇṭu": {
+     "words": 459,
+     "full_tag": 0.8910675381263616
+    },
+    "Tantrāloka": {
+     "words": 5741,
+     "full_tag": 0.9155199442605818
+    },
+    "Yogasūtrabhāṣya": {
+     "words": 223,
+     "full_tag": 0.7892376681614349
+    },
+    "Śatakatraya": {
+     "words": 2511,
+     "full_tag": 0.7972919155714855
+    },
+    "Śukasaptati": {
+     "words": 1063,
+     "full_tag": 0.8730009407337723
+    },
+    "Śyainikaśāstra": {
+     "words": 2101,
+     "full_tag": 0.9152784388386482
+    }
+   },
+   "calibration": {
+    "J0": {
+     "nll": {
+      "value": 0.2244583763262859,
+      "ci95": [
+       0.20038265466715113,
+       0.2510397657686906
+      ]
+     },
+     "brier": {
+      "value": 0.06952758370908708,
+      "ci95": [
+       0.06092180681754664,
+       0.07894937517003328
+      ]
+     },
+     "ece_equal_mass": 0.020877308179314734,
+     "mean_confidence": 0.8679569959640503,
+     "accuracy": 0.8783159413103744
+    }
+   },
+   "role": "descriptive"
+  },
+  "N3-seed11": {
+   "full_tag": {
+    "value": 0.8754009931859331,
+    "ci95": [
+     0.8520560384555882,
+     0.8976962513575073
+    ]
+   },
+   "full_tag_unseen_forms": {
+    "value": 0.7576752064365869,
+    "ci95": [
+     0.7081196812029216,
+     0.8064225528584399
+    ]
+   },
+   "heads": {
+    "vibhakti": {
+     "applicable": {
+      "value": 0.9074481022380576,
+      "ci95": [
+       0.8881596731649265,
+       0.9256225175083899
+      ]
+     },
+     "none_predictions": 0.9562707315220419,
+     "macro": 0.8537554331181905
+    },
+    "vacana": {
+     "applicable": {
+      "value": 0.9524817867856513,
+      "ci95": [
+       0.9380205999827012,
+       0.9656955101808765
+      ]
+     },
+     "none_predictions": 0.9551719027860107,
+     "macro": 0.9128925575607878
+    },
+    "linga": {
+     "applicable": {
+      "value": 0.8706970320217382,
+      "ci95": [
+       0.8404988941413029,
+       0.8979331567574779
+      ]
+     },
+     "none_predictions": 0.9565999316300293,
+     "macro": 0.8862443200302818
+    },
+    "purusha": {
+     "applicable": {
+      "value": 0.9165424739195231,
+      "ci95": [
+       0.8946627320743159,
+       0.9337594931778248
+      ]
+     },
+     "none_predictions": 0.9938223625617358,
+     "macro": 0.9122795036710353
+    },
+    "lakara": {
+     "applicable": {
+      "value": 0.8949826130153999,
+      "ci95": [
+       0.8712917863775433,
+       0.9141608071826566
+      ]
+     },
+     "none_predictions": 0.9935741281775289,
+     "macro": 0.6468879336763957
+    }
+   },
+   "per_text": {
+    "Abhidhānacintāmaṇi": {
+     "words": 1029,
+     "full_tag": 0.9222546161321672
+    },
+    "Avadānaśataka": {
+     "words": 643,
+     "full_tag": 0.7620528771384136
+    },
+    "Aṣṭādhyāyī": {
+     "words": 982,
+     "full_tag": 0.7912423625254582
+    },
+    "Harivaṃśa": {
+     "words": 805,
+     "full_tag": 0.906832298136646
+    },
+    "Harṣacarita": {
+     "words": 12305,
+     "full_tag": 0.6932141405932548
+    },
+    "Kathāsaritsāgara": {
+     "words": 86018,
+     "full_tag": 0.9057522844055895
+    },
+    "Kauśikasūtradārilabhāṣya": {
+     "words": 266,
+     "full_tag": 0.8759398496240601
+    },
+    "Kauśikasūtrakeśavapaddhati": {
+     "words": 222,
+     "full_tag": 0.7567567567567568
+    },
+    "Kirātārjunīya": {
+     "words": 9336,
+     "full_tag": 0.8559340188517567
+    },
+    "Kāśikāvṛtti": {
+     "words": 48,
+     "full_tag": 0.875
+    },
+    "Lalitavistara": {
+     "words": 1447,
+     "full_tag": 0.7111264685556323
+    },
+    "Mīmāṃsāsūtrabhāṣya": {
+     "words": 3669,
+     "full_tag": 0.8659035159443991
+    },
+    "Mūlamadhyamakārikāḥ": {
+     "words": 1514,
+     "full_tag": 0.916116248348745
+    },
+    "Nibandhasaṃgraha": {
+     "words": 296,
+     "full_tag": 0.8074324324324325
+    },
+    "Nyāyabindu": {
+     "words": 115,
+     "full_tag": 0.9217391304347826
+    },
+    "Nāṭyaśāstra": {
+     "words": 2233,
+     "full_tag": 0.9081952530228392
+    },
+    "Rasaratnasamuccayabodhinī": {
+     "words": 5,
+     "full_tag": 0.6
+    },
+    "Rasaratnasamuccayaṭīkā": {
+     "words": 5,
+     "full_tag": 1.0
+    },
+    "Ratnaṭīkā": {
+     "words": 71,
+     "full_tag": 0.8169014084507042
+    },
+    "Rājanighaṇṭu": {
+     "words": 459,
+     "full_tag": 0.8779956427015251
+    },
+    "Tantrāloka": {
+     "words": 5741,
+     "full_tag": 0.9139522731231493
+    },
+    "Yogasūtrabhāṣya": {
+     "words": 223,
+     "full_tag": 0.7982062780269058
+    },
+    "Śatakatraya": {
+     "words": 2511,
+     "full_tag": 0.8000796495420152
+    },
+    "Śukasaptati": {
+     "words": 1063,
+     "full_tag": 0.8711194731890874
+    },
+    "Śyainikaśāstra": {
+     "words": 2101,
+     "full_tag": 0.9071870537839124
+    }
+   },
+   "calibration": {
+    "J0": {
+     "nll": {
+      "value": 0.2275061717661998,
+      "ci95": [
+       0.20350767753288332,
+       0.25341995613016793
+      ]
+     },
+     "brier": {
+      "value": 0.07058439524142711,
+      "ci95": [
+       0.062087711183109094,
+       0.07973731463031036
+      ]
+     },
+     "ece_equal_mass": 0.019350799628595535,
+     "mean_confidence": 0.867408275604248,
+     "accuracy": 0.8754009931859331
+    }
+   },
+   "role": "descriptive"
+  },
+  "N3-seed19": {
+   "full_tag": {
+    "value": 0.8758818093714079,
+    "ci95": [
+     0.8522898108059175,
+     0.8979414428611593
+    ]
+   },
+   "full_tag_unseen_forms": {
+    "value": 0.7573576116874867,
+    "ci95": [
+     0.7070768192013165,
+     0.8066941369537237
+    ]
+   },
+   "heads": {
+    "vibhakti": {
+     "applicable": {
+      "value": 0.9074481022380576,
+      "ci95": [
+       0.8885991263254952,
+       0.9254125407267463
+      ]
+     },
+     "none_predictions": 0.9577600649845154,
+     "macro": 0.8462162342659475
+    },
+    "vacana": {
+     "applicable": {
+      "value": 0.951107918021629,
+      "ci95": [
+       0.9352618729871817,
+       0.9653428942362752
+      ]
+     },
+     "none_predictions": 0.9540744578491599,
+     "macro": 0.9139420782260526
+    },
+    "linga": {
+     "applicable": {
+      "value": 0.8704718439897314,
+      "ci95": [
+       0.8407679346535475,
+       0.8977005422526546
+      ]
+     },
+     "none_predictions": 0.955248012341284,
+     "macro": 0.885303314229516
+    },
+    "purusha": {
+     "applicable": {
+      "value": 0.9157476403378043,
+      "ci95": [
+       0.8929885772800735,
+       0.934628977481341
+      ]
+     },
+     "none_predictions": 0.9939739031126734,
+     "macro": 0.9084396639927739
+    },
+    "lakara": {
+     "applicable": {
+      "value": 0.8949826130153999,
+      "ci95": [
+       0.8710816112040164,
+       0.9153382898182866
+      ]
+     },
+     "none_predictions": 0.9937104372743609,
+     "macro": 0.6464535765791269
+    }
+   },
+   "per_text": {
+    "Abhidhānacintāmaṇi": {
+     "words": 1029,
+     "full_tag": 0.9183673469387755
+    },
+    "Avadānaśataka": {
+     "words": 643,
+     "full_tag": 0.7791601866251944
+    },
+    "Aṣṭādhyāyī": {
+     "words": 982,
+     "full_tag": 0.7922606924643585
+    },
+    "Harivaṃśa": {
+     "words": 805,
+     "full_tag": 0.9142857142857143
+    },
+    "Harṣacarita": {
+     "words": 12305,
+     "full_tag": 0.6950020316944332
+    },
+    "Kathāsaritsāgara": {
+     "words": 86018,
+     "full_tag": 0.9062521797763259
+    },
+    "Kauśikasūtradārilabhāṣya": {
+     "words": 266,
+     "full_tag": 0.868421052631579
+    },
+    "Kauśikasūtrakeśavapaddhati": {
+     "words": 222,
+     "full_tag": 0.7702702702702703
+    },
+    "Kirātārjunīya": {
+     "words": 9336,
+     "full_tag": 0.8549700085689803
+    },
+    "Kāśikāvṛtti": {
+     "words": 48,
+     "full_tag": 0.7916666666666666
+    },
+    "Lalitavistara": {
+     "words": 1447,
+     "full_tag": 0.7035245335176227
+    },
+    "Mīmāṃsāsūtrabhāṣya": {
+     "words": 3669,
+     "full_tag": 0.8566366857454347
+    },
+    "Mūlamadhyamakārikāḥ": {
+     "words": 1514,
+     "full_tag": 0.9141347424042272
+    },
+    "Nibandhasaṃgraha": {
+     "words": 296,
+     "full_tag": 0.8108108108108109
+    },
+    "Nyāyabindu": {
+     "words": 115,
+     "full_tag": 0.9043478260869565
+    },
+    "Nāṭyaśāstra": {
+     "words": 2233,
+     "full_tag": 0.9175996417375728
+    },
+    "Rasaratnasamuccayabodhinī": {
+     "words": 5,
+     "full_tag": 0.6
+    },
+    "Rasaratnasamuccayaṭīkā": {
+     "words": 5,
+     "full_tag": 1.0
+    },
+    "Ratnaṭīkā": {
+     "words": 71,
+     "full_tag": 0.8028169014084507
+    },
+    "Rājanighaṇṭu": {
+     "words": 459,
+     "full_tag": 0.8910675381263616
+    },
+    "Tantrāloka": {
+     "words": 5741,
+     "full_tag": 0.9177843581257621
+    },
+    "Yogasūtrabhāṣya": {
+     "words": 223,
+     "full_tag": 0.7937219730941704
+    },
+    "Śatakatraya": {
+     "words": 2511,
+     "full_tag": 0.7949024293110315
+    },
+    "Śukasaptati": {
+     "words": 1063,
+     "full_tag": 0.8758231420507996
+    },
+    "Śyainikaśāstra": {
+     "words": 2101,
+     "full_tag": 0.9105188005711566
+    }
+   },
+   "calibration": {
+    "J0": {
+     "nll": {
+      "value": 0.22999054234256017,
+      "ci95": [
+       0.20530655355768404,
+       0.25689879604990135
+      ]
+     },
+     "brier": {
+      "value": 0.07150191263730313,
+      "ci95": [
+       0.06273273124450769,
+       0.08108186714821895
+      ]
+     },
+     "ece_equal_mass": 0.02114189432487349,
+     "mean_confidence": 0.865953803062439,
+     "accuracy": 0.8758818093714079
+    }
+   },
+   "role": "descriptive"
+  }
+ },
+ "hypotheses": {
+  "T-1": {
+   "claim": "N1 beats N2 on full-tag accuracy",
+   "per_seed": [
+    0.0628667162508358,
+    0.061228936119062105,
+    0.05966628351626887
+   ],
+   "mean": 0.061253978628722255,
+   "ci95": [
+    0.05782288231240284,
+    0.0643963228946577
+   ],
+   "supported": true
+  },
+  "T-2": {
+   "claim": "N1 beats B2 on full-tag accuracy, pooled",
+   "per_seed": [
+    0.020660070469622184,
+    0.016648260422066456,
+    0.017354459194482634
+   ],
+   "mean": 0.01822093002872376,
+   "ci95": [
+    -0.005215994268814279,
+    0.04030522624918454
+   ],
+   "supported": false
+  },
+  "T-2b": {
+   "claim": "B2 beats N1 outside Kathasaritsagara (difference B2 - N1)",
+   "per_seed": [
+    0.03563464928114846,
+    0.03943596168956656,
+    0.03709995965087388
+   ],
+   "mean": 0.0373901902071963,
+   "ci95": [
+    -0.018301544183568323,
+    0.08134939619804082
+   ],
+   "supported": false
+  },
+  "T-3": {
+   "claim": "frozen J4 has lower NLL than J0 (difference J4 - J0)",
+   "per_seed": [
+    -0.004242258968961687,
+    -0.003382115075201919,
+    -0.0037113047825279577
+   ],
+   "mean": -0.0037785596088971882,
+   "ci95": [
+    -0.005804888540293977,
+    -0.0020333414600465696
+   ],
+   "supported": true
+  },
+  "T-4": {
+   "claim": "test coverage at the frozen tau lies within [0.85, 0.95] for every seed",
+   "per_seed": [
+    0.8856333626330697,
+    0.8844688859338727,
+    0.8854831075751087
+   ],
+   "supported": true
+  }
+ }
+}

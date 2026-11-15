@@ -840,6 +840,17 @@ y.
   numbers that ship with the model. A test-set confirmation needs a frozen
   amendment.
 
+**Confirmatory test (2026-11-14, amendment 0.8, one run).**
+`reports/rlcd-stage3/test/TEST_RESULTS.md`.
+
+- **Supported.** Pretraining replicates (+0.061, T-1). The frozen J4
+  calibration transfers (T-3), and the gate keeps about 88% of words at
+  about 94% full-tag accuracy (T-4).
+- **Not supported.** N1 beating the kosha baseline (T-2). Its loss outside
+  Kathāsaritsāgara (T-2b) was in the predicted direction but underpowered.
+  It trails the baseline on several prose texts, by as much as 0.17 on
+  Harṣacarita.
+
 #### Stage 3 Logit Platt Calibration Pre-Registered Settings
 
 Recorded 2026-11-14 and committed before the calibrators below are fitted or
