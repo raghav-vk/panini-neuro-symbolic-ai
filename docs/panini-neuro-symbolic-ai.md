@@ -7,13 +7,16 @@
 evaluation is pending. The pre-registered extension of Section 12 is complete:
 one confirmatory test run.
 
-> This version is not ready for arXiv resubmission. It contains a complete
-> sandhi study design, measured synthetic engineering results and the
-> completed Section 12 extension, but no completed sandhi independent-corpus
-> or expert evaluation. The sandhi results already measured on silver data
-> (repository reports `dcs-silver-v3` and `pretraining-v1`) are not yet
-> written into Section 11. Planned-study TBD cells must not be filled using
-> the synthetic probe scores.
+> This version is not ready for arXiv resubmission. It contains:
+> - a complete sandhi study design and measured synthetic engineering
+>   results;
+> - silver-data sandhi results (Section 11: a test result, plus development
+>   results for pretraining and calibration);
+> - the completed Section 12 extension.
+>
+> It has no expert-reviewed rule inventory, no expert gold test set and no
+> expert evaluation yet. Silver results must not be presented as the planned
+> independent-corpus study.
 
 ## Abstract
 
@@ -41,8 +44,15 @@ executes 18 narrow draft encodings across five families, converts the DCS
 archive without executing pickle objects, and runs a small CPU Transformer
 on synthetic nonce-string probes. Those measurements establish engineering
 reproducibility, not Sanskrit accuracy; independent-corpus results remain
-pending and no claim of general grammatical correctness is made. A
-separately pre-registered extension (Section 12) tests the same small
+pending and no claim of general grammatical correctness is made.
+
+On silver boundaries extracted from the DCS, the symbolic layer finds the
+correct analysis for 99.9% of unseen right-hand words. On that holdout test,
+a linear ranker over training counts and a dictionary reaches 0.943 top-1,
+and a tiny Transformer trained from scratch does not improve on it. On
+development data only, adding a word score from a Sanskrit-pretrained byte
+encoder raises the linear ranker to about 0.95. Its confidence is calibrated
+and supports abstention. A separately pre-registered extension (Section 12) tests the same small
 encoder on real text, as a set of calibrated Choice decisions: per-word
 case, number, gender, person and tense for 133,107 held-out words of the
 Digital Corpus of Sanskrit, with the segmentation given. In one frozen test
@@ -517,49 +527,147 @@ The non-executing DCS conversion examined 441,735 archive records, converted
 These proposals expose lemma slots and source sentences, leaving inflected
 forms and surface alignment to review rather than inventing them from lemmas.
 
-The following tables remain templates for the **independent-corpus study**.
+The results below come from the first corpus-derived data: **silver**
+boundaries automatically extracted from the DCS (`DCS_pick`, Krishna et al.
+2017). The study ran under protocol amendments 0.2 to 0.6. Three
+differences from the planned study must be kept in view:
 
-### 11.1 Dataset and Candidate Coverage
+- **Draft rules.** The rule inventory is 18 *draft* encodings, not the 25
+  expert-reviewed rules of Section 3.
+- **Silver labels.** Labels are automatic alignments, not expert gold.
+- **A different lexical test.** The left words are chunk-initial
+  indeclinables (211 lemmas). So the strict test of Section 9.3 is replaced
+  by a **right-word holdout**: unseen right-hand lemmas, with indeclinables
+  allowed in every partition. These are right-word holdout results, not
+  Section 9.3 results. The both-lemma holdout needs inflected left words
+  (Phase 2) and is still pending.
 
-| Split | Train | Dev | Test | Mixed | Lemma overlap | Gold candidate recall |
+### 11.1 Silver Data and Candidate Coverage
+
+| Split | Train | Dev | Test | Mixed | Lemma overlap, train–test | Test gold candidate recall |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Source-grouped random | TBD | TBD | TBD | not applicable | report | TBD |
-| Exact-pair holdout | TBD | TBD | TBD | not applicable | allowed by design | TBD |
-| Strict lexical | TBD | TBD | TBD | TBD | 0 required | TBD |
+| Source-grouped random | 32,749 | 1,828 | 1,892 | — | 743 lemmas | 1.000 |
+| Exact-pair holdout | 33,637 | 1,490 | 1,342 | — | 549 lemmas (allowed) | 1.000 |
+| Strict lexical (Section 9.3) | 1,334 | 34 | 36 | 35,065 | 0 | 1.000 |
+| **Right-word holdout** | 9,066 | 988 | 821 | 2,679 | 0 right-word lemmas | 0.999 |
 
-### 11.2 Main Comparison
+There are 39,838 silver examples in all. The strict lexical split keeps only
+36 test examples, far below the planned minimum, which is why the
+right-word holdout was adopted (protocol section 9.5).
 
-| System | Parameters | Random exact | Pair exact | Strict exact | Compliance | Coverage |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Majority rule | 0 | TBD | TBD | TBD | TBD | 100 percent |
-| Symbolic frequency | 0 | TBD | TBD | TBD | 100 percent expected | TBD |
-| Character n-gram | TBD | TBD | TBD | TBD | TBD | TBD |
-| Tiny unconstrained Transformer | TBD | TBD | TBD | TBD | measured | 100 percent |
-| Constrained without rule features | TBD | TBD | TBD | TBD | 100 percent expected | TBD |
-| Proposed typed ranker | TBD | TBD | TBD | TBD | 100 percent expected | TBD |
+The six rules added in amendment 0.3 were chosen from junction counts over
+all partitions. Only observed surfaces were used, never ranker scores. With
+them, dev candidate recall rose from 0.847 to 0.999.
 
-Expected compliance values are architectural expectations and must still be
-verified from saved predictions before replacing TBD.
+### 11.2 Main Comparison: Right-Word Holdout (Test)
 
-### 11.3 Data Efficiency
+Settings were fixed on dev (amendment 0.4). The neural rankers have width
+64, 2 layers, mean pooling and a maximum length of 300, over seeds 7, 11, 19,
+23 and 29. The best epoch of 3 was chosen on dev. Paired differences are
+against the linear model, with 95% bootstrap intervals over test examples.
 
-| Training examples | Random exact | Pair exact | Strict exact | Train time |
-| ---: | ---: | ---: | ---: | ---: |
-| 250 | TBD | TBD | TBD | TBD |
-| 1,000 | TBD | TBD | TBD | TBD |
-| 5,000 | TBD | TBD | TBD | TBD |
-| All | TBD | TBD | TBD | TBD |
+| Ranker | Test top-1 (821) | Paired difference |
+| --- | ---: | ---: |
+| Symbolic rule order | 0.607 | |
+| Character bigram | 0.582 | |
+| Frequency, short-vowel tie-break | 0.825 (0.831 tie-averaged) | |
+| **Linear features + Vidyut kosha + short-vowel tie-break** | **0.943** (0.946 tie-averaged) | reference |
+| Tiny Transformer + the same features | 0.897 ± 0.017 (seeds 0.875–0.914) | −0.046 [−0.059, −0.034] |
+| Residual Tiny Transformer on the frozen linear model | 0.943 ± 0.002 | +0.000 [−0.005, +0.005] |
 
-### 11.4 Ablation
+**The symbolic layer does the heavy lifting.** It finds the correct analysis
+in 99.9% of cases. Ranking candidates by training counts and dictionary
+(kosha) membership already reaches 0.943 on unseen right-hand words.
 
-| Variant | Strict exact | Change | Interpretation |
-| --- | ---: | ---: | --- |
-| Full model | TBD | reference | TBD |
-| No context | TBD | TBD | TBD |
-| No rule or tag features | TBD | TBD | TBD |
-| No trace features | TBD | TBD | TBD |
-| No hard constraint | TBD | TBD | TBD |
-| Randomized rule IDs | TBD | TBD | TBD |
+**The tiny Transformer adds no accuracy here.** Trained from scratch on the
+labelled data, it is worse than the linear model on every seed (exact
+McNemar p < 0.001 per seed). As a residual correction to the linear model it
+ties.
+
+**On the other splits:**
+
+| Split | Test n | Linear + kosha (tie-averaged) | Transformer + features | Paired difference |
+| --- | ---: | ---: | ---: | ---: |
+| Source-grouped random | 1,892 | 0.934 | 0.936 ± 0.002 | +0.007 [+0.001, +0.012] |
+| Exact-pair holdout | 1,342 | 0.935 | 0.933 ± 0.003 | +0.000 [−0.005, +0.006] |
+| Strict lexical | 36 | 0.778 | 0.772 ± 0.060 | not interpretable |
+
+The Transformer gains slightly only where test words occur in training.
+
+**Test-set use disclosure.** This right-word holdout test set has now been
+evaluated three times:
+1. a single-seed timing run with the original 12 rules, superseded;
+2. the amendment 0.3 model, which scored 0.822 against 0.831 for frequency;
+3. the run above.
+
+Any further use must be disclosed as such.
+
+### 11.3 Self-Supervised Pretraining (Development Only)
+
+The negative result in 11.2 motivated a pretraining plan (amendment 0.5).
+- **Encoder.** A 4,937,220-parameter byte encoder (width 256, 6 layers).
+- **Pretraining data.** Decontaminated DCS_pick text:
+  - P-A: the held-out sentences and their near-duplicates removed;
+    439,274 sentences.
+  - P-B: additionally, every sentence containing a held-out right-hand
+    lemma removed.
+- **Objectives.** Span-masked byte modelling and rule-guided
+  real-or-near-miss discrimination.
+- **Use.** The discriminator's word score is added to the linear ranker as a
+  feature.
+
+Results are on the 988 dev examples. **The test set has not been used for
+pretraining.**
+
+| Ranker (dev top-1) | P-A, seeds 7 / 11 / 19 | P-B, seed 7 |
+| --- | --- | --- |
+| Linear, no lexicon | 0.778 | 0.778 |
+| Linear + kosha (reference) | 0.903 (0.909 tie-averaged) | 0.903 |
+| Linear + neural score, no kosha (H-P1), words scored alone | 0.925 / 0.926 / 0.929 | 0.845 |
+| Linear + kosha + neural score (H-P2), words scored alone | 0.950 / 0.952 / 0.956 | 0.890 |
+| Fine-tuned pretrained ranker + kosha (H-P3) | about 0.90 | — |
+
+**With P-A pretraining:**
+- **Without the kosha.** The neural word score alone lifts the linear
+  ranker above the kosha (H-P1).
+- **With the kosha.** Together they reach 0.950 to 0.956, against 0.909
+  (H-P2; every seed, McNemar p < 0.001).
+
+**With strict P-B pretraining, the gain over the kosha disappears.**
+- **P-B.** P-B removes every sentence with a held-out right-hand word, so
+  most of the P-A gain comes from seeing those words in other contexts.
+- **Fine-tuning.** Fine-tuning the pretrained encoder as the ranker (H-P3)
+  adds nothing.
+
+These are dev results under repeated dev use. A test run needs a frozen
+amendment and a disclosed fourth use of the test set.
+
+### 11.4 Calibration and Abstention (Development Only)
+
+The H-P2 ranker's confidences were evaluated with temperature scaling
+cross-fitted on dev (RLCD stage 1, pre-registered).
+
+- **Already calibrated.** Raw ECE is 0.013 to 0.029, and temperature scaling
+  does not change it beyond its interval. The discriminator's word
+  probability is also calibrated (ECE 0.001 to 0.003).
+- **Abstention works.** Accepting only answers with confidence ≥ 0.95 keeps
+  77 to 81% of dev examples, at 0.991 to 0.996 accuracy, against 0.950 to
+  0.956 overall.
+- **Routing to an ensemble does not help.** Sending uncertain items to a
+  three-seed ensemble gains at most 0.007, inside the intervals.
+
+These figures are dev only and have not been tested.
+
+### 11.5 Not Yet Run
+
+The planned study of Sections 3 and 10 remains to be done:
+- the expert-reviewed rule inventory and the expert-verified gold test set
+  (`docs/GOLD_SET_PLAN.md`; the texts are reserved, see Section 12.2)
+- the both-lemma strict holdout (Phase 2)
+- the data-efficiency curves and the ablations of Section 10.3
+- the blinded expert evaluation of Section 13
+
+Their results will be reported in this section when they exist.
 
 ## 12. Extension: Calibrated Morphological Decisions on Real Text
 
