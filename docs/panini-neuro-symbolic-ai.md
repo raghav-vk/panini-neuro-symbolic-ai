@@ -740,7 +740,7 @@ the frozen choices.
   so the product of separately calibrated probabilities understates the
   joint accuracy.
 - **Calibrate the joint confidence directly.** Isotonic regression (Zadrozny
-  and Elkan 2002) and Platt scaling (Platt 1999) of the logit of the raw
+  and Elkan 2002) and Platt scaling (Platt 2000) of the logit of the raw
   product c₀ both calibrated it well. Platt scaling, with two parameters,
   transferred best across texts.
 - **Frozen gate.** The Platt parameters were fitted once on all development
@@ -943,7 +943,9 @@ Ambuda contributors. Sanitized data from the Digital Corpus of Sanskrit.
 https://github.com/ambuda-org/dcs
 
 Guo, Chuan, Geoff Pleiss, Yu Sun, and Kilian Q. Weinberger. 2017. On
-Calibration of Modern Neural Networks. Proceedings of ICML 2017, PMLR 70.
+Calibration of Modern Neural Networks. Proceedings of the 34th International
+Conference on Machine Learning (ICML 2017), PMLR 70, pages 1321–1330.
+https://proceedings.mlr.press/v70/guo17a.html
 
 Guo, Ruoqi, Yi Liu, Gelei Deng, Yuekang Li, Lida Zhao, Yutao Wu, Simin Chen,
 Ying Zhang, and Leo Yu Zhang. 2026. Just Ask Jev: Reinforcement Learning for
@@ -953,9 +955,12 @@ arXiv:2609.29429.
 Hellwig, Oliver. 2010–2024. The Digital Corpus of Sanskrit (DCS).
 https://github.com/OliverHellwig/sanskrit
 
-Platt, John C. 1999. Probabilistic Outputs for Support Vector Machines and
-Comparisons to Regularized Likelihood Methods. In Advances in Large Margin
-Classifiers. MIT Press.
+Platt, John C. 2000. Probabilistic Outputs for Support Vector Machines and
+Comparisons to Regularized Likelihood Methods. In Alexander J. Smola, Peter
+Bartlett, Bernhard Schölkopf, and Dale Schuurmans, editors, Advances in Large
+Margin Classifiers, pages 61–74. MIT Press.
 
 Zadrozny, Bianca, and Charles Elkan. 2002. Transforming Classifier Scores into
-Accurate Multiclass Probability Estimates. Proceedings of KDD 2002.
+Accurate Multiclass Probability Estimates. Proceedings of the Eighth ACM
+SIGKDD International Conference on Knowledge Discovery and Data Mining (KDD
+2002), pages 694–699. https://doi.org/10.1145/775047.775151
