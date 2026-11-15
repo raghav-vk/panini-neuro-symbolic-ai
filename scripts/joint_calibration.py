@@ -7,7 +7,10 @@ J2 (logistic on the five log head probabilities) and J3 (isotonic on the product
 the NLL of whole-tag correctness. The primary scheme is cross-fitting over the stage 3 dev chapter
 folds; the secondary one fits on Kathasaritsagara and scores the other texts. Dev only.
 
-Writes reports/rlcd-stage3/joint_calibration.json and JOINT_CALIBRATION.md.
+Writes reports/rlcd-stage3/joint_calibration.json and JOINT_CALIBRATION.md. With
+--calibrators J0 J3 J4 J5 --name platt_calibration it runs the logit Platt calibrators J4 (Platt
+on logit c0) and J5 (logistic on the five head logits) of "Stage 3 Logit Platt Calibration
+Pre-Registered Settings" and writes platt_calibration.json and PLATT_CALIBRATION.md instead.
 """
 
 import argparse
@@ -28,7 +31,8 @@ from eval_tagger import (CHAPTERS, DEV, bootstrap_index, fit_beta, neural_logits
                          weighted_ece)
 
 RUNS = {"N1": (7, 11, 19), "N3": (7, 11, 19)}
-CALIBRATORS = ("J0", "JT", "J1", "J2", "J3")
+CALIBRATORS = ("J0", "JT", "J1", "J2", "J3", "J4", "J5")
+HYPOTHESES = {"H-J1": ("J2", "J0"), "H-J2": ("J2", "JT"), "H-J3": ("J4", "J0"), "H-J4": ("J5", "J0")}
 TRANSFER_TEXT = "Kathāsaritsāgara"
 EPS = 1e-12
 
@@ -71,9 +75,23 @@ def isotonic_predict(c, model):
     return values[np.minimum(np.searchsorted(tops, c, side="left"), len(values) - 1)]
 
 
+def logit(p):
+    p = np.clip(p, EPS, 1 - EPS)
+    return np.log(p) - np.log1p(-p)
+
+
 def features(log_p, kind):
+    """J1: log c0. J2: log p_i. J4: logit c0. J5: logit p_i. Each with an intercept column."""
     ones = np.ones((len(log_p), 1))
-    return np.hstack([log_p.sum(1, keepdims=True), ones]) if kind == "J1" else np.hstack([log_p, ones])
+    if kind == "J1":
+        x = log_p.sum(1, keepdims=True)
+    elif kind == "J2":
+        x = log_p
+    elif kind == "J4":
+        x = logit(np.exp(log_p.sum(1, keepdims=True)))
+    else:
+        x = logit(np.exp(log_p))
+    return np.hstack([x, ones])
 
 
 def fit_score(kind, train, test, log_p, y, logits, gold_idx):
@@ -86,7 +104,7 @@ def fit_score(kind, train, test, log_p, y, logits, gold_idx):
             beta = fit_beta(logits[h][train], gold_idx[:, k][train])
             out *= softmax(logits[h][test], beta).max(1)
         return out
-    if kind in ("J1", "J2"):
+    if kind in ("J1", "J2", "J4", "J5"):
         x = features(log_p, kind)
         return logistic_predict(x[test], logistic_fit(x[train], y[train]))
     return isotonic_predict(np.exp(log_p[test].sum(1)), isotonic_fit(np.exp(log_p[train].sum(1)), y[train]))
@@ -120,7 +138,10 @@ def main():
     p.add_argument("--device", default="mps")
     p.add_argument("--resamples", type=int, default=1000)
     p.add_argument("--output", type=Path, default=ROOT / "reports/rlcd-stage3")
+    p.add_argument("--calibrators", nargs="+", choices=CALIBRATORS, default=["J0", "JT", "J1", "J2", "J3"])
+    p.add_argument("--name", default="joint_calibration", help="report base name")
     args = p.parse_args()
+    chosen = tuple(args.calibrators)
     if "test" in args.dev.name:
         p.error("the test part is sealed")
     texts = {json.loads(l)["chapter_id"]: json.loads(l)["text"] for l in CHAPTERS.read_text(encoding="utf-8").splitlines()}
@@ -143,7 +164,7 @@ def main():
             log_p = np.log(np.clip(np.stack([probs[h].max(1) for h in HEADS], 1), EPS, 1))
             run = {"accuracy": float(y.mean()), "cross_fit": {}, "transfer": {}, "per_text_ece": {}}
             everyone = np.ones(len(y), bool)
-            for kind in CALIBRATORS:
+            for kind in chosen:
                 conf = np.empty(len(y))
                 for held in (0, 1):
                     conf[folds == held] = fit_score(kind, folds != held, folds == held, log_p, y, logits, gold_idx)
@@ -155,9 +176,11 @@ def main():
                 transferred[score_on] = fit_score(kind, fit_on, score_on, log_p, y, logits, gold_idx)
                 run["transfer"][kind] = block(transferred, y, score_on, counts, word_chapter)[0]
             result["runs"][key] = run
-            print(key, {k: round(run["cross_fit"][k]["nll"]["value"], 4) for k in CALIBRATORS}, flush=True)
+            print(key, {k: round(run["cross_fit"][k]["nll"]["value"], 4) for k in chosen}, flush=True)
     hyp = {}
-    for name, (a, b) in {"H-J1": ("J2", "J0"), "H-J2": ("J2", "JT")}.items():
+    for name, (a, b) in HYPOTHESES.items():
+        if a not in chosen or b not in chosen:
+            continue
         keys = [f"N1-seed{s}" for s in RUNS["N1"]]
         per_seed = [result["runs"][k]["cross_fit"][a]["nll"]["value"] - result["runs"][k]["cross_fit"][b]["nll"]["value"]
                     for k in keys]
@@ -167,8 +190,9 @@ def main():
                      "supported": all(x < 0 for x in per_seed) and ci[1] < 0}
     result["hypotheses"] = hyp
     args.output.mkdir(parents=True, exist_ok=True)
-    (args.output / "joint_calibration.json").write_text(json.dumps(result, indent=1, ensure_ascii=False) + "\n")
-    (args.output / "JOINT_CALIBRATION.md").write_text(summary(result))
+    result["calibrators"] = list(chosen)
+    (args.output / f"{args.name}.json").write_text(json.dumps(result, indent=1, ensure_ascii=False) + "\n")
+    (args.output / f"{args.name.upper()}.md").write_text(summary(result))
     print(summary(result))
 
 
@@ -195,11 +219,12 @@ def summary(r):
                 lines.append(f"| {key} | {kind} | {fmt(b['nll'])} | {fmt(b['ece_equal_mass'])} | {b['brier']['value']:.4f} | "
                              f"{b['mean_confidence']:.3f} / {b['accuracy']:.3f} | {b['aurc']:.4f} | "
                              f"{b['full_tag_at_coverage'][0.9]:.3f} / {b['full_tag_at_coverage'][0.95]:.3f} |")
-    lines += ["", "## ECE per text (cross-fit, N1 seed 7)", "", "| Text | " + " | ".join(CALIBRATORS) + " |",
-              "| --- | " + " | ".join("---" for _ in CALIBRATORS) + " |"]
+    chosen = r["calibrators"]
+    lines += ["", "## ECE per text (cross-fit, N1 seed 7)", "", "| Text | " + " | ".join(chosen) + " |",
+              "| --- | " + " | ".join("---" for _ in chosen) + " |"]
     run = r["runs"]["N1-seed7"]["per_text_ece"]
     for t in run["J0"]:
-        lines.append(f"| {t} | " + " | ".join(f"{run[k][t]:.3f}" for k in CALIBRATORS) + " |")
+        lines.append(f"| {t} | " + " | ".join(f"{run[k][t]:.3f}" for k in chosen) + " |")
     return "\n".join(lines) + "\n"
 
 
