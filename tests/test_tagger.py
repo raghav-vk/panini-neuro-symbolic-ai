@@ -100,3 +100,19 @@ def test_platt_on_logit_contains_the_identity():
     c0 = np.exp(log_p.sum(1))
     assert np.allclose(logistic_predict(features(log_p, "J4"), np.array([1.0, 0.0])), c0)
     assert features(log_p, "J5").shape == (2, 6) and features(log_p, "J1").shape == (2, 2)
+
+
+def test_frozen_mode_refuses_on_hash_mismatch(tmp_path):
+    sys.path.insert(0, str(ROOT / "scripts"))
+    import run_stage3_test as frozen_mode
+    if not frozen_mode.TRAIN.exists():
+        pytest.skip("stage 3 training file not built")
+    checkpoint = tmp_path / "tagger.pt"
+    checkpoint.write_bytes(b"weights")
+    good = {"runs": {"N1-seed7": {"checkpoint": str(checkpoint), "sha256": frozen_mode.sha256(checkpoint)}},
+            "train_sha256": frozen_mode.sha256(frozen_mode.TRAIN), "test_sha256": "0" * 64,
+            "vidyut_data_sha256": frozen_mode.VIDYUT_SHA256}
+    assert frozen_mode.verify(good, checkpoint, smoke=True) == []
+    assert frozen_mode.verify(good, checkpoint) == ["test file differs from the frozen hash"]
+    checkpoint.write_bytes(b"tampered")
+    assert frozen_mode.verify(good, checkpoint, smoke=True) == ["checkpoint N1-seed7 differs from the frozen hash"]
