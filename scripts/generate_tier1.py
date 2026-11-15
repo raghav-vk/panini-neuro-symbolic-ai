@@ -6,8 +6,9 @@ stem classes from data/rlcd/stem_classes.tsv), derives them with the stage 2 com
 the licit ones. Person and number follow the agreeing participant, so the sampler proposes only
 clauses the constraint layer should accept; any rejection is counted and reported.
 
-Every sentence is synthetic, never attested (protocol section 8.4). While any table row is still
-draft_unreviewed (issue #78), the output is marked not for training.
+Every sentence is synthetic, never attested (protocol section 8.4). The output is marked not for
+training while any table row is still draft_unreviewed, unless the whole table is provisionally
+accepted in data/rlcd/provisional_acceptance.json and unchanged since (issue #78).
 
 Writes the dataset to data/processed/rlcd-tier1-v0/ (not committed; it regenerates exactly from
 the seed), its manifest to reports/rlcd-stage3/, and a stratified sample for the text reader to
@@ -31,6 +32,7 @@ from panini.translit import slp1_to_iast
 
 FRAMES = ROOT / "data/rlcd/frames.tsv"
 CLASSES = ROOT / "data/rlcd/stem_classes.tsv"
+PROVISIONAL = ROOT / "data/rlcd/provisional_acceptance.json"
 LAKARAS = ["Lat", "Lit", "Lut", "Lrt", "Lot", "Lan", "VidhiLin", "AshirLin", "Lun", "Lrn"]
 VACANAS = ["Eka", "Dvi", "Bahu"]
 OPTIONAL = {"karaRa": 0.3, "aDikaraRa": 0.3}
@@ -154,7 +156,12 @@ def main():
     (args.output / "sentences.jsonl").write_text(data)
 
     tables = {str(path.relative_to(ROOT)): path for path in (KARMAKATVA, STEMS, FRAMES, CLASSES)}
-    unreviewed = sum(r["status"] == "draft_unreviewed" for path in tables.values() for r in read_tsv(path))
+    provisional = json.loads(PROVISIONAL.read_text())["tables"] if PROVISIONAL.exists() else {}
+    # A provisional acceptance holds only while the table is unchanged since the decision was recorded.
+    accepted = {name for name, path in tables.items() if provisional.get(name) == sha256(path)}
+    unreviewed_by_table = {name: sum(r["status"] == "draft_unreviewed" for r in read_tsv(path)) for name, path in tables.items()}
+    unreviewed = sum(unreviewed_by_table.values())
+    blocking = sum(n for name, n in unreviewed_by_table.items() if name not in accepted)
     count = lambda key: dict(sorted(Counter(key(r) for r in rows).items()))
     manifest = {
         "dataset": "rlcd-tier1-v0", "plan": "docs/RLCD_TRANSITION_PLAN.md, stage 3 step 1",
@@ -162,7 +169,10 @@ def main():
         "sha256": hashlib.sha256(data.encode()).hexdigest(),
         "tables": {name: sha256(path) for name, path in tables.items()},
         "table_rows_unreviewed": unreviewed,
-        "for_training": unreviewed == 0,
+        "table_rows_unreviewed_by_table": unreviewed_by_table,
+        "provisionally_accepted": sorted(accepted),
+        "table_rows_blocking_training": blocking,
+        "for_training": blocking == 0,
         "vidyut": version("vidyut"),
         "words": sum(len(r["words"]) for r in rows),
         "forms_not_in_kosha": sum(w["round_trip"] != "verified" for r in rows for w in r["words"]),
@@ -200,7 +210,8 @@ def main():
         lines.append(f"| {r['id']} | {slp1_to_iast(r['text'])} | {gloss[c['dhatu']['code']]} | {c['prayoga']} | {c['lakara']} |")
     (reviews / "rlcd_tier1_sample.md").write_text("\n".join(lines) + "\n")
     print(json.dumps({k: manifest[k] for k in ("sentences", "attempts", "rejected", "words", "forms_not_in_kosha",
-                                               "table_rows_unreviewed", "for_training")}, indent=1))
+                                               "table_rows_unreviewed_by_table", "provisionally_accepted",
+                                               "table_rows_blocking_training", "for_training")}, indent=1))
 
 
 if __name__ == "__main__":

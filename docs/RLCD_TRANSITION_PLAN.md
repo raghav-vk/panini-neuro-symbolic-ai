@@ -554,6 +554,13 @@ output regenerates byte for byte and is not committed. Its manifest is
   reader. The root and stem tables are under review in issue #78.
 - **Not for training yet.** The manifest records `for_training: false` while
   any table row is unreviewed (140 rows now).
+- **Provisional acceptance (2026-11-14).** The project owner decided to treat
+  the grammarian's two tables (roots, stems; 70 rows) as accurate pending
+  #78, recorded with their hashes in `data/rlcd/provisional_acceptance.json`
+  (`docs/RLCD_CONSTRAINTS.md`). The rows stay `draft_unreviewed`, and the
+  acceptance lapses if a table changes. Significant corrections trigger a
+  re-run. The text reader's two tables (role frames, noun classes; 70 rows)
+  are not covered, so Tier 1 is still not for training.
 
 Two findings came from the kosha round trip during generation:
 
