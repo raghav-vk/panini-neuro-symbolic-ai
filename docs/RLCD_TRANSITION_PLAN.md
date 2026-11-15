@@ -818,6 +818,51 @@ y.
 **Outputs.** `scripts/joint_calibration.py` writes
 `reports/rlcd-stage3/joint_calibration.json` and `JOINT_CALIBRATION.md`.
 
+#### Stage 3 Logit Platt Calibration Pre-Registered Settings
+
+Recorded 2026-11-14 and committed before the calibrators below are fitted or
+scored. Dev only; the test part stays sealed.
+
+**Disclosure.** Dev results for J0 to J3 have already been seen
+(`reports/rlcd-stage3/JOINT_CALIBRATION_RESULTS.md`). J1 and J2 failed
+because they used log probabilities, which cannot express confidence near 1.
+The calibrators here are the correctly specified versions, chosen because of
+that result. This is post hoc on dev; a confirmatory claim needs the test
+part, under a later frozen amendment.
+
+**Inputs, folds, transfer scheme, metrics and intervals.** As in "Stage 3
+Joint Calibration Pre-Registered Settings": N1 (primary) and N3 (secondary),
+seeds 7, 11 and 19, on the same dev words. NLL of whole-tag correctness is
+primary.
+
+**Calibrators.** Fitted by minimising NLL of y. Probabilities are clipped to
+[1e-12, 1 − 1e-12] before the logit.
+
+| ID | Calibrator | Parameters |
+| --- | --- | --- |
+| J4 | Platt scaling of logit(c₀): σ(a · logit c₀ + b) | 2 |
+| J5 | Logistic regression on logit p₁ … logit p₅, plus an intercept; no penalty | 6 |
+
+J0 (raw product) and J3 (isotonic) are recomputed in the same run as
+references. With a = 1 and b = 0, J4 is the identity on c₀, so it contains
+J0. With unit weights on the five logits and a zero intercept, J5 does not
+reproduce c₀, because a product of probabilities is not a sum of logits. It
+can, however, represent confidence near 0 and near 1.
+
+**Hypotheses and decision rules (dev, post hoc).** Each holds if it holds
+for every N1 seed and the 95% chapter-bootstrap interval of the mean paired
+NLL difference over seeds excludes 0:
+
+- **H-J3.** J4 has lower cross-fitted NLL than J0.
+- **H-J4.** J5 has lower cross-fitted NLL than J0.
+
+**Descriptive.** J4 and J5 against J3, the transfer scheme, and N3 against
+N1.
+
+**Outputs.** `scripts/joint_calibration.py --calibrators J0 J3 J4 J5` writes
+`reports/rlcd-stage3/platt_calibration.json` and `PLATT_CALIBRATION.md`.
+The J0 to J3 report is not overwritten.
+
 ### Stage 4: English interface (later work, separate paper)
 
 1. Decide how the model reads English (section 6).
