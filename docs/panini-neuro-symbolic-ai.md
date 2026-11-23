@@ -1,7 +1,7 @@
 # Proof-Carrying External Vowel-Sandhi Splitting with Typed Pāṇinian Rules and a Tiny Transformer
 
 **Author:** Raghavendra V. Karnam
-**Working manuscript version:** 0.5, November 2026
+**Working manuscript version:** 0.6, November 2026
 **Repository:** https://github.com/raghav-vk/panini-neuro-symbolic-ai
 **Status:** Runnable development system. The sandhi independent-corpus
 evaluation is pending. The pre-registered extension of Section 12 is complete:
@@ -10,8 +10,9 @@ one confirmatory test run.
 > This version is not ready for arXiv resubmission. It contains:
 > - a complete sandhi study design and measured synthetic engineering
 >   results;
-> - silver-data sandhi results (Section 11: a test result, plus development
->   results for pretraining and calibration);
+> - silver-data sandhi results (Section 11: test results for the baseline
+>   comparison and for pretraining, plus development results for
+>   calibration);
 > - the completed Section 12 extension.
 >
 > It has no expert-reviewed rule inventory, no expert gold test set and no
@@ -49,10 +50,12 @@ pending and no claim of general grammatical correctness is made.
 On silver boundaries extracted from the DCS, the symbolic layer finds the
 correct analysis for 99.9% of unseen right-hand words. On that holdout test,
 a linear ranker over training counts and a dictionary reaches 0.943 top-1,
-and a tiny Transformer trained from scratch does not improve on it. On
-development data only, adding a word score from a Sanskrit-pretrained byte
-encoder raises the linear ranker to about 0.95. Its confidence is calibrated
-and supports abstention. A separately pre-registered extension (Section 12) tests the same small
+and a tiny Transformer trained from scratch does not improve on it. In one
+frozen test run, adding a word score from a Sanskrit-pretrained byte encoder
+raises the linear ranker by 0.018, to 0.956–0.966. The ranker's raw
+confidence keeps about 78% of test items at 0.995 accuracy. Without the
+dictionary, the word score does not match it. Both gains are smaller than on
+development data. A separately pre-registered extension (Section 12) tests the same small
 encoder on real text, as a set of calibrated Choice decisions: per-word
 case, number, gender, person and tense for 133,107 held-out words of the
 Digital Corpus of Sanskrit, with the segmentation given. In one frozen test
@@ -598,11 +601,13 @@ The Transformer gains slightly only where test words occur in training.
 evaluated three times:
 1. a single-seed timing run with the original 12 rules, superseded;
 2. the amendment 0.3 model, which scored 0.822 against 0.831 for frequency;
-3. the run above.
+3. the run above;
+4. the frozen pretraining run of Section 11.3 (amendment 0.9), on the same
+   821 items in SLP1.
 
 Any further use must be disclosed as such.
 
-### 11.3 Self-Supervised Pretraining (Development Only)
+### 11.3 Self-Supervised Pretraining
 
 The negative result in 11.2 motivated a pretraining plan (amendment 0.5).
 - **Encoder.** A 4,937,220-parameter byte encoder (width 256, 6 layers).
@@ -616,33 +621,54 @@ The negative result in 11.2 motivated a pretraining plan (amendment 0.5).
 - **Use.** The discriminator's word score is added to the linear ranker as a
   feature.
 
-Results are on the 988 dev examples. **The test set has not been used for
-pretraining.**
+Settings were chosen on the 988 dev examples, then frozen by hash
+(amendment 0.9, protocol section 11.7) for one test run on the 821
+right-word holdout examples. That run was the fourth use of the test set
+(Section 11.2). Before it, the frozen script reproduced every dev result
+below exactly.
 
-| Ranker (dev top-1) | P-A, seeds 7 / 11 / 19 | P-B, seed 7 |
-| --- | --- | --- |
-| Linear, no lexicon | 0.778 | 0.778 |
-| Linear + kosha (reference) | 0.903 (0.909 tie-averaged) | 0.903 |
-| Linear + neural score, no kosha (H-P1), words scored alone | 0.925 / 0.926 / 0.929 | 0.845 |
-| Linear + kosha + neural score (H-P2), words scored alone | 0.950 / 0.952 / 0.956 | 0.890 |
-| Fine-tuned pretrained ranker + kosha (H-P3) | about 0.90 | — |
+| Ranker (top-1) | Dev, P-A seeds 7 / 11 / 19 | Test, P-A seeds 7 / 11 / 19 | Dev / test, P-B seed 7 |
+| --- | --- | --- | --- |
+| Linear, no lexicon | 0.778 | — | 0.778 / — |
+| Linear + kosha (R-K, reference) | 0.903 (0.909 tie-averaged) | 0.942 (0.945 tie-averaged) | 0.903 / 0.942 |
+| Linear + neural score, no kosha (R-N, H-P1) | 0.925 / 0.926 / 0.929 | 0.926 / 0.935 / 0.923 | 0.845 / 0.833 |
+| Linear + kosha + neural score (R-KN, H-P2) | 0.950 / 0.952 / 0.956 | 0.956 / 0.966 / 0.957 | 0.890 / 0.922 |
+| Fine-tuned pretrained ranker + kosha (H-P3) | about 0.90 | not tested | — |
 
-**With P-A pretraining:**
-- **Without the kosha.** The neural word score alone lifts the linear
-  ranker above the kosha (H-P1).
-- **With the kosha.** Together they reach 0.950 to 0.956, against 0.909
-  (H-P2; every seed, McNemar p < 0.001).
+Words are scored alone, not in their sentence. The R-K test score differs
+from the 0.943 of Section 11.2 because candidate order, and so
+tie-breaking, depends on the transliteration (SLP1 here, IAST there).
 
-**With strict P-B pretraining, the gain over the kosha disappears.**
-- **P-B.** P-B removes every sentence with a held-out right-hand word, so
-  most of the P-A gain comes from seeing those words in other contexts.
-- **Fine-tuning.** Fine-tuning the pretrained encoder as the ranker (H-P3)
-  adds nothing.
+**Confirmatory test results** (paired against R-K; 95% source-group
+bootstrap intervals of the seed mean):
 
-These are dev results under repeated dev use. A test run needs a frozen
-amendment and a disclosed fourth use of the test set.
+| Hypothesis | Test, per seed | Mean [95% CI] | Dev | Verdict |
+| --- | --- | --- | --- | --- |
+| T-P1: R-N is non-inferior to R-K (margin 0.010) | −0.016 / −0.006 / −0.018 | −0.013 [−0.033, +0.006] | +0.022 to +0.026 | Not supported |
+| T-P1s: R-N beats R-K | as above | as above | as above | Not supported |
+| T-P2: R-KN beats R-K | +0.015 / +0.024 / +0.016 | +0.018 [+0.004, +0.033] | +0.048 to +0.054 | Supported |
+| T-P3: R-KN coverage at τ = 0.95 within [0.71, 0.86] | 0.781 / 0.788 / 0.762 | — | 0.761–0.806 | Supported |
 
-### 11.4 Calibration and Abstention (Development Only)
+**What this shows:**
+- **The neural score adds to the kosha.** The gain holds for every seed,
+  but it is about a third of the dev gain. Dev was used repeatedly, and
+  scoring words alone was chosen on it.
+- **It does not replace the kosha.** On dev the neural score alone beat the
+  kosha; on test it is behind for every seed. Most of the loss is in
+  SDH-001, which holds 503 of the 821 examples. This arm uses no CC BY-NC-SA
+  kosha data, so a ranker without the kosha costs about 0.013 on this
+  evidence.
+- **Strict P-B pretraining stays below the kosha.** P-B removes every
+  sentence with a held-out right-hand word, so most of the P-A gain comes
+  from seeing those words in other contexts.
+- **Fine-tuning adds nothing.** Fine-tuning the pretrained encoder as the
+  ranker (H-P3) failed its dev stopping rule and was not tested.
+- **Scoring in sentence is worse.** It was worse on dev, and it is worse on
+  test (descriptive).
+
+Full results: `reports/pretraining-v1/test/TEST_RESULTS.md`.
+
+### 11.4 Calibration and Abstention
 
 The H-P2 ranker's confidences were evaluated with temperature scaling
 cross-fitted on dev (RLCD stage 1, pre-registered).
@@ -656,7 +682,10 @@ cross-fitted on dev (RLCD stage 1, pre-registered).
 - **Routing to an ensemble does not help.** Sending uncertain items to a
   three-seed ensemble gains at most 0.007, inside the intervals.
 
-These figures are dev only and have not been tested.
+The calibration figures are dev only. The gate itself was tested once
+(T-P3 in Section 11.3). With the raw confidence and τ = 0.95 frozen, it
+accepts 76 to 79% of test items at 0.994 to 0.995 accuracy, against 0.956 to
+0.966 overall.
 
 ### 11.5 Not Yet Run
 
@@ -869,7 +898,12 @@ Fifth, results on external vowel sandhi do not justify claims about full word
 segmentation, morphology, syntax, translation, literary quality, or language
 modeling.
 
-Sixth, the Section 12 extension has its own limits:
+Sixth, the pretraining gains of Section 11.3 are smaller on test than on
+the repeatedly used dev set. They rest on the fourth use of one silver test
+set, with encoders that saw the held-out right-hand words in other
+sentences (P-A).
+
+Seventh, the Section 12 extension has its own limits:
 - **Silver labels.** Its labels are silver, single-annotator DCS analyses.
 - **Gold-segmented input.** Its input is gold-segmented.
 - **Merged tenses.** It scores two pairs of tenses as merged classes.
@@ -909,6 +943,11 @@ properties the larger design depends on:
   when to trust it.
 
 It also shows where a lookup baseline remains stronger.
+
+The frozen sandhi pretraining test of Section 11.3 points the same way. The
+pretrained word score improves a dictionary-based ranker, and the ranker's
+confidence supports abstention on held-out items, but the score does not
+replace the dictionary.
 
 ## References
 
