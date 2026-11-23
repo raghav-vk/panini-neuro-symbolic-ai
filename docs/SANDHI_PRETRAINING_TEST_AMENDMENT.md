@@ -123,3 +123,34 @@ correction is applied.
 2. **Timing.** The fourth use goes ahead now. The expert gold set remains
    the final untouched evaluation.
 3. **P-B arms.** They stay descriptive.
+
+## 7. Erratum (2026-11-23)
+
+**What was wrong.** The split hashes in
+`reports/pretraining-v1/frozen_test_settings.json`, as adopted, were those of
+the IAST files in `data/processed/dcs-silver-v2-kosha-splits/`. Those files
+were made on 2026-10-24, before SLP1 became the internal transliteration
+(amendment 0.6, section 11.4). The dev runs this amendment freezes used the
+SLP1 files in `data/processed/dcs-silver-slp1-kosha-splits/`. Their dev file
+is identical to the scored dev data once the neural fields are removed. The
+frozen `rules_sha256` already matched the SLP1 data. The encoders read SLP1
+only, so a run on the IAST files would not have tested the frozen settings.
+
+**Correction.** The settings file now names the SLP1 split directory and
+records its hashes (train `b29c2a77…`, dev `720182fa…`, test `90129cbf…`).
+The superseded hashes are kept in the file's `erratum` entry. Nothing else
+changes.
+
+**What had been read.** No result on the SLP1 test file existed when the
+error was found. All three earlier uses of the test set (section 1) read the
+IAST file. The 821 examples are the same items, so this is still the fourth
+use.
+
+**The R-K score is not exactly known.** The 0.943 of the third use was
+measured on the IAST file. In SLP1 the candidates sort in a different order,
+so ties break differently, and the R-K score on the SLP1 file may differ
+slightly. Sections 1 and 5 should be read with that in mind.
+
+**Frozen script.** `scripts/run_sandhi_pretraining_test.py` implements
+section 4. Its `--smoke` mode runs the same pipeline on dev and reproduces
+the dev results recorded in paper section 11.3 before the test run.

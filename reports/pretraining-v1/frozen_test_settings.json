@@ -20,10 +20,11 @@
    "role": "descriptive"
   }
  },
+ "split_dir": "data/processed/dcs-silver-slp1-kosha-splits/strict_right_lemma",
  "split_sha256": {
-  "train": "9e3c7d7416ff8937096ea295f2f9f930e4eb1699e8ef9769d72f73222c93fcb3",
-  "dev": "c1733e33afe3fd6592710e1a9f980196e690a95b4fa9b683cb82a0213fad73d6",
-  "test": "b498d6dab52fc805b144d037c765f6fa098a8a6e063fd8c9b6ceb4e7db91d28c"
+  "train": "b29c2a778a584d96eebfb24826cdc8bf43f04b906a243997b00f81d032059487",
+  "dev": "720182faa407669e171cad7e45a77065bff527ac82d9c83dfa2882ea7fabb861",
+  "test": "90129cbf55e48befe318a3e95623f03dbf0f240eed4345067f4ab3af5709b9f2"
  },
  "rules_sha256": "9f4844226ac879dac72791b6343d43b6f93f552899172b865ddee4f56f3bdda0",
  "vidyut_data_sha256": "5269cda86451a75dbc93b605f6864bb5a52cc79d66da02f18f30cf87d0059ecb",
@@ -52,5 +53,15 @@
     "dev_accepted_accuracy": 0.9960106382978723
    }
   }
+ },
+ "erratum": {
+  "date": "2026-11-23",
+  "correction": "split_sha256 as adopted recorded the IAST files of data/processed/dcs-silver-v2-kosha-splits (made before amendment 0.6). The dev runs this amendment freezes used the SLP1 files of data/processed/dcs-silver-slp1-kosha-splits, whose dev file equals the scored dev data with the neural fields removed. The SLP1 hashes replace them; rules_sha256 already matched the SLP1 data.",
+  "superseded_split_sha256": {
+   "train": "9e3c7d7416ff8937096ea295f2f9f930e4eb1699e8ef9769d72f73222c93fcb3",
+   "dev": "c1733e33afe3fd6592710e1a9f980196e690a95b4fa9b683cb82a0213fad73d6",
+   "test": "b498d6dab52fc805b144d037c765f6fa098a8a6e063fd8c9b6ceb4e7db91d28c"
+  },
+  "test_file_read": "The SLP1 test file had never been scored when this erratum was made; the three earlier uses of the test set read the IAST file."
  }
 }

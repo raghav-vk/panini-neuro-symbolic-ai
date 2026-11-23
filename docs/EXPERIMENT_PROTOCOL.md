@@ -650,6 +650,13 @@ All four are reported whatever the outcome.
 **Procedure.** One run, by a hash-checked frozen script merged first.
 Nothing is retrained or retuned afterwards.
 
+**Erratum (2026-11-23).** The split hashes as adopted were those of the
+pre-SLP1 IAST files; the dev runs used the SLP1 files. The settings file now
+records the SLP1 hashes, and no result on the SLP1 test file existed when
+this was corrected. The 0.943 reference score was measured on the IAST file,
+so the R-K score on the SLP1 file may differ slightly. Full text: section 7
+of the amendment.
+
 ## 12. Baselines
 
 Run at least these baselines under identical splits:
