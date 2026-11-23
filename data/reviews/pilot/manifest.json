@@ -1,0 +1,23 @@
+{
+  "source": "DCS_pick (Krishna et al. 2017, CC BY 4.0), silver right-word holdout training split",
+  "design": "docs/REVIEW_APP_DESIGN.md, stage 0 pilot",
+  "inputs": {
+    "train": "b29c2a778a584d96eebfb24826cdc8bf43f04b906a243997b00f81d032059487",
+    "split_manifest": "d398e31cf043c49ba1435348456c958939c39dfad36a7312ac7103e4a20efe2a",
+    "pending_review": "a31c3f645184748f3719cfb614fb993a45439b29d164e9cc26782bffbf769adc"
+  },
+  "seed": 2026,
+  "items": 60,
+  "kinds": {
+    "control_wrong": 6,
+    "real": 48,
+    "control_correct": 6
+  },
+  "excluded_source_groups": 33528,
+  "excluded_sentences": 71325,
+  "outputs": {
+    "pilot_items.jsonl": "3fe93bf132296127fca40dbd2019ec5e3b518192aa12ba91636579992e9a2e5a"
+  },
+  "answer_key_sha256": "4768285dc18037666b7ae7107cd2f0d79bd516ce48600a3befb8e9b804ccfabf",
+  "controls_vetted": false
+}

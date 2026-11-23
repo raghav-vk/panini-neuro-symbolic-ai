@@ -12,6 +12,7 @@
 <h1 id="title"></h1>
 <p>Each item shows a sentence with a fused form highlighted, and a proposed split of it into two words, each with its final and initial sound restored. Judge whether the split is right <em>in this sentence</em>. Your answers are saved in this browser as you go; use <strong>Export answers</strong> to produce the file you hand in.</p>
 <div class="grid"><label>Your name<input type="text" id="reviewer"></label><label>Review date<input type="date" id="reviewed_at"></label></div>
+<label id="script-choice" hidden>Show Sanskrit in <select id="script"><option value="devanagari">Devanagari</option><option value="iast">IAST</option></select> <span class="help">You can type corrections in either script.</span></label>
 <nav><button id="previous">Previous</button><strong id="progress"></strong><button id="next">Next</button><button class="secondary" id="unanswered">Next unanswered</button><button class="secondary" id="export">Export answers</button></nav>
 <section class="panel"><div id="identity" class="eyebrow"></div><div class="sentence" id="sentence"></div>
 <p class="proposal">Proposed: <strong id="proposal"></strong></p><p class="help" id="lemmas"></p></section>
@@ -35,12 +36,14 @@ try{answers=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){answers={}}
 const meta=JSON.parse(localStorage.getItem(key+':meta')||'{}');
 $('reviewer').value=meta.reviewer||'';$('reviewed_at').value=meta.reviewed_at||'';
 $('title').textContent=config.title;
+if(config.devanagari){$('script-choice').hidden=false;$('script').value=localStorage.getItem(key+':script')||'devanagari';$('script').onchange=()=>{localStorage.setItem(key+':script',$('script').value);keep();show()}}
+function view(it){return config.devanagari&&$('script').value==='devanagari'?{...it,...it.devanagari}:it}
 function persist(){try{localStorage.setItem(key,JSON.stringify(answers));localStorage.setItem(key+':meta',JSON.stringify({reviewer:$('reviewer').value,reviewed_at:$('reviewed_at').value}))}catch(e){$('message').textContent='This browser cannot save locally; export your answers often.'}}
 function choice(){const c=document.querySelector('input[name=decision]:checked');return c?c.value:''}
 function keep(){const it=items[index],d=choice();if(!d&&!$('notes').value){delete answers[it.item_id];persist();return}
 answers[it.item_id]={item_id:it.item_id,decision:d,left:d==='wrong'?$('left').value.trim():'',right:d==='wrong'?$('right').value.trim():'',notes:$('notes').value.trim()};persist()}
 function answered(){return items.filter(it=>answers[it.item_id]?.decision).length}
-function show(){const it=items[index],a=answers[it.item_id]||{};const chars=Array.from(it.sentence),[s,e]=it.span;
+function show(){const it=view(items[index]),a=answers[it.item_id]||{};const chars=Array.from(it.sentence),[s,e]=it.span;
 $('progress').textContent=`${index+1} / ${items.length} (${answered()} answered)`;$('identity').textContent=it.item_id;
 $('sentence').replaceChildren(chars.slice(0,s).join(''),Object.assign(document.createElement('mark'),{textContent:chars.slice(s,e).join('')}),chars.slice(e).join(''));
 $('proposal').textContent=`${it.surface} = ${it.proposed_left} + ${it.proposed_right}`;$('lemmas').textContent=`Dictionary forms: ${it.left_lemma} + ${it.right_lemma}`;
@@ -54,7 +57,7 @@ const who=$('reviewer').value.trim(),when=$('reviewed_at').value;const rows=item
 const url=URL.createObjectURL(new Blob([rows.map(r=>JSON.stringify(r)).join('\n')+'\n'],{type:'application/x-ndjson'}));const a=document.createElement('a');a.href=url;a.download=config.answers_name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);$('message').textContent=`Exported ${rows.length} answers as ${config.answers_name}.`};
 $('import').onchange=async e=>{try{const rows=(await e.target.files[0].text()).trim().split('\n').filter(Boolean).map(JSON.parse);const ids=new Set(items.map(it=>it.item_id));
 if(rows.some(r=>!ids.has(r.item_id)))throw Error('This file has items that are not in this worksheet.');answers={};for(const r of rows){const{reviewer,reviewed_at,...rest}=r;answers[r.item_id]=rest;if(reviewer)$('reviewer').value=reviewer;if(reviewed_at)$('reviewed_at').value=reviewed_at}persist();index=0;show();$('message').textContent=`Loaded ${rows.length} answers.`}catch(error){$('message').textContent=error.message}};
-function prefill(){const it=items[index];if(choice()==='wrong'&&!$('left').value&&!$('right').value){$('left').value=it.proposed_left;$('right').value=it.proposed_right}}
+function prefill(){const it=view(items[index]);if(choice()==='wrong'&&!$('left').value&&!$('right').value){$('left').value=it.proposed_left;$('right').value=it.proposed_right}}
 $('form').onchange=e=>{if(e.target.name==='decision'){prefill();keep();show()}};$('notes').oninput=keep;$('left').oninput=$('right').oninput=()=>{document.querySelector('input[value=wrong]').checked=true;keep()};
 $('reviewer').oninput=$('reviewed_at').onchange=persist;$('form').onsubmit=e=>e.preventDefault();
 $('previous').onclick=()=>go(index-1);$('next').onclick=()=>go(index+1);
