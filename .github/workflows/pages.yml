@@ -1,0 +1,45 @@
+name: pages
+
+# Publishes the community review worksheet (docs/REVIEW_APP_DESIGN.md, stage 0) and nothing else.
+# The answer key lives in git-ignored data/reviews/pilot/private/ and is never in the checkout.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - data/reviews/pilot/pilot_worksheet.html
+      - site/**
+      - .github/workflows/pages.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assemble the site
+        run: |
+          mkdir -p _site/review
+          cp site/index.html _site/index.html
+          cp data/reviews/pilot/pilot_worksheet.html _site/review/pilot.html
+          touch _site/.nojekyll
+          if [ -e data/reviews/pilot/private ]; then echo "private directory present in checkout" >&2; exit 1; fi
+          find _site -type f
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

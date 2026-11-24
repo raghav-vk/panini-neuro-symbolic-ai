@@ -6,10 +6,12 @@ can help check the project's Sanskrit data. It is the first stage of
 
 ## What You Do
 
-**Open the worksheet.** Download `pilot_worksheet.html` (on GitHub: open
-it, then "Download raw file") and open it in Chrome, Firefox or Edge. It
-works offline and sends nothing anywhere. Your answers are saved in the
-browser as you go.
+**Open the worksheet** at
+<https://raghav-vk.github.io/panini-neuro-symbolic-ai/review/pilot.html> in
+Chrome, Firefox, Edge or Safari. It works on a phone, but a laptop is easier
+for handing in. Nothing is sent anywhere while you work: your answers are
+saved in that browser on that device, so finish where you started. You can
+also download `pilot_worksheet.html` and open it offline.
 
 **Choose a script.** The worksheet shows Sanskrit in Devanagari by default.
 You can switch to IAST at the top, and switch back at any time.
@@ -79,5 +81,8 @@ Sanskrit (Krishna et al. 2017, CC BY 4.0).
   data/reviews/pilot/pilot_items.jsonl FILE`
 - **Score:** `scripts/score_pilot.py FILE [FILE ...]`. It writes the
   leaderboard and expert queue to `runs/pilot-scores/`.
+- **Publish:** `.github/workflows/pages.yml` deploys the worksheet to GitHub
+  Pages when it changes on `main` (or run the workflow by hand). It publishes
+  only `site/index.html` and the worksheet.
 - **Before sending:** check the 12 control answers in the private key.
   `manifest.json` records `controls_vetted: false` until you do.
