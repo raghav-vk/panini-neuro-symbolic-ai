@@ -19,5 +19,7 @@
     "pilot_items.jsonl": "3fe93bf132296127fca40dbd2019ec5e3b518192aa12ba91636579992e9a2e5a"
   },
   "answer_key_sha256": "4768285dc18037666b7ae7107cd2f0d79bd516ce48600a3befb8e9b804ccfabf",
-  "controls_vetted": false
+  "controls_vetted": true,
+  "controls_vetted_on": "2026-11-24",
+  "controls_vetted_by": "project owner"
 }
