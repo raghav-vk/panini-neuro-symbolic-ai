@@ -17,3 +17,6 @@ checkpoints/
 
 # External lexicon data (fetched, never committed)
 data/external/
+
+# Community review pilot answer key (controls must stay hidden from reviewers)
+data/reviews/pilot/private/

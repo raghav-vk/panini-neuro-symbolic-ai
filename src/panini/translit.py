@@ -56,3 +56,29 @@ def iast_hiatus_ambiguous(text):
     """True if the IAST has 'ai' or 'au', which could be a vowel sequence, not a diphthong."""
     text = unicodedata.normalize("NFC", text)
     return "ai" in text or "au" in text
+
+
+DEVANAGARI = range(0x0900, 0x0980)
+
+
+def has_devanagari(text):
+    return any(ord(c) in DEVANAGARI for c in text)
+
+
+def slp1_to_devanagari(text):
+    """Devanagari for people who read it; needs vidyut (requirements-lexicon.txt)."""
+    from vidyut.lipi import Scheme, transliterate
+    return transliterate(text, Scheme.Slp1, Scheme.Devanagari)
+
+
+def to_slp1(text):
+    """A reviewer's typed answer in Devanagari or IAST, as SLP1.
+
+    Devanagari needs vidyut and is unambiguous. IAST goes through iast_to_slp1, so 'ai'
+    and 'au' are read as diphthongs (see iast_hiatus_ambiguous).
+    """
+    text = unicodedata.normalize("NFC", text.strip())
+    if has_devanagari(text):
+        from vidyut.lipi import Scheme, transliterate
+        return transliterate(text, Scheme.Devanagari, Scheme.Slp1)
+    return iast_to_slp1(text)
