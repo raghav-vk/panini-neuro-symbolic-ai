@@ -5,15 +5,18 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'">
 <title>Project Panini | Verify Splits</title>
 <style>
-:root{--ink:#24362e;--paper:#fcf8ed;--accent:#b54c20;--line:#d8ddce}*{box-sizing:border-box}body{margin:0;color:var(--ink);background:var(--paper);font:17px/1.5 Georgia,serif}main{max-width:900px;margin:auto;padding:32px 24px}h1{font-size:clamp(28px,5vw,44px);font-weight:normal;line-height:1.1;margin:8px 0}.eyebrow{font:12px monospace;letter-spacing:2px;text-transform:uppercase;color:var(--accent)}nav{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:20px 0}button{background:var(--ink);color:var(--paper);border:0;border-radius:3px;padding:10px 16px;font:14px Georgia,serif;cursor:pointer}button.secondary{background:transparent;color:var(--ink);border:1px solid var(--line)}button:focus,input:focus,textarea:focus{outline:3px solid var(--accent);outline-offset:2px}.panel{border:1px solid var(--line);padding:20px;background:#fffdf7;margin:16px 0}.sentence{font-size:24px;overflow-wrap:anywhere}mark{background:#f3d9a4;padding:0 2px}.proposal{font-size:22px}label{display:block;font-size:15px;margin:8px 0}input[type=text],input[type=date],textarea{display:block;width:100%;padding:9px;border:1px solid var(--line);background:white;font:17px Georgia,serif;margin-top:4px}.choice{display:flex;gap:8px;align-items:baseline}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.help{font-size:14px;color:#526555}#message{min-height:24px;color:var(--accent)}@media(max-width:650px){.grid{grid-template-columns:1fr}main{padding:20px 14px}}
+:root{--ink:#24362e;--paper:#fcf8ed;--accent:#b54c20;--line:#d8ddce}*{box-sizing:border-box}body{margin:0;color:var(--ink);background:var(--paper);font:17px/1.5 Georgia,serif}main{max-width:900px;margin:auto;padding:32px 24px}h1{font-size:clamp(28px,5vw,44px);font-weight:normal;line-height:1.1;margin:8px 0}.eyebrow{font:12px monospace;letter-spacing:2px;text-transform:uppercase;color:var(--accent)}nav{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:20px 0}button{background:var(--ink);color:var(--paper);border:0;border-radius:3px;padding:10px 16px;font:14px Georgia,serif;cursor:pointer}button.secondary{background:transparent;color:var(--ink);border:1px solid var(--line)}button:focus,input:focus,textarea:focus{outline:3px solid var(--accent);outline-offset:2px}.panel{border:1px solid var(--line);padding:20px;background:#fffdf7;margin:16px 0}.sentence{font-size:24px;overflow-wrap:anywhere}mark{background:#f3d9a4;padding:0 2px}.proposal{font-size:22px}label{display:block;font-size:15px;margin:8px 0}input[type=text],input[type=date],textarea{display:block;width:100%;padding:9px;border:1px solid var(--line);background:white;font:17px Georgia,serif;margin-top:4px}.choice{display:flex;gap:8px;align-items:baseline}.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.help{font-size:14px;color:#526555}#message{min-height:24px;color:var(--accent)}a.button{display:inline-block;background:var(--ink);color:var(--paper);border-radius:3px;padding:10px 16px;font:14px Georgia,serif;text-decoration:none}#round{border-color:var(--accent)}#countdown{font-size:20px;color:var(--accent)}#sealed{font:12px monospace}@media(max-width:650px){.grid{grid-template-columns:1fr}main{padding:20px 14px}}
 </style>
 <main>
 <div class="eyebrow">Project Panini / Expert Review</div>
 <h1 id="title"></h1>
+<section id="round" class="panel" hidden><strong id="countdown"></strong><p class="help" id="round-help"></p></section>
 <p>Each item shows a sentence with a fused form highlighted, and a proposed split of it into two words, each with its final and initial sound restored. Judge whether the split is right <em>in this sentence</em>. Your answers are saved in this browser as you go; use <strong>Export answers</strong> to produce the file you hand in.</p>
 <div class="grid"><label>Your name<input type="text" id="reviewer"></label><label>Review date<input type="date" id="reviewed_at"></label></div>
+<label id="credit-choice" class="choice" hidden><input type="checkbox" id="credit"> Credit me by this name on the leaderboard and in the acknowledgements (otherwise you appear anonymously).</label>
 <label id="script-choice" hidden>Show Sanskrit in <select id="script"><option value="devanagari">Devanagari</option><option value="iast">IAST</option></select> <span class="help">You can type corrections in either script.</span></label>
-<nav><button id="previous">Previous</button><strong id="progress"></strong><button id="next">Next</button><button class="secondary" id="unanswered">Next unanswered</button><button class="secondary" id="export">Export answers</button></nav>
+<nav><button id="previous">Previous</button><strong id="progress"></strong><button id="next">Next</button><button class="secondary" id="unanswered">Next unanswered</button><button class="secondary" id="export">Export answers</button><button id="hand-in" hidden>Hand in</button></nav>
+<section id="sealed-panel" class="panel" hidden><p><strong>Your answers are sealed.</strong> Only the project can open them, and only after the round closes, so nobody can copy them. Two steps:</p><nav><button id="copy">1. Copy sealed answers</button><a id="hand-in-link" class="button" target="_blank" rel="noopener">2. Open the hand-in form and paste</a></nav><textarea id="sealed" rows="5" readonly aria-label="Sealed answers"></textarea><p class="help">The form needs a free GitHub account. A bot replies within a few minutes to confirm your hand-in. You can hand in again until the deadline; your latest hand-in counts.</p></section>
 <section class="panel"><div id="identity" class="eyebrow"></div><div class="sentence" id="sentence"></div>
 <p class="proposal">Proposed: <strong id="proposal"></strong></p><p class="help" id="lemmas"></p></section>
 <form id="form" class="panel">
@@ -34,14 +37,14 @@ const $=id=>document.getElementById(id), key='panini-review:'+config.answers_nam
 let answers={}, index=0;
 try{answers=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){answers={}}
 const meta=JSON.parse(localStorage.getItem(key+':meta')||'{}');
-$('reviewer').value=meta.reviewer||'';$('reviewed_at').value=meta.reviewed_at||'';
+$('reviewer').value=meta.reviewer||'';$('reviewed_at').value=meta.reviewed_at||'';$('credit').checked=!!meta.credit;
 $('title').textContent=config.title;
 if(config.devanagari){$('script-choice').hidden=false;$('script').value=localStorage.getItem(key+':script')||'devanagari';$('script').onchange=()=>{localStorage.setItem(key+':script',$('script').value);keep();show()}}
 function view(it){return config.devanagari&&$('script').value==='devanagari'?{...it,...it.devanagari}:it}
-function persist(){try{localStorage.setItem(key,JSON.stringify(answers));localStorage.setItem(key+':meta',JSON.stringify({reviewer:$('reviewer').value,reviewed_at:$('reviewed_at').value}))}catch(e){$('message').textContent='This browser cannot save locally; export your answers often.'}}
+function persist(){try{localStorage.setItem(key,JSON.stringify(answers));Object.assign(meta,{reviewer:$('reviewer').value,reviewed_at:$('reviewed_at').value,credit:$('credit').checked});localStorage.setItem(key+':meta',JSON.stringify(meta))}catch(e){$('message').textContent='This browser cannot save locally; export your answers often.'}}
 function choice(){const c=document.querySelector('input[name=decision]:checked');return c?c.value:''}
 function keep(){const it=items[index],d=choice();if(!d&&!$('notes').value){delete answers[it.item_id];persist();return}
-answers[it.item_id]={item_id:it.item_id,decision:d,left:d==='wrong'?$('left').value.trim():'',right:d==='wrong'?$('right').value.trim():'',notes:$('notes').value.trim()};persist()}
+if(!meta.started_at)meta.started_at=new Date().toISOString();answers[it.item_id]={item_id:it.item_id,decision:d,left:d==='wrong'?$('left').value.trim():'',right:d==='wrong'?$('right').value.trim():'',notes:$('notes').value.trim()};persist()}
 function answered(){return items.filter(it=>answers[it.item_id]?.decision).length}
 function show(){const it=view(items[index]),a=answers[it.item_id]||{};const chars=Array.from(it.sentence),[s,e]=it.span;
 $('progress').textContent=`${index+1} / ${items.length} (${answered()} answered)`;$('identity').textContent=it.item_id;
@@ -53,10 +56,29 @@ function problems(){const out=[];if(!$('reviewer').value.trim())out.push('your n
 for(const it of items){const a=answers[it.item_id];if(!a?.decision){out.push(`an answer for ${it.item_id}`);continue}
 if(a.decision==='wrong'&&(!a.left||!a.right))out.push(`both words for ${it.item_id}`);if(a.decision==='unsure'&&!a.notes)out.push(`a note for ${it.item_id}`)}return out}
 $('export').onclick=()=>{keep();const missing=problems();if(missing.length&&!confirm(`Still missing: ${missing.slice(0,5).join('; ')}${missing.length>5?` and ${missing.length-5} more`:''}.\n\nExport an unfinished file anyway?`))return;
-const who=$('reviewer').value.trim(),when=$('reviewed_at').value;const rows=items.filter(it=>answers[it.item_id]).map(it=>({...answers[it.item_id],reviewer:who,reviewed_at:when}));
+const rows=rowsOut();
 const url=URL.createObjectURL(new Blob([rows.map(r=>JSON.stringify(r)).join('\n')+'\n'],{type:'application/x-ndjson'}));const a=document.createElement('a');a.href=url;a.download=config.answers_name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);$('message').textContent=`Exported ${rows.length} answers as ${config.answers_name}.`};
 $('import').onchange=async e=>{try{const rows=(await e.target.files[0].text()).trim().split('\n').filter(Boolean).map(JSON.parse);const ids=new Set(items.map(it=>it.item_id));
 if(rows.some(r=>!ids.has(r.item_id)))throw Error('This file has items that are not in this worksheet.');answers={};for(const r of rows){const{reviewer,reviewed_at,...rest}=r;answers[r.item_id]=rest;if(reviewer)$('reviewer').value=reviewer;if(reviewed_at)$('reviewed_at').value=reviewed_at}persist();index=0;show();$('message').textContent=`Loaded ${rows.length} answers.`}catch(error){$('message').textContent=error.message}};
+function rowsOut(){const who=$('reviewer').value.trim(),when=$('reviewed_at').value;return items.filter(it=>answers[it.item_id]).map(it=>({...answers[it.item_id],reviewer:who,reviewed_at:when}))}
+const round=config.round;
+function countdown(){const left=new Date(round.closes)-Date.now();if(left<=0){$('countdown').textContent='This round has closed. Thank you!';$('hand-in').disabled=true;return}
+const d=Math.floor(left/864e5),h=Math.floor(left%864e5/36e5),m=Math.floor(left%36e5/6e4);$('countdown').textContent=`Round closes in ${d?d+' days, ':''}${h} h ${m} min`}
+function b64(buf){let s='';for(const x of new Uint8Array(buf))s+=String.fromCharCode(x);return btoa(s)}
+async function seal(payload){const s=crypto.subtle,secret=crypto.getRandomValues(new Uint8Array(32)),iv=crypto.getRandomValues(new Uint8Array(12));
+const pub=await s.importKey('spki',Uint8Array.from(atob(round.public_key_spki),c=>c.charCodeAt(0)),{name:'RSA-OAEP',hash:'SHA-256'},false,['encrypt']);
+const aes=await s.importKey('raw',secret,'AES-GCM',false,['encrypt']);const body=await s.encrypt({name:'AES-GCM',iv},aes,new TextEncoder().encode(JSON.stringify(payload)));
+const text='1.'+[await s.encrypt({name:'RSA-OAEP'},pub,secret),iv,body].map(b64).join('.');
+return ['-----BEGIN PANINI SEALED ANSWERS-----',...text.match(/.{1,76}/g),'-----END PANINI SEALED ANSWERS-----'].join('\n')}
+if(round){$('round').hidden=$('credit-choice').hidden=$('hand-in').hidden=false;$('export').textContent='Save a backup';
+$('round-help').textContent=`Hand in by ${new Date(round.closes).toLocaleString([], {dateStyle:'full',timeStyle:'short'})} (your time). Answers handed in later are not scored.`;countdown();setInterval(countdown,30000);
+$('credit').onchange=persist;
+$('hand-in').onclick=async()=>{keep();if(Date.now()>new Date(round.closes)){countdown();return}
+const missing=problems();if(missing.length&&!confirm(`Still missing: ${missing.slice(0,5).join('; ')}${missing.length>5?` and ${missing.length-5} more`:''}.\n\nHand in anyway? Missing answers score nothing.`))return;
+if(!window.crypto?.subtle){$('message').textContent='This browser cannot seal answers. Please open the worksheet in a recent Chrome, Firefox, Edge or Safari.';return}
+try{$('sealed').value=await seal({round:round.round,reviewer:$('reviewer').value.trim(),credit:$('credit').checked,started_at:meta.started_at||null,sealed_at:new Date().toISOString(),answers:rowsOut()})}catch(error){$('message').textContent='Sealing failed: '+error.message;return}
+$('hand-in-link').href=round.hand_in_url;$('sealed-panel').hidden=false;$('sealed-panel').scrollIntoView({behavior:'smooth'})};
+$('copy').onclick=async()=>{try{await navigator.clipboard.writeText($('sealed').value)}catch(e){$('sealed').select();document.execCommand('copy')}$('message').textContent='Copied. Now open the hand-in form and paste into the box.'}}
 function prefill(){const it=view(items[index]);if(choice()==='wrong'&&!$('left').value&&!$('right').value){$('left').value=it.proposed_left;$('right').value=it.proposed_right}}
 $('form').onchange=e=>{if(e.target.name==='decision'){prefill();keep();show()}};$('notes').oninput=keep;$('left').oninput=$('right').oninput=()=>{document.querySelector('input[value=wrong]').checked=true;keep()};
 $('reviewer').oninput=$('reviewed_at').onchange=persist;$('form').onsubmit=e=>e.preventDefault();

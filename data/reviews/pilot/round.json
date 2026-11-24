@@ -1,0 +1,14 @@
+{
+  "round": "pilot-1",
+  "opens": "2026-11-24T00:00:00Z",
+  "closes": "2026-12-01T23:59:59Z",
+  "hand_in_url": "https://github.com/raghav-vk/panini-neuro-symbolic-ai/issues/new?template=pilot-hand-in.yml&title=Pilot+hand-in",
+  "public_key_spki": "MIIBojANBgkqhkiG9w0BAQEFAAOCAY8AMIIBigKCAYEAyeZORo/VFx/ZcI5ttpA8FxHv2WvFpP/cC8jU9lkAjGZorEZL2WAGW5MI8JvM+VML/HRjNebuIlMoUg81SsYEDnQJ4bzQX0hC9x5wcTYUuzfgwAT+vRHaP8H+4mAm686rhpYGQtELfbf7cBJtsg8Jtbr0bQW0J9MqX+D32/So/b7wuWuZWKec++e+Lby09MvCOKInadpD0UnpPxKPcfAackxtRdW4KtgunTxMlLiz5r3uoRpK9PYD8YioMXHEeFRu4uJjsvMId6UGAX6+3j0m5ko+hkyjeSMlxfRArmrZnpO+eJ1AIAS+81m3GeaaK9Kpre+HULoKhKdzXovXig7Xry79VfXtOMMA9/6R4WmrZ2Zomb/4a9IlES4qohRDj7i5W3TkWgCqStW/RaO5CP1rYHqdBAoBcwVNiDCoSvvglYaafbnKTwPlQDRfdD6vBiOvVXcazQ2uM9ZbF4rWm/sOBoPI3yoXYl648lzXGd6It3XEk9m/w0hyQKuUgGhobf7TAgMBAAE=",
+  "criteria": {
+    "note": "Fixed on 2026-11-24, before any answers. All four must hold to go to stage 1 (hosted app). Agreement uses Gwet's AC1, not Fleiss' kappa: with most silver splits correct, kappa falls near zero even when reviewers agree (seen in a simulated dry run).",
+    "min_submissions": 5,
+    "min_completion_share": 0.8,
+    "min_median_control_accuracy": 0.85,
+    "min_gwet_ac1": 0.6
+  }
+}

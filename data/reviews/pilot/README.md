@@ -38,9 +38,20 @@ don't guess to avoid it.
 where readers agree. Please don't discuss the items with other reviewers
 until everyone has handed in.
 
-**Hand in.** Click **Export answers** and send the file
-`pilot_answers.jsonl` to the project owner, or commit it to
-`data/reviews/pilot/answers/` on your own branch and open a pull request.
+**Hand in before the deadline.** The round runs for one week and closes on
+**Tuesday 1 December 2026 at 23:59 UTC**. The worksheet and the welcome
+page count down to it. Answers handed in later are not scored.
+
+1. Click **Hand in**. The worksheet seals your answers: they are encrypted
+   so that only the project can open them, and only after the round closes.
+2. Click **Copy sealed answers**, then **Open the hand-in form**, paste into
+   the box and submit. The form needs a free GitHub account.
+3. A bot replies within a few minutes to confirm how many items you
+   answered. It never says which answers were right.
+
+You can hand in again until the deadline, and your latest hand-in counts.
+**Save a backup** downloads your answers so you can resume on another
+device.
 
 The whole worksheet takes about 30 to 45 minutes.
 
@@ -56,9 +67,14 @@ Points are counted only after everyone has handed in:
 - **Items with a known answer:** some items have one, and they look the same
   as the others. They count extra.
 
-The leaderboard lists reviewers with high accuracy on the known items. With
-your permission, the leaders are credited by name in the dataset release
-and in the paper's acknowledgements.
+The leaderboard lists reviewers with high accuracy on the known items.
+Tick **Credit me by this name** to appear by name on the leaderboard, in
+the dataset release and in the paper's acknowledgements. Otherwise you
+appear as "Reviewer A", "Reviewer B" and so on.
+
+When the round closes, scoring runs automatically. The results, the
+leaderboard and a short report are published, and your hand-in issue gets
+a link to them.
 
 ## What Happens to Your Answers
 
@@ -74,9 +90,19 @@ Sanskrit (Krishna et al. 2017, CC BY 4.0).
   `data/reviews/pilot/private/`, which git ignores. Never commit it or share
   it with reviewers.
 - **Build the worksheet:** `scripts/build_review_page.py
-  data/reviews/pilot/pilot_items.jsonl --mode verify --devanagari --title
-  "Community review pilot: check proposed splits" --answers-name
-  pilot_answers.jsonl --output data/reviews/pilot/pilot_worksheet.html`
+  data/reviews/pilot/pilot_items.jsonl --mode verify --devanagari --round
+  data/reviews/pilot/round.json --title "Community review pilot: check
+  proposed splits" --answers-name pilot_answers.jsonl --output
+  data/reviews/pilot/pilot_worksheet.html`
+- **The round** (`round.json`): its deadline, the public sealing key and
+  the success criteria, fixed before any answers. The private key is in
+  `private/round_private_key.pem` and in the `PILOT_PRIVATE_KEY` secret;
+  the answer key is also in the `PILOT_ANSWER_KEY` secret (base64).
+- **Automation:** `.github/workflows/pilot-intake.yml` confirms each
+  hand-in issue. After the deadline, `.github/workflows/pilot-close.yml`
+  scores every valid hand-in with `scripts/pilot_round.py`, writes
+  `reports/review-pilot/<round>/` (report, leaderboard, expert queue) and
+  opens a pull request. Run it by hand from the Actions tab if needed.
 - **Check a file:** `scripts/validate_review.py answers
   data/reviews/pilot/pilot_items.jsonl FILE`
 - **Score:** `scripts/score_pilot.py FILE [FILE ...]`. It writes the

@@ -1,0 +1,3 @@
+# Community review round automation (scripts/pilot_round.py): Devanagari input and sealed hand-ins.
+vidyut==0.4.0
+cryptography>=42,<47

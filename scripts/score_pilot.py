@@ -62,6 +62,26 @@ def fleiss_kappa(table):
     return None if p_e == 1 else (p_bar - p_e) / (1 - p_e)
 
 
+def observed_agreement(table):
+    """Mean share of agreeing rater pairs per item (the P-bar of Fleiss' kappa)."""
+    if not table or sum(table[0]) < 2 or any(sum(row) != sum(table[0]) for row in table):
+        return None
+    raters = sum(table[0])
+    return sum((sum(c * c for c in row) - raters) / (raters * (raters - 1)) for row in table) / len(table)
+
+
+def gwet_ac1(table):
+    """Gwet's AC1 for several raters. Unlike kappa, it stays meaningful when one answer dominates
+    (most silver splits are correct), where kappa can be near zero despite high agreement."""
+    p_a = observed_agreement(table)
+    if p_a is None:
+        return None
+    q, raters, n = len(table[0]), sum(table[0]), len(table)
+    pi = [sum(row[j] for row in table) / (n * raters) for j in range(q)]
+    p_e = sum(p * (1 - p) for p in pi) / (q - 1)
+    return None if p_e == 1 else (p_a - p_e) / (1 - p_e)
+
+
 def score(items, key, answer_sets, rules, min_accuracy=0.85, min_share=0.8):
     by_id = {i["item_id"]: i for i in items}
     key = {k["item_id"]: k for k in key}
@@ -138,7 +158,9 @@ def score(items, key, answer_sets, rules, min_accuracy=0.85, min_share=0.8):
     complete = [n for n, a in reviewers.items() if all(i in a for i in real_ids)]
     table = [[sum(reviewers[n][i][0] == d for n in complete) for d in DECISIONS] for i in real_ids] if len(complete) >= 2 else []
     return {"reviewers": stats, "resolved": resolved, "expert_queue": queue,
-            "agreement": {"fleiss_kappa_real_items": fleiss_kappa(table), "reviewers_with_every_real_item": len(complete)}}
+            "agreement": {"fleiss_kappa_real_items": fleiss_kappa(table), "gwet_ac1_real_items": gwet_ac1(table),
+                          "observed_agreement_real_items": observed_agreement(table),
+                          "reviewers_with_every_real_item": len(complete)}}
 
 
 def leaderboard(result):
@@ -147,8 +169,10 @@ def leaderboard(result):
              "Points come from agreeing with the resolved answer and from hidden control items.", "",
              "| Rank | Reviewer | Points | Control accuracy | Answered |", "| ---: | --- | ---: | ---: | ---: |"]
     lines += [f"| {i} | {n} | {s['points']} | {s['control_accuracy']:.0%} | {s['answered']} |" for i, (n, s) in enumerate(rows, 1)]
-    kappa = result["agreement"]["fleiss_kappa_real_items"]
-    lines += ["", f"Agreement on real items (Fleiss' kappa): {'—' if kappa is None else f'{kappa:.2f}'}."]
+    a = result["agreement"]
+    fmt = lambda x, pct=False: "—" if x is None else (f"{x:.0%}" if pct else f"{x:.2f}")
+    lines += ["", f"Agreement on real items: {fmt(a['observed_agreement_real_items'], True)} of reviewer pairs agree "
+              f"(Gwet's AC1 {fmt(a.get('gwet_ac1_real_items'))}, Fleiss' kappa {fmt(a['fleiss_kappa_real_items'])})."]
     return "\n".join(lines) + "\n"
 
 
