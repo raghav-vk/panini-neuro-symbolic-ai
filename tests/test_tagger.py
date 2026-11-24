@@ -103,6 +103,7 @@ def test_platt_on_logit_contains_the_identity():
 
 
 def test_frozen_mode_refuses_on_hash_mismatch(tmp_path):
+    pytest.importorskip("numpy")
     sys.path.insert(0, str(ROOT / "scripts"))
     import run_stage3_test as frozen_mode
     if not frozen_mode.TRAIN.exists():
