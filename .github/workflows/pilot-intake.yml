@@ -1,0 +1,43 @@
+name: pilot-intake
+
+# Confirms each community review hand-in (scripts/pilot_round.py intake) without revealing scores.
+# The issue body is untrusted: it is read from the event file by Python, never interpolated into shell.
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: pilot-intake-${{ github.event.issue.number }}
+
+jobs:
+  intake:
+    if: contains(github.event.issue.labels.*.name, 'pilot-hand-in')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: python -m pip install -r requirements.txt -r requirements-pilot.txt
+      - name: Check the hand-in
+        id: check
+        env:
+          PILOT_PRIVATE_KEY: ${{ secrets.PILOT_PRIVATE_KEY }}
+        run: |
+          status=$(python scripts/pilot_round.py intake --event "$GITHUB_EVENT_PATH" --reply "$RUNNER_TEMP/reply.md")
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+      - name: Reply and label
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ github.event.issue.number }}
+          STATUS: ${{ steps.check.outputs.status }}
+        run: |
+          gh issue comment "$ISSUE" --repo "$GITHUB_REPOSITORY" --body-file "$RUNNER_TEMP/reply.md"
+          gh issue edit "$ISSUE" --repo "$GITHUB_REPOSITORY" --remove-label pilot-received,pilot-invalid,pilot-late 2>/dev/null || true
+          gh issue edit "$ISSUE" --repo "$GITHUB_REPOSITORY" --add-label "pilot-$STATUS"

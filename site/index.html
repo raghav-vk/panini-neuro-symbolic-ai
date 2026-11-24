@@ -10,16 +10,29 @@ main{max-width:720px;margin:auto;padding:32px 20px}
 h1{font-weight:normal;font-size:clamp(28px,6vw,40px);line-height:1.15}
 a.button{display:inline-block;background:var(--ink);color:var(--paper);padding:12px 18px;border-radius:3px;text-decoration:none;margin:8px 0}
 a{color:var(--accent)}
+#countdown{font-size:22px;color:var(--accent);margin:16px 0 0}
 </style>
 <main>
 <h1>Community review pilot</h1>
 <p>Help check how Sanskrit sentences in the project's data are split at sandhi junctions.
 The worksheet has 60 short items and takes about 30 to 45 minutes.</p>
+<p id="countdown"></p>
 <p><a class="button" href="review/pilot.html">Open the worksheet</a></p>
-<p>Your answers stay in your browser until you click <b>Export answers</b> and send the file
-to the project owner. Please use the same browser and device until you finish, and work
-alone until everyone has handed in.</p>
+<p>Your answers are saved in your browser as you go, so please finish on the same device and
+browser. When you are done, click <b>Hand in</b>: the worksheet seals your answers, and you paste
+them into a short GitHub form (a free account is needed). Nobody can read sealed answers until
+the round closes, then scoring and the leaderboard run automatically. Please work alone until
+then.</p>
 <p>Read the <a href="https://github.com/raghav-vk/panini-neuro-symbolic-ai/blob/main/data/reviews/pilot/README.md">reviewer guide</a>
 first. Sentences come from the Digital Corpus of Sanskrit (Krishna et al. 2017, CC BY 4.0).</p>
 </main>
+<script>
+fetch('round.json').then(r=>r.json()).then(round=>{
+  const box=document.getElementById('countdown'),closes=new Date(round.closes);
+  const tick=()=>{const left=closes-Date.now();
+    if(left<=0){box.textContent='This round has closed. Results will be posted soon.';return}
+    const d=Math.floor(left/864e5),h=Math.floor(left%864e5/36e5),m=Math.floor(left%36e5/6e4);
+    box.textContent=`Hand in within ${d?d+' days, ':''}${h} h ${m} min (by ${closes.toLocaleString([],{dateStyle:'medium',timeStyle:'short'})}, your time).`};
+  tick();setInterval(tick,30000)}).catch(()=>{});
+</script>
 </html>

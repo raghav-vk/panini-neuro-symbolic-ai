@@ -1,0 +1,19 @@
+name: Pilot hand-in
+description: Hand in your sealed answers for the community review pilot.
+title: "Pilot hand-in"
+labels: ["pilot-hand-in"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reviewing! In the worksheet, click **Hand in**, then **Copy sealed answers**, and paste below.
+        Your answers are encrypted: only the project can open them, and only after the round closes.
+        A bot replies within a few minutes to confirm. You can hand in again until the deadline; your latest hand-in counts.
+  - type: textarea
+    id: sealed
+    attributes:
+      label: Sealed answers
+      description: Paste the whole block, including the BEGIN and END lines. Please do not edit it.
+      render: text
+    validations:
+      required: true

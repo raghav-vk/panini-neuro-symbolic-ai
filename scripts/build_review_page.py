@@ -60,6 +60,7 @@ def main():
     parser.add_argument("--title", default="Verify proposed splits")
     parser.add_argument("--answers-name", default="answers.jsonl", help="verify mode: exported file name")
     parser.add_argument("--devanagari", action="store_true", help="verify mode: add Devanagari, shown by default")
+    parser.add_argument("--round", type=Path, help="verify mode: round.json; adds a countdown and sealed hand-in")
     args = parser.parse_args()
     rows = [json.loads(line) for line in args.input.read_text(encoding="utf-8").splitlines() if line.strip()]
     if args.mode == "boundary":
@@ -72,6 +73,9 @@ def main():
                 parser.error("some IDs are not in the input")
         rows = [{**iast_item(r), **({"devanagari": devanagari_view(r)} if args.devanagari else {})} for r in rows]
         config = {"title": args.title, "answers_name": args.answers_name, "devanagari": args.devanagari}
+        if args.round:
+            r = json.loads(args.round.read_text(encoding="utf-8"))
+            config["round"] = {k: r[k] for k in ("round", "closes", "hand_in_url", "public_key_spki")}
         page = ((ROOT / "src/review/verify.html").read_text(encoding="utf-8")
                 .replace("__REVIEW_CONFIG__", embed(config)).replace("__REVIEW_DATA__", embed(rows)))
     output = args.output or args.input.with_name("review.html")

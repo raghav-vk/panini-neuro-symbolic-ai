@@ -1,0 +1,80 @@
+name: pilot-close
+
+# After the round's deadline (data/reviews/pilot/round.json), scores every valid hand-in, writes the
+# report, opens a pull request with it and tells each hand-in issue where the results are.
+# Runs daily; does nothing before the deadline or once the results branch exists.
+
+on:
+  schedule:
+    - cron: "30 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: pilot-close
+
+jobs:
+  close:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Is the round due?
+        id: due
+        run: |
+          round=$(jq -r .round data/reviews/pilot/round.json)
+          closes=$(jq -r .closes data/reviews/pilot/round.json)
+          echo "round=$round" >> "$GITHUB_OUTPUT"
+          if [ "$(date -u +%s)" -lt "$(date -u -d "$closes" +%s)" ]; then echo "open until $closes"; echo "due=false" >> "$GITHUB_OUTPUT"
+          elif [ -e "reports/review-pilot/$round/REPORT.md" ] || git ls-remote --exit-code --heads origin "$round-results" >/dev/null; then
+            echo "already scored"; echo "due=false" >> "$GITHUB_OUTPUT"
+          else echo "due=true" >> "$GITHUB_OUTPUT"; fi
+      - if: steps.due.outputs.due == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - if: steps.due.outputs.due == 'true'
+        run: python -m pip install -r requirements.txt -r requirements-pilot.txt
+      - name: Restore the answer key
+        if: steps.due.outputs.due == 'true'
+        env:
+          PILOT_ANSWER_KEY: ${{ secrets.PILOT_ANSWER_KEY }}
+        run: |
+          mkdir -p data/reviews/pilot/private
+          printf '%s' "$PILOT_ANSWER_KEY" | base64 -d > data/reviews/pilot/private/answer_key.jsonl
+          test "$(sha256sum data/reviews/pilot/private/answer_key.jsonl | cut -d' ' -f1)" = "$(jq -r .answer_key_sha256 data/reviews/pilot/manifest.json)"
+      - name: Fetch, score and write the report
+        if: steps.due.outputs.due == 'true'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PILOT_PRIVATE_KEY: ${{ secrets.PILOT_PRIVATE_KEY }}
+        run: |
+          python scripts/pilot_round.py fetch --output "$RUNNER_TEMP/issues.json"
+          python scripts/pilot_round.py close --issues "$RUNNER_TEMP/issues.json"
+      - name: Open the results pull request and notify reviewers
+        if: steps.due.outputs.due == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ROUND: ${{ steps.due.outputs.round }}
+        run: |
+          dir="reports/review-pilot/$ROUND"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$ROUND-results"
+          git add "$dir/REPORT.md" "$dir/LEADERBOARD.md" "$dir/EXPERT_QUEUE.md" "$dir/results.json"
+          git commit -m "Score community review round $ROUND"
+          git push origin "$ROUND-results"
+          url=$(gh pr create --base main --head "$ROUND-results" --title "Community review round $ROUND: results" --body-file "$dir/REPORT.md")
+          for n in $(jq -r '.all[]' "$dir/issues.json"); do
+            if jq -e --argjson n "$n" '.scored | index($n)' "$dir/issues.json" >/dev/null; then
+              msg="The round has closed and your answers were scored. Results and the leaderboard: $url"
+            else
+              msg="The round has closed. This hand-in was not scored (a later hand-in of yours counted, or it arrived late or could not be read). Results: $url"
+            fi
+            gh issue comment "$n" --body "$msg"
+            gh issue close "$n"
+          done
