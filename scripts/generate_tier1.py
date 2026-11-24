@@ -87,7 +87,7 @@ def sample_clause(frame, compiler, members, rng):
             "participants": participants}
 
 
-_TSV = []
+_TSV: list[dict[str, str]] = []
 
 
 def read_tsv_cached():
