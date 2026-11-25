@@ -85,6 +85,9 @@ Sanskrit (Krishna et al. 2017, CC BY 4.0).
 
 ## For the Project Owner
 
+- **Invite reviewers:** `invite/` has a message, an email and a reminder
+  (`INVITE.md`), a flyer (`flyer.png`, source `flyer.html`) and the site's QR
+  code.
 - **Build the set:** `scripts/build_pilot_set.py`. It draws only from the
   training split and refuses evaluation data. The answer key goes to
   `data/reviews/pilot/private/`, which git ignores. Never commit it or share
@@ -111,4 +114,4 @@ Sanskrit (Krishna et al. 2017, CC BY 4.0).
   Pages when it changes on `main` (or run the workflow by hand). It publishes
   only `site/index.html` and the worksheet.
 - **Before sending:** check the 12 control answers in the private key.
-  `manifest.json` records `controls_vetted: false` until you do (vetted 2026-11-24).
+  Done on 2026-11-24: `manifest.json` records `controls_vetted: true`.

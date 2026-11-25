@@ -12,46 +12,50 @@ universally correct grammar engine.
 
 ## Status
 
-**Working experiment, not publication-ready.** Rules and data are drafts or
-silver; nothing has been expert reviewed yet.
+**Working research system, not publication-ready.** Rules and data are drafts
+or silver; no expert review is complete yet.
 
-Current results, on silver DCS data with a holdout of unseen right-hand words
-([report](reports/dcs-silver-v3/SUMMARY.md)):
+Main results so far, all on held-out test data
+([how the system got here](docs/VERSIONS.md)):
 
-| | Test (tie-averaged top-1) |
-| --- | ---: |
-| Gold split among the rule-generated candidates | 99.9% |
-| Best system: linear model over word counts, rule frequency, the Vidyut kosha and a short-vowel preference | 0.946 |
-| Previous best baseline (frequency, short-vowel tie-break) | 0.831 |
-| Byte-level Transformer with the same features | 0.897 |
+| Version | Finding |
+| --- | --- |
+| 0.4 | A linear model over word counts, rule frequency and the Vidyut kosha picks the right split for 0.943 of unseen right-hand words; a byte Transformer reaches 0.897 ([report](reports/dcs-silver-v3/SUMMARY.md)) |
+| 0.9 | Adding word scores from a Sanskrit-pretrained encoder to the kosha gains +0.018 [+0.004, +0.033]; the scores alone do not replace the kosha ([report](reports/pretraining-v1/test/TEST_RESULTS.md)) |
+| 0.9 | Answering only at confidence of at least 0.95 covers 76% to 79% of items, with 99.4% to 99.5% of those answers right |
+| 0.8 | For whole-word morphology, pretraining helps the tagger (+0.061), but beating the kosha baseline did not hold ([report](reports/rlcd-stage3/test/TEST_RESULTS.md)) |
 
-The neural ranker does not yet beat the symbolic features on unseen words.
-The next step is self-supervised pretraining on decontaminated Sanskrit text
-([plan](docs/PRETRAINING_PLAN.md), protocol amendment 0.5).
+**Now (0.10):** a community review pilot is open until 1 December 2026.
+[Take part](https://raghav-vk.github.io/panini-neuro-symbolic-ai/).
 
 Implemented:
 
 - 18 draft rules across five families, with negative checks and a review
   packet.
 - Inverse candidate generation with forward proof traces and abstention.
-- Non-executing DCS conversion: 441,722 sentences.
-- Rule-independent extraction of 39,838 silver vowel-sandhi boundaries.
-- Four holdouts: source-random, exact pair, both-lemma strict, and right-word
-  strict.
-- Baselines, a byte Transformer ranker, a lexical feature head, an optional
-  external lexicon, a residual variant, ablations and paired significance
-  tests.
+- Non-executing DCS conversion: 441,722 sentences, and 39,838 silver
+  vowel-sandhi boundaries extracted without consulting the rules.
+- Four holdouts, baselines, a byte Transformer ranker, an optional external
+  lexicon, ablations and paired significance tests.
+- Self-supervised pretraining on decontaminated Sanskrit text.
+- A calibrated confidence gate for abstention.
+- RLCD: a clause schema, a constraint layer before Vidyut derivation, and a
+  morphological tagger on DCS CoNLL-U.
 - A reproducible 148-record all-sandhi sūtra source corpus.
+- A community review worksheet with hidden controls, sealed hand-ins and
+  automatic scoring.
 
 Still required:
 
 - Expert review of the rules, a silver sample and an independent gold test
   set.
-- The pretraining study.
 - Phase 2 data with inflected left words.
 - The 25-rule reviewed inventory for the publication gate.
 - Comparison with prior Sanskrit segmentation work.
-- Results in place of every TBD in the manuscript.
+- The studies still listed as not run in the manuscript (§11.5).
+
+The full list, with what each step waits on, is in the
+[roadmap](docs/ROADMAP.md).
 
 ## How It Works
 
@@ -100,14 +104,16 @@ ignored by Git. Reported results are kept in `reports/`.
 
 ## Documentation
 
-- [docs/README.md](docs/README.md): documentation map.
-- [docs/panini-neuro-symbolic-ai.md](docs/panini-neuro-symbolic-ai.md): working
+- [docs/README.md](docs/README.md): **start here**, with the building blocks.
+- [docs/VERSIONS.md](docs/VERSIONS.md): how the system evolved, 0.1 to 0.10.
+- [docs/ROADMAP.md](docs/ROADMAP.md): what is done, next, and waiting.
+- [docs/paper/panini-neuro-symbolic-ai.md](docs/paper/panini-neuro-symbolic-ai.md): working
   paper.
 - [docs/EXPERIMENT_PROTOCOL.md](docs/EXPERIMENT_PROTOCOL.md): study design,
   amendments and release gates.
 - [docs/PRETRAINING_PLAN.md](docs/PRETRAINING_PLAN.md): adopted pretraining
   plan.
-- [docs/RULE_AUTHORING_GUIDE.md](docs/RULE_AUTHORING_GUIDE.md): authoring and
+- [docs/guides/RULE_AUTHORING_GUIDE.md](docs/guides/RULE_AUTHORING_GUIDE.md): authoring and
   reviewing rules.
 - [docs/ALL_SANDHI_DATASET.md](docs/ALL_SANDHI_DATASET.md): the all-sandhi
   source corpus.
