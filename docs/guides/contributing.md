@@ -19,8 +19,8 @@ Then read:
 
 1. docs/ALL_SANDHI_DATASET.md
 2. docs/EXPERIMENT_PROTOCOL.md
-3. docs/RULE_AUTHORING_GUIDE.md
-4. docs/panini-neuro-symbolic-ai.md
+3. docs/guides/RULE_AUTHORING_GUIDE.md
+4. docs/paper/panini-neuro-symbolic-ai.md
 
 ## Contribution Areas
 

@@ -1,8 +1,9 @@
 # Design Draft: A Community Review App for Sanskrit Data
 
-**Status:** Draft for discussion, 2026-11-23. Nothing here is built, and no
-data has been shown to anyone. Section 10 lists the decisions needed before
-building.
+**Status:** Draft for discussion, 2026-11-23. Stage 0, the pilot, is built
+and running as version 0.10 ([data/reviews/pilot/](../data/reviews/pilot/README.md);
+round closes 2026-12-01). Stages 1 and 2 are not built. Section 10 lists the
+decisions needed before building them.
 
 ## In Plain Terms
 

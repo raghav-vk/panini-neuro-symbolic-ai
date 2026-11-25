@@ -2,7 +2,11 @@
 
 This directory holds local source corpora and small repository fixtures.
 Large corpora are ignored by Git. A source corpus does not inherit the
-repository's MIT license.
+repository's Apache 2.0 license.
+
+Which version uses which corpus is in [docs/VERSIONS.md](../docs/VERSIONS.md)
+and [data/README.md](../data/README.md): `DCS_pick` from 0.1, the DCS
+CoNLL-U treebank (`dcs_conllu_manifest.json`) from 0.7.
 
 ## Current Local Archive
 

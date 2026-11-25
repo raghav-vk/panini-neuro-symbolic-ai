@@ -517,7 +517,7 @@ strict partitions have zero annotated lemma, source and surface overlap.
 Three non-neural baselines and the tiny ranker, with no-rule and no-context
 ablations, run on CPU over five seeds. The exact scores, parameter counts,
 resource measurements and frozen data hashes are retained in
-[the development report](../reports/development-v1/SUMMARY.md). Candidate recall
+[the development report](../../reports/development-v1/SUMMARY.md). Candidate recall
 is complete on these probes by construction and is not an independent measure
 of linguistic coverage. Synthetic contexts are empty, so context ablation is
 a software control, not a test of semantic disambiguation. No reliable benefit

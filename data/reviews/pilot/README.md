@@ -111,4 +111,4 @@ Sanskrit (Krishna et al. 2017, CC BY 4.0).
   Pages when it changes on `main` (or run the workflow by hand). It publishes
   only `site/index.html` and the worksheet.
 - **Before sending:** check the 12 control answers in the private key.
-  `manifest.json` records `controls_vetted: false` until you do (vetted 2026-11-24).
+  Done on 2026-11-24: `manifest.json` records `controls_vetted: true`.

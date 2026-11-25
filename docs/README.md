@@ -1,43 +1,81 @@
-# Documentation
+# Documentation: Start Here
 
-This directory contains only the active research specification and
-collaboration guides for the current neuro-symbolic sandhi experiment.
+Project Pāṇini splits Sanskrit sandhi with typed rules taken from Pāṇini's
+grammar, and uses a small neural model to choose among the rules' answers.
+Every answer carries a proof, and the system abstains when it is unsure.
 
-## Start Here
+**New here? Read three things, in order:**
+1. The project [readme](../readme.md): what it is and what it does not
+   claim (two minutes).
+2. [VERSIONS.md](VERSIONS.md): how the system grew from 0.1 to 0.10, one
+   question at a time, with every result (ten minutes).
+3. [The paper](paper/panini-neuro-symbolic-ai.md): the full argument, for
+   when you want details.
 
-| Document | Purpose |
-| --- | --- |
-| [Silver DCS results](../reports/dcs-silver-v3/SUMMARY.md) | Current results: right-word holdout with the external lexicon |
-| [Earlier silver results](../reports/dcs-silver-v2/SUMMARY.md) | Results without the external lexicon |
-| [Development results](../reports/development-v1/SUMMARY.md) | September synthetic CPU smoke experiment |
-| [Reviewer guide](../data/reviews/README.md) | Instructions and worksheets for the expert reviewers (issues #65 to #68) |
-| [Review packet](../data/reviews/REVIEW_PACKET.md) | 18 draft rule encodings awaiting expert judgement |
-| [Working paper](panini-neuro-symbolic-ai.md) | Manuscript being developed for archival submission |
-| [Experiment protocol](EXPERIMENT_PROTOCOL.md) | Research questions, frozen-study design, amendments, metrics, and release gates |
-| [Pretraining plan](PRETRAINING_PLAN.md) | Adopted plan for self-supervised pretraining of the neural ranker |
-| [Sandhi pretraining test amendment](SANDHI_PRETRAINING_TEST_AMENDMENT.md) | Amendment 0.9: frozen settings and hypotheses for the sandhi pretraining test run |
-| [Stage 3 test amendment](STAGE3_TEST_AMENDMENT.md) | Amendment 0.8: frozen settings and hypotheses for the stage 3 test run |
-| [RLCD stage 1 results](../reports/rlcd-stage1/DEV_RESULTS.md) | Dev calibration, abstention and routing of the sandhi ranker and discriminator |
-| [RLCD constraint review](RLCD_CONSTRAINTS.md) | Stage 2 constraint layer, root and stem tables awaiting the grammarian |
-| [RLCD transition plan](RLCD_TRANSITION_PLAN.md) | Draft amendment 0.7: review of the RLCD architecture and dataset pipeline, and a staged path |
-| [All-sandhi dataset](ALL_SANDHI_DATASET.md) | Reproducible 148-record source corpus and expert-screening workflow |
-| [Rule authoring guide](RULE_AUTHORING_GUIDE.md) | Convert reviewed interpretations into typed executable rules |
-| [Contributing](contributing.md) | Contribution boundaries and review requirements |
+To run the code, use the [Quick Start](../QUICKSTART.md).
 
-For setup and verification, use the repository-level
-[Quick Start](../QUICKSTART.md). Release gates are in protocol section 18.
-Corpus-specific requirements are in [datasets/README.md](../datasets/README.md).
+## The Building Blocks
 
-## Scope
+A fused form such as *cāpi* passes through five blocks, and a sixth checks
+the data:
 
-The broad language-model, translation, literary-generation, and universal
-grammar-engine plans from early project drafts are retired. They are available
-from Git history if needed but are intentionally absent from the current
-documentation tree.
+    fused form in context ──▶ 1. rules ──▶ 2. candidates with proofs
+        ──▶ 3. ranker ──▶ 4. confidence gate ──▶ answer, or "unsure"
+    5. RLCD: the same idea for whole-word morphology
+    6. review: people check and correct the data
 
-The current source corpus spans sandhi families. The executable development
-experiment uses 18 draft encodings across five families; the independent
-scholarly benchmark still awaits reviewed rules and corpus examples.
-No document in this directory should
-describe source candidates as automatically executable rules or subset
-compliance as complete Sanskrit correctness.
+| # | Block | What it does | Code | Read | Since |
+| --- | --- | --- | --- | --- | --- |
+| 1 | Typed rules | Each sandhi rule is a typed, testable rewrite, traced to its sūtra | `src/panini/rules.py`, `data/rules/` | [Rule authoring guide](guides/RULE_AUTHORING_GUIDE.md), [all-sandhi source corpus](ALL_SANDHI_DATASET.md) | 0.1 |
+| 2 | Candidate generator | Undoes a fused form into every rule-licensed split, each with a forward proof | `src/panini/candidates.py` | [Protocol §10](EXPERIMENT_PROTOCOL.md#10-candidate-generator) | 0.1 |
+| 3 | Ranker | Picks a candidate from frequency, the Vidyut kosha and pretrained word scores | `src/panini/ranking.py`, `lexicon.py`, `pretraining.py` | [Protocol §11](EXPERIMENT_PROTOCOL.md#11-neural-ranker), [pretraining plan](PRETRAINING_PLAN.md) | 0.1, 0.4, 0.5 |
+| 4 | Confidence gate | Answers only when confidence is at least 0.95; otherwise abstains | `src/panini/calibration.py` | [RLCD plan §4](RLCD_TRANSITION_PLAN.md) | 0.7 |
+| 5 | RLCD | Clause schema, constraint checks before Vidyut derivation, and a morphological tagger | `src/panini/clause.py`, `derive.py`, `tagger.py`, `data/rlcd/` | [RLCD plan](RLCD_TRANSITION_PLAN.md), [constraint review](RLCD_CONSTRAINTS.md) | 0.7 |
+| 6 | Review | Expert review packets, and the community pilot with hidden controls | `src/review/`, `scripts/*review*.py`, `scripts/*pilot*.py` | [Review app design](REVIEW_APP_DESIGN.md), [pilot guide](../data/reviews/pilot/README.md), [expert reviewer guide](../data/reviews/README.md) | 0.1, 0.10 |
+
+All text inside the system is in SLP1 (version 0.6, `src/panini/translit.py`);
+IAST and Devanagari are for people.
+
+## Where Things Are
+
+| Folder | Holds | Map |
+| --- | --- | --- |
+| `docs/` | This page, the timeline, and the protocol record (below) | — |
+| `docs/paper/` | The manuscript and its figures | — |
+| `docs/guides/` | How to contribute and how to write rules | — |
+| `docs/architecture/` | Draft long-term designs, not adopted, reviewed by the RLCD plan | — |
+| `docs/archive/` | Retired January 2026 plans, kept for history | — |
+| `reports/` | Every result, dev and test | [reports/README.md](../reports/README.md) |
+| `data/` | Rules, reviews, RLCD tables, schemas; rebuilt corpora in `data/processed/` | [data/README.md](../data/README.md) |
+| `datasets/` | Source corpus manifests (the DCS archive itself is downloaded) | [datasets/README.md](../datasets/README.md) |
+
+## The Protocol Record
+
+These documents set out each experiment **before** it ran. Frozen test
+records and code name them by path, so they stay where they are.
+
+| Document | Version | What it fixes |
+| --- | --- | --- |
+| [Experiment protocol](EXPERIMENT_PROTOCOL.md) | 0.1 to 0.9 | Questions, splits, metrics, release gates, and every amendment |
+| [Pretraining plan](PRETRAINING_PLAN.md) | 0.5 | Corpora, hypotheses and steps for pretraining |
+| [RLCD transition plan](RLCD_TRANSITION_PLAN.md) | 0.7 | Review of the RLCD architecture and its staged path |
+| [RLCD constraint review](RLCD_CONSTRAINTS.md) | 0.7 | Root and stem tables awaiting the grammarian |
+| [Stage 3 test amendment](STAGE3_TEST_AMENDMENT.md) | 0.8 | Frozen settings and hypotheses for the tagger test |
+| [Sandhi pretraining test amendment](SANDHI_PRETRAINING_TEST_AMENDMENT.md) | 0.9 | Frozen settings and hypotheses for the pretraining test, with its erratum |
+| [Review app design](REVIEW_APP_DESIGN.md) | 0.10 | The crowd review app and its pilot |
+
+Plans not yet built:
+- [Gold-set plan](GOLD_SET_PLAN.md): an independent, expert-reviewed test
+  set.
+- [Dataset generation pipeline](dataset-generation-pipeline.md): an
+  English-to-Pāṇinian dataset design, reviewed in the RLCD plan (stage 4).
+
+Field examples: [dataset-structure.json](dataset-structure.json).
+
+## Ground Rules
+
+- "Verified" means consistent with the encoded and tested rule subset, not
+  complete Sanskrit correctness.
+- Spent test parts are never reused for tuning; any reuse is disclosed.
+- Nothing is marked reviewed without an actual review.
+- See [contributing](guides/contributing.md) before opening a pull request.
