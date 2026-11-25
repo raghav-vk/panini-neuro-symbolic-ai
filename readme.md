@@ -52,7 +52,10 @@ Still required:
 - Phase 2 data with inflected left words.
 - The 25-rule reviewed inventory for the publication gate.
 - Comparison with prior Sanskrit segmentation work.
-- Results in place of every TBD in the manuscript.
+- The studies still listed as not run in the manuscript (§11.5).
+
+The full list, with what each step waits on, is in the
+[roadmap](docs/ROADMAP.md).
 
 ## How It Works
 
@@ -103,6 +106,7 @@ ignored by Git. Reported results are kept in `reports/`.
 
 - [docs/README.md](docs/README.md): **start here**, with the building blocks.
 - [docs/VERSIONS.md](docs/VERSIONS.md): how the system evolved, 0.1 to 0.10.
+- [docs/ROADMAP.md](docs/ROADMAP.md): what is done, next, and waiting.
 - [docs/paper/panini-neuro-symbolic-ai.md](docs/paper/panini-neuro-symbolic-ai.md): working
   paper.
 - [docs/EXPERIMENT_PROTOCOL.md](docs/EXPERIMENT_PROTOCOL.md): study design,

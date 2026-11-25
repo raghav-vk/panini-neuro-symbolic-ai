@@ -7,7 +7,8 @@ results it governs. Version 0.10, the community review pilot, is a project
 step rather than a protocol amendment.
 
 Read this page top to bottom to see why each piece exists: every version
-answers a question the previous one raised.
+answers a question the previous one raised. What comes next is in
+[ROADMAP.md](ROADMAP.md).
 
 **Three numberings to keep apart:**
 - **Versions**, as here: 0.1 to 0.10.

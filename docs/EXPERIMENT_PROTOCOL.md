@@ -829,6 +829,9 @@ the smaller scope in the title and abstract.
 
 ## 20. Immediate Work Queue
 
+*Kept as the August 2026 record. Current planning is in
+[ROADMAP.md](ROADMAP.md).*
+
 | Order | Deliverable | Owner needed | Completion test |
 | --- | --- | --- | --- |
 | 1 | Screen 148 all-sandhi source candidates | Pāṇinian scholars | Every record has an adjudicated scope decision |

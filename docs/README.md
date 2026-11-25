@@ -12,6 +12,9 @@ Every answer carries a proof, and the system abstains when it is unsure.
 3. [The paper](paper/panini-neuro-symbolic-ai.md): the full argument, for
    when you want details.
 
+**What's next?** [ROADMAP.md](ROADMAP.md): what is done, what is next, and
+what each open step waits on.
+
 To run the code, use the [Quick Start](../QUICKSTART.md).
 
 ## The Building Blocks
@@ -40,7 +43,7 @@ IAST and Devanagari are for people.
 
 | Folder | Holds | Map |
 | --- | --- | --- |
-| `docs/` | This page, the timeline, and the protocol record (below) | — |
+| `docs/` | This page, the timeline, the roadmap, and the protocol record (below) | — |
 | `docs/paper/` | The manuscript and its figures | — |
 | `docs/guides/` | How to contribute and how to write rules | — |
 | `docs/architecture/` | Draft long-term designs, not adopted, reviewed by the RLCD plan | — |
