@@ -29,7 +29,8 @@ their own; their evidence is in the protocol, sections 9.5 and 11.4.
 Two folders hold work from more than one version:
 
 - **pretraining-v1/**
-  - 0.5 dev: `DEV_RESULTS.md`, `corpus_audit.json`,
+  - 0.5 dev: `DEV_RESULTS.md`, `CORPUS_TEXTS.md` (which texts the encoder
+    read), `corpus_audit.json`,
     `pilot_S_1000_steps.json`, `pretrain_S_*.json`.
   - 0.9 test: `frozen_test_settings.json` and `test/`.
   - `calibration_*_simulated.*` are simulated figures from the RLCD review,

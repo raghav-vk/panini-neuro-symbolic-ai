@@ -16,6 +16,7 @@ See [Quick Start](../QUICKSTART.md) for commands in execution order.
 | `run_experiment.py` | CPU baselines, five-seed ranker training, ablations, checkpoint and metric artifacts; `--dev-only` never reads test, `--pretrained` starts from a pretrained encoder |
 | `compare_paired.py` | Paired bootstrap and per-seed McNemar comparison of saved test predictions against a baseline |
 | `build_pretraining_corpus.py` | Build the decontaminated pretraining corpora P-A and P-B from DCS_pick, with an audit report (`docs/PRETRAINING_PLAN.md` section 3) |
+| `attribute_pretraining_texts.py` | List which DCS texts the pretraining corpora come from, by matching sentences against the DCS CoNLL-U treebank |
 | `pretrain.py` | Pretrain the byte encoder with span masking and rule-guided near-miss discrimination; checks on dev sentences only, never test |
 | `annotate_neural_lexicon.py` | Copy train and dev (never test), adding the pretrained encoder's word scores for `--neural-lexicon` |
 | `fetch_vidyut_data.py` | Download and verify the pinned Vidyut data release (optional external lexicon; non-commercial terms) |

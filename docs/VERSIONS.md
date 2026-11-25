@@ -117,6 +117,10 @@ anything. The table marks which is which.
   span-masking and near-miss pretraining (`src/panini/pretraining.py`,
   `scripts/pretrain.py`), and pretrained word scores for the ranker
   (`scripts/annotate_neural_lexicon.py`). The encoder has 4.94M parameters.
+- **Texts.** The encoder read DCS_pick: about 439,000 sentences from 236
+  texts, led by the Mahābhārata (29%) and Rāmāyaṇa (9%), then purāṇas,
+  āyurveda and rasaśāstra works. See
+  [CORPUS_TEXTS.md](../reports/pretraining-v1/CORPUS_TEXTS.md) for the list.
 - **Results (dev).**
   [reports/pretraining-v1/DEV_RESULTS.md](../reports/pretraining-v1/DEV_RESULTS.md):
   against the kosha reference of 0.903, pretrained scores alone reach 0.925
