@@ -1,0 +1,254 @@
+{
+  "configuration": {
+    "corpus": "/Users/raghav.karnam/git/panini-neuro-symbolic-ai/data/processed/pretrain-v1/P-A.jsonl",
+    "dev": "/Users/raghav.karnam/git/panini-neuro-symbolic-ai/data/processed/pretrain-v1/dev_sentences.jsonl",
+    "rules": "/Users/raghav.karnam/git/panini-neuro-symbolic-ai/data/rules/development_sandhi.jsonl",
+    "output": "runs/pretrain-pilot-M",
+    "size": "M",
+    "objectives": [
+      "mlm",
+      "disc"
+    ],
+    "steps": 1000,
+    "batch_size": 128,
+    "lr": 0.0005,
+    "warmup": 100,
+    "eval_every": 100,
+    "save_every": null,
+    "seed": 7,
+    "device": "mps"
+  },
+  "corpus_sha256": "526dc24d16d11bc72ccf350a9c136390350aee732ee636fe747e35ccee787e14",
+  "dev_sha256": "4478849ffa71bb6d41b0c1e26ad364fd56416511a23b0ce745c1320c3aa0a191",
+  "rules_sha256": "af71fad4d4d1c1b099589b7546e71944e5a328834d7ac6e0e678d1f55b470536",
+  "corpus_sentences": 439274,
+  "corpus_bytes": 19731508,
+  "vocabulary": 605091,
+  "confusions": {
+    "initial": {
+      "A": [
+        "a"
+      ],
+      "E": [
+        "e"
+      ],
+      "I": [
+        "i"
+      ],
+      "O": [
+        "o"
+      ],
+      "U": [
+        "u"
+      ],
+      "a": [
+        "A"
+      ],
+      "e": [
+        "E"
+      ],
+      "i": [
+        "I"
+      ],
+      "o": [
+        "O"
+      ],
+      "u": [
+        "U"
+      ]
+    },
+    "final": {
+      "A": [
+        "a"
+      ],
+      "I": [
+        "i"
+      ],
+      "U": [
+        "u"
+      ],
+      "a": [
+        "A"
+      ],
+      "i": [
+        "I"
+      ],
+      "u": [
+        "U"
+      ]
+    }
+  },
+  "parameters": 19311364,
+  "torch": "2.14.0",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "device": "mps",
+  "note": "MPS is not bit-for-bit deterministic; compare seeds, not single runs.",
+  "history": [
+    {
+      "step": 100,
+      "seconds": 49.39641079097055,
+      "epochs": 0.028357234530680574,
+      "train_mlm_loss": 3.5235659790039064,
+      "train_disc_loss": 0.4380876922607422,
+      "dev": {
+        "masked_byte_accuracy": 0.17339270804341775,
+        "masked_bytes": 7186,
+        "disc_altered_accuracy": 0.0,
+        "disc_attested_accuracy": 1.0,
+        "disc_balanced_accuracy": 0.5,
+        "disc_altered_words": 271,
+        "disc_attested_words": 1583
+      }
+    },
+    {
+      "step": 200,
+      "seconds": 106.6629469160107,
+      "epochs": 0.059403265072289456,
+      "train_mlm_loss": 3.1964227294921876,
+      "train_disc_loss": 0.3957585144042969,
+      "dev": {
+        "masked_byte_accuracy": 0.17603673810186474,
+        "masked_bytes": 7186,
+        "disc_altered_accuracy": 0.0959409594095941,
+        "disc_attested_accuracy": 0.9861023373341756,
+        "disc_balanced_accuracy": 0.5410216483718848,
+        "disc_altered_words": 271,
+        "disc_attested_words": 1583
+      }
+    },
+    {
+      "step": 300,
+      "seconds": 162.16935883299448,
+      "epochs": 0.089060298888458,
+      "train_mlm_loss": 3.1753741455078126,
+      "train_disc_loss": 0.3842702102661133,
+      "dev": {
+        "masked_byte_accuracy": 0.17186195379905372,
+        "masked_bytes": 7186,
+        "disc_altered_accuracy": 0.09225092250922509,
+        "disc_attested_accuracy": 0.9879974731522426,
+        "disc_balanced_accuracy": 0.5401241978307338,
+        "disc_altered_words": 271,
+        "disc_attested_words": 1583
+      }
+    },
+    {
+      "step": 400,
+      "seconds": 212.14581679098774,
+      "epochs": 0.11633591309898868,
+      "train_mlm_loss": 3.16164306640625,
+      "train_disc_loss": 0.3803093338012695,
+      "dev": {
+        "masked_byte_accuracy": 0.17645421653214585,
+        "masked_bytes": 7186,
+        "disc_altered_accuracy": 0.05166051660516605,
+        "disc_attested_accuracy": 0.9949463044851548,
+        "disc_balanced_accuracy": 0.5233034105451604,
+        "disc_altered_words": 271,
+        "disc_attested_words": 1583
+      }
+    },
+    {
+      "step": 500,
+      "seconds": 285.08940737496596,
+      "epochs": 0.144321660564413,
+      "train_mlm_loss": 3.125234375,
+      "train_disc_loss": 0.3737962341308594,
+      "dev": {
+        "masked_byte_accuracy": 0.18661285833565266,
+        "masked_bytes": 7186,
+        "disc_altered_accuracy": 0.12546125461254612,
+        "disc_attested_accuracy": 0.9804169298799748,
+        "disc_balanced_accuracy": 0.5529390922462605,
+        "disc_altered_words": 271,
+        "disc_attested_words": 1583
+      }
+    },
+    {
+      "step": 600,
+      "seconds": 344.49767920799786,
+      "epochs": 0.171234149969683,
+      "train_mlm_loss": 3.07134033203125,
+      "train_disc_loss": 0.37268665313720706,
+      "dev": {
+        "masked_byte_accuracy": 0.19426662955747287,
+        "masked_bytes": 7186,
+        "disc_altered_accuracy": 0.17712177121771217,
+        "disc_attested_accuracy": 0.967150979153506,
+        "disc_balanced_accuracy": 0.5721363751856091,
+        "disc_altered_words": 271,
+        "disc_attested_words": 1583
+      }
+    },
+    {
+      "step": 700,
+      "seconds": 478.45055004098685,
+      "epochs": 0.20053368450095146,
+      "train_mlm_loss": 2.98146484375,
+      "train_disc_loss": 0.36533805847167966,
+      "dev": {
+        "masked_byte_accuracy": 0.21597550793209017,
+        "masked_bytes": 7186,
+        "disc_altered_accuracy": 0.21033210332103322,
+        "disc_attested_accuracy": 0.9715729627289956,
+        "disc_balanced_accuracy": 0.5909525330250144,
+        "disc_altered_words": 271,
+        "disc_attested_words": 1583
+      }
+    },
+    {
+      "step": 800,
+      "seconds": 547.6601534159854,
+      "epochs": 0.22787416957690207,
+      "train_mlm_loss": 2.859046630859375,
+      "train_disc_loss": 0.35217636108398437,
+      "dev": {
+        "masked_byte_accuracy": 0.22947397717784582,
+        "masked_bytes": 7186,
+        "disc_altered_accuracy": 0.17343173431734318,
+        "disc_attested_accuracy": 0.9810486418193304,
+        "disc_balanced_accuracy": 0.5772401880683368,
+        "disc_altered_words": 271,
+        "disc_attested_words": 1583
+      }
+    },
+    {
+      "step": 900,
+      "seconds": 636.4690486660111,
+      "epochs": 0.2567003495120596,
+      "train_mlm_loss": 2.8104544067382813,
+      "train_disc_loss": 0.3500555419921875,
+      "dev": {
+        "masked_byte_accuracy": 0.23865850264403005,
+        "masked_bytes": 7186,
+        "disc_altered_accuracy": 0.2029520295202952,
+        "disc_attested_accuracy": 0.9829437776373974,
+        "disc_balanced_accuracy": 0.5929479035788463,
+        "disc_altered_words": 271,
+        "disc_attested_words": 1583
+      }
+    },
+    {
+      "step": 1000,
+      "seconds": 721.5769177079783,
+      "epochs": 0.2880888272705766,
+      "train_mlm_loss": 2.788932189941406,
+      "train_disc_loss": 0.34316646575927734,
+      "dev": {
+        "masked_byte_accuracy": 0.23893682159755078,
+        "masked_bytes": 7186,
+        "disc_altered_accuracy": 0.2029520295202952,
+        "disc_attested_accuracy": 0.9842072015161086,
+        "disc_balanced_accuracy": 0.5935796155182019,
+        "disc_altered_words": 271,
+        "disc_attested_words": 1583
+      }
+    }
+  ],
+  "timing": {
+    "seconds": 725.4681962499744,
+    "seconds_per_step_including_eval": 0.7254681962499744,
+    "bytes_per_second": 7835.5288755364245,
+    "estimated_seconds_per_epoch": 2518.2101059705647
+  }
+}

@@ -5,7 +5,7 @@ across every plan in the project. The plans themselves keep the detail; this
 page links to them. For how the project got here, see
 [VERSIONS.md](VERSIONS.md).
 
-**Status as of 25 November 2026.** Update this page in the same pull request
+**Status as of 25 November 2026** (size M started). Update this page in the same pull request
 that changes a step's status.
 
 | Mark | Meaning |
@@ -82,7 +82,7 @@ The first paper's claim rests on sandhi splitting
 | 3. Pretrain size S on P-A | ✅ | Three seeds |
 | 4. H-P1 and H-P2 on dev | ✅ | [dev results](../reports/pretraining-v1/DEV_RESULTS.md) |
 | 5. H-P3, fine-tuning, on dev | ✅ | No gain (0.901 against 0.903) |
-| 6. Pretrain the larger size M; run P-B | Half done | P-B was run (below the kosha). **Size M was never pretrained**, although step 4 met the condition. ⏭️ Decide whether to run it or to record why not |
+| 6. Pretrain the larger size M; run P-B | 🔄 | P-B was run with S (below the kosha). Size M was decided on 2026-11-25, with settings fixed in advance in [plan §8.1](PRETRAINING_PLAN.md#81-step-6-settings-size-m-pre-registered-2026-11-25): three seeds, dev only. The timing pilot is done: learning rate 2.5e-4, about 7 hours per seed |
 | 7. Freeze and run one test | ✅ 0.9 | [test results](../reports/pretraining-v1/test/TEST_RESULTS.md) |
 | Prose and genre balance | ⏭️ | The corpus is 29% Mahābhārata and mostly verse, and the tagger is weakest on prose. A hypothesis to test, for example by adding prose text whose licence allows it |
 
@@ -122,7 +122,7 @@ The first paper's claim rests on sandhi splitting
 | --- | --- | --- |
 | Record the rebuild command for the SLP1 silver data (0.6) | ⏭️ | Never written down ([data map](../data/README.md)) |
 | Update stale status lines in the pretraining plan and the RLCD specifications | ⏭️ | They predate the 0.9 run and the adoption of 0.7 |
-| Review open issues from January | ⏸️ | Project owner. #30 to #33, #52 and #58 describe the retired January plan; #52 (script conversion) and #58 (Vidyut bindings) are largely covered by `translit.py` and `derive.py` |
+| Review open issues from January | ✅ | Closed on 2026-11-25: #33, #52 and #58 as done by current code; #30 to #32 as superseded. #61 (pretraining step 1) is done and can be closed too |
 | Report Vidyut's declension of feminine stems upstream | ⏸️ | Project owner's approval before contacting upstream |
 
 The protocol's original work queue (§20, August 2026) is kept as a record;

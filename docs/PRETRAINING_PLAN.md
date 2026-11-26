@@ -271,6 +271,81 @@ If no condition beats 0.909 on dev, the paper reports that pretraining at
 this scale does not displace the symbolic lexicon. That is still a
 publishable result, given the survey found no prior study of it.
 
+### 8.1 Step 6 Settings: Size M (Pre-Registered 2026-11-25)
+
+**Why now.** Step 4 met step 6's condition. On dev, kosha + neural (H-P2)
+reached 0.942 to 0.956 against the kosha's 0.909, beyond the seed spread
+(`reports/pretraining-v1/DEV_RESULTS.md`). Step 6 was then only half done:
+P-B ran with size S (below the kosha), but size M was never pretrained. The
+project owner decided on 2026-11-25 to run it. These settings were written
+before any M result was seen. A 1,000-step timing pilot was already running,
+and its outcome only selects the learning rate, by the rule below.
+
+**Encoders.**
+- Size M: width 512, 6 layers, 8 heads, 19,311,364 parameters.
+- P-A, both objectives (span-masked bytes and near-miss discrimination).
+- 10 passes (34,720 steps), batch 128, warmup 1,000, dev check every 1,000
+  steps, an extra checkpoint every 3,472 steps.
+- Seeds 7, 11 and 19, on MPS.
+- The final checkpoint is used; none is chosen on dev.
+
+Everything except the width matches the S runs.
+
+**Learning rate.** 5e-4, as for S, unless the timing pilot (1,000 steps,
+seed 7, warmup 100; `runs/pretrain-pilot-M`) shows either of these:
+- a loss that is not finite;
+- dev masked-byte accuracy at step 1,000 below that of the S pilot at the
+  same step (0.266, `reports/pretraining-v1/pilot_S_1000_steps.json`).
+
+If it does, all three seeds use 2.5e-4. The pilot record is committed as
+`reports/pretraining-v1/pilot_M_1000_steps.json`.
+
+**Pilot outcome (2026-11-25): 2.5e-4.**
+- The loss stayed finite, falling from 3.52 to 2.79.
+- Dev masked-byte accuracy at step 1,000 was 0.239, below S's 0.266, so the
+  rule selects 2.5e-4 for all three seeds.
+- Time: 0.725 s per step, against S's 0.189, so about 7 hours per seed for
+  34,720 steps and about 21 hours for all three.
+
+**Evaluation: dev only.** The right-word test set is spent (section 9). Every
+step matches the S evaluation:
+- `scripts/annotate_neural_lexicon.py` on train and dev;
+- the linear model `linear_features_short_vowel`, seed 7;
+- dev, 988 items.
+
+Each M seed is compared with the S encoder of the same seed, on the same
+items. The interval is the source-group bootstrap of amendment 0.9 (1,000
+resamples, seed 1729) over the mean of the three per-seed differences.
+
+| | Hypothesis | Decision rule |
+| --- | --- | --- |
+| **H-M1 (primary)** | M beats S for kosha + neural, words scored alone | Every per-seed difference above 0, and the 95% interval excludes 0 |
+| **H-M2 (secondary)** | M beats S for the neural score alone, words scored alone | The same rule |
+
+- **Outcome.** If H-M1 holds, M becomes the encoder for later work (the
+  RLCD tagger and the gold-set evaluation). Otherwise S stays, and the
+  result is reported as no measurable gain at this scale.
+- **Descriptive only:**
+  - the rows with words scored in their sentence;
+  - the label-free dev checks (masked-byte accuracy, discrimination);
+  - training time.
+- **Optional later.** The stage 3 tagger on the M encoder, with dev results
+  per text and the prose texts first. This is descriptive and reads no
+  test part.
+
+**Ceiling.** Kosha + neural is already 0.950 to 0.956 on dev, so a real
+gain may be too small to detect on 988 items. A null result is still
+reported.
+
+**Not done here.**
+- No test data is read. A claim about M on test waits for the gold set
+  (#63).
+- M on P-B is not run: S on P-B was already below the kosha.
+
+**Compute.** About four times the work of S per step. The timing pilot
+gives the estimate. Runs use `caffeinate` so that the Mac does not sleep,
+because sleep inflated two earlier run times.
+
 ## 9. Test-Set Reuse
 
 The right-word holdout test set has already been evaluated three times:
