@@ -1,0 +1,4 @@
+# Every change to this repository needs a review from its code owner.
+# With "Require review from Code Owners" set in the main branch ruleset,
+# a pull request cannot merge until a code owner approves it.
+* @raghav-vk
